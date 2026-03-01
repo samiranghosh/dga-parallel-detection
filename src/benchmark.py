@@ -94,10 +94,17 @@ class CPUMonitor:
         }
 
 
-def measure_ipc_overhead(chunks: list, results: list) -> Dict[str, float]:
+def measure_ipc_overhead(chunks: list, results: list,
+                         total_compute_time: float = None) -> Dict[str, float]:
     """Instrument pickle serialization/deserialization overhead.
 
     Validates the theoretical IPC estimate from P1 Section 2.3.1.
+
+    Args:
+        chunks: List of Chunk tuples sent to workers.
+        results: List of np.ndarray results returned from workers.
+        total_compute_time: Wall-clock time of the parallel extraction.
+                           Used to compute overhead_percentage.
 
     Returns:
         Dict with serialize_time_sec, deserialize_time_sec,
@@ -114,16 +121,19 @@ def measure_ipc_overhead(chunks: list, results: list) -> Dict[str, float]:
     for result in results:
         t0 = time.perf_counter()
         data = pickle.dumps(result)
+        serialize_time += time.perf_counter() - t0
         t1 = time.perf_counter()
         pickle.loads(data)
         deserialize_time += time.perf_counter() - t1
 
     total = serialize_time + deserialize_time
-    # Compute overhead percentage against a rough baseline (estimation)
+    pct = (total / total_compute_time * 100) if total_compute_time and total_compute_time > 0 else 0.0
+
     return {
         'serialize_time_sec': serialize_time,
         'deserialize_time_sec': deserialize_time,
         'total_overhead_sec': total,
+        'overhead_percentage': pct,
     }
 
 
@@ -150,14 +160,18 @@ def run_experiment_e1(domain_list, dictionary, ngram_table,
                       k_values: list = None, reps: int = 5) -> list:
     """E1: Strong scaling — fixed N, vary K.
 
+    P1 Section 15: K = 1, 2, 4, 8, 16 (16 leverages SMT/hyperthreading).
+
     Returns:
-        List of dicts: [{k, rep, time_sec, speedup, cpu_util}, ...]
+        List of dicts: [{k, rep, time_sec, speedup, cpu_util_avg,
+                         ipc_overhead_pct}, ...]
     """
     from src.features import extract_all_sequential
     from src.parallel_engine import parallel_extract_features
+    from src.chunker import create_overlapping_chunks
 
     if k_values is None:
-        k_values = [1, 2, 4, 8]
+        k_values = [1, 2, 4, 8, 16]
 
     results = []
 
@@ -175,15 +189,29 @@ def run_experiment_e1(domain_list, dictionary, ngram_table,
         for rep in range(reps):
             monitor = CPUMonitor(interval=0.5)
             monitor.start()
-            _, elapsed = measure_wall_time(parallel_extract_features, domain_list, k, dictionary, ngram_table)
-            cpu_stats = monitor.stop()
-            cpu_summary = CPUMonitor().summary() if not cpu_stats else {'avg_utilization': float(np.mean([v for s in cpu_stats for v in s]))}
+            _, elapsed = measure_wall_time(
+                parallel_extract_features, domain_list, k, dictionary, ngram_table
+            )
+            cpu_samples = monitor.stop()
+            cpu_avg = float(np.mean([v for s in cpu_samples for v in s])) if cpu_samples else 0.0
+
+            # Measure IPC overhead for this configuration
+            chunks = create_overlapping_chunks(domain_list, k)
+            # Simulate results for IPC measurement (quick re-extract of small sample)
+            from src.parallel_engine import _init_worker, extract_chunk_features
+            import multiprocessing as mp
+            with mp.Pool(processes=k, initializer=_init_worker,
+                         initargs=(dictionary, ngram_table)) as pool:
+                chunk_results = pool.map(extract_chunk_features, chunks)
+            ipc = measure_ipc_overhead(chunks, chunk_results, elapsed)
+
             results.append({
                 'k': k,
                 'rep': rep,
                 'time_sec': elapsed,
                 'speedup': seq_baseline / elapsed if elapsed > 0 else 0,
-                'cpu_util_avg': cpu_summary.get('avg_utilization', 0),
+                'cpu_util_avg': cpu_avg,
+                'ipc_overhead_pct': ipc['overhead_percentage'],
             })
 
     return results
@@ -239,6 +267,112 @@ def run_experiment_e8(domain_list, dictionary, ngram_table,
         for rep in range(reps):
             _, elapsed = measure_wall_time(parallel_extract_features, subset, k, dictionary, ngram_table)
             results.append({'k': k, 'n': n, 'rep': rep, 'time_sec': elapsed})
+    return results
+
+
+
+def run_experiment_e2(domain_list, dictionary, ngram_table,
+                      k_values: list = None, reps: int = 3) -> list:
+    """E2: High-core efficiency — K = 8, 12, 16 with detailed metrics.
+
+    P1 Section 15: Tests whether hyperthreading (K > physical cores)
+    provides additional benefit on the Ryzen 7 7840HS (8C/16T).
+
+    Returns:
+        List of dicts: [{k, rep, time_sec, speedup, cpu_util_avg,
+                         efficiency, ipc_overhead_pct}, ...]
+    """
+    from src.features import extract_all_sequential
+    from src.parallel_engine import parallel_extract_features
+    from src.chunker import create_overlapping_chunks
+
+    if k_values is None:
+        k_values = [8, 12, 16]
+
+    # Need sequential baseline for speedup/efficiency
+    print(f"  [E2] Running sequential baseline ({reps} reps)...")
+    seq_times = []
+    for _ in range(reps):
+        _, t = measure_wall_time(extract_all_sequential, domain_list, dictionary, ngram_table)
+        seq_times.append(t)
+    seq_baseline = float(np.median(seq_times))
+    print(f"  [E2] Sequential baseline: {seq_baseline:.2f}s")
+
+    results = []
+    for k in k_values:
+        print(f"  [E2] K={k}...")
+        for rep in range(reps):
+            monitor = CPUMonitor(interval=0.3)
+            monitor.start()
+            mem_before = measure_memory_usage()
+            _, elapsed = measure_wall_time(
+                parallel_extract_features, domain_list, k, dictionary, ngram_table
+            )
+            mem_after = measure_memory_usage()
+            cpu_samples = monitor.stop()
+            cpu_avg = float(np.mean([v for s in cpu_samples for v in s])) if cpu_samples else 0.0
+
+            speedup = seq_baseline / elapsed if elapsed > 0 else 0
+            efficiency = speedup / k  # Parallel efficiency = S(K) / K
+
+            # IPC overhead
+            chunks = create_overlapping_chunks(domain_list, k)
+            from src.parallel_engine import _init_worker, extract_chunk_features
+            import multiprocessing as mp
+            with mp.Pool(processes=k, initializer=_init_worker,
+                         initargs=(dictionary, ngram_table)) as pool:
+                chunk_results = pool.map(extract_chunk_features, chunks)
+            ipc = measure_ipc_overhead(chunks, chunk_results, elapsed)
+
+            results.append({
+                'k': k,
+                'rep': rep,
+                'time_sec': elapsed,
+                'speedup': speedup,
+                'efficiency': efficiency,
+                'cpu_util_avg': cpu_avg,
+                'ipc_overhead_pct': ipc['overhead_percentage'],
+                'mem_delta_mb': mem_after['rss_mb'] - mem_before['rss_mb'],
+            })
+
+    return results
+
+
+def run_experiment_e4(domain_list, dictionary, ngram_table,
+                      k: int = 8, reps: int = 3) -> list:
+    """E4: Chunk size sweep — fixed N and K=8, vary chunk granularity.
+
+    Tests the effect of splitting N domains into different numbers of
+    chunks (k_split) while keeping the worker pool at K=8. When
+    k_split > k, Pool.map handles the load balancing automatically.
+
+    P1 Section 15: Sweep chunk sizes to find the optimal granularity.
+
+    Returns:
+        List of dicts: [{k_split, chunk_size, rep, time_sec, throughput}, ...]
+    """
+    from src.parallel_engine import parallel_extract_features
+
+    n = len(domain_list)
+    # Test: fewer chunks (coarse), equal to K, and more chunks (fine-grained)
+    k_split_values = [4, 8, 16, 32, 64]
+
+    results = []
+    for k_split in k_split_values:
+        chunk_size = n // k_split
+        print(f"  [E4] k_split={k_split}, chunk_size≈{chunk_size}...")
+        for rep in range(reps):
+            _, elapsed = measure_wall_time(
+                parallel_extract_features, domain_list, k_split,
+                dictionary, ngram_table
+            )
+            results.append({
+                'k_split': k_split,
+                'chunk_size': chunk_size,
+                'rep': rep,
+                'time_sec': elapsed,
+                'throughput': n / elapsed if elapsed > 0 else 0,
+            })
     return results
 
 
@@ -390,6 +524,83 @@ def plot_dt_vs_rf(results_e6: dict, output_path: str):
     print(f"  [PLOT] Saved DT vs RF comparison to {output_path}")
 
 
+
+def plot_efficiency(results_e2: list, output_path: str):
+    """Plot 7: Parallel efficiency (S(K)/K) vs K for high-core counts."""
+    import matplotlib.pyplot as plt
+
+    k_values = sorted(set(r['k'] for r in results_e2))
+    avg_efficiency = {}
+    avg_speedup = {}
+    for k in k_values:
+        eff_vals = [r['efficiency'] for r in results_e2 if r['k'] == k]
+        spd_vals = [r['speedup'] for r in results_e2 if r['k'] == k]
+        avg_efficiency[k] = float(np.mean(eff_vals))
+        avg_speedup[k] = float(np.mean(spd_vals))
+
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 5))
+
+    # Left: speedup at high K
+    ax1.bar(list(avg_speedup.keys()), list(avg_speedup.values()),
+            color='steelblue', alpha=0.8)
+    ax1.axhline(y=8, color='r', linestyle='--', alpha=0.5, label='Physical cores (8)')
+    ax1.set_xlabel('Number of Workers (K)')
+    ax1.set_ylabel('Speedup')
+    ax1.set_title('E2: Speedup at High Core Counts')
+    ax1.legend()
+    ax1.grid(True, alpha=0.3, axis='y')
+
+    # Right: efficiency
+    ax2.bar(list(avg_efficiency.keys()), list(avg_efficiency.values()),
+            color='coral', alpha=0.8)
+    ax2.axhline(y=1.0, color='g', linestyle='--', alpha=0.5, label='Ideal (100%)')
+    ax2.set_xlabel('Number of Workers (K)')
+    ax2.set_ylabel('Efficiency (S(K) / K)')
+    ax2.set_title('E2: Parallel Efficiency')
+    ax2.legend()
+    ax2.grid(True, alpha=0.3, axis='y')
+
+    plt.tight_layout()
+    plt.savefig(output_path, dpi=150)
+    plt.close()
+    print(f"  [PLOT] Saved efficiency plot to {output_path}")
+
+
+def plot_chunk_sweep(results_e4: list, output_path: str):
+    """Plot 8: Throughput vs chunk granularity (k_split)."""
+    import matplotlib.pyplot as plt
+
+    k_splits = sorted(set(r['k_split'] for r in results_e4))
+    avg_tp = {}
+    avg_time = {}
+    for ks in k_splits:
+        tp_vals = [r['throughput'] for r in results_e4 if r['k_split'] == ks]
+        t_vals = [r['time_sec'] for r in results_e4 if r['k_split'] == ks]
+        avg_tp[ks] = float(np.mean(tp_vals))
+        avg_time[ks] = float(np.mean(t_vals))
+
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 5))
+
+    ax1.plot(list(avg_tp.keys()), list(avg_tp.values()), 'bo-',
+             linewidth=2, markersize=8)
+    ax1.set_xlabel('Number of Chunks (k_split)')
+    ax1.set_ylabel('Throughput (domains/sec)')
+    ax1.set_title('E4: Throughput vs Chunk Granularity')
+    ax1.grid(True, alpha=0.3)
+
+    ax2.plot(list(avg_time.keys()), list(avg_time.values()), 'rs-',
+             linewidth=2, markersize=8)
+    ax2.set_xlabel('Number of Chunks (k_split)')
+    ax2.set_ylabel('Wall-clock Time (sec)')
+    ax2.set_title('E4: Execution Time vs Chunk Granularity')
+    ax2.grid(True, alpha=0.3)
+
+    plt.tight_layout()
+    plt.savefig(output_path, dpi=150)
+    plt.close()
+    print(f"  [PLOT] Saved chunk sweep to {output_path}")
+
+
 # ── Suite Runner ──
 
 def run_benchmark_suite(args) -> Dict[str, Any]:
@@ -431,26 +642,50 @@ def run_benchmark_suite(args) -> Dict[str, Any]:
 
     all_results = {}
 
-    # E1: Strong scaling
-    if experiment in ('all', 'E1', 'E2'):
+    # E1: Strong scaling (K = 1, 2, 4, 8, 16)
+    if experiment in ('all', 'E1'):
         print("\n[BENCH] Running E1: Strong scaling...")
-        e1_results = run_experiment_e1(domain_list, dictionary, ngram_table,
-                                       k_values=[1, 2, 4, 8], reps=reps)
+        e1_results = run_experiment_e1(
+            domain_list, dictionary, ngram_table,
+            k_values=[1, 2, 4, 8, 16], reps=reps,
+        )
         all_results['E1'] = e1_results
         plot_speedup_curve(e1_results, os.path.join(plots_dir, 'e1_speedup.png'))
 
-    # E3: Dataset scaling
+    # E2: High-core efficiency (K = 8, 12, 16)
+    if experiment in ('all', 'E2'):
+        print("\n[BENCH] Running E2: High-core efficiency...")
+        e2_results = run_experiment_e2(
+            domain_list, dictionary, ngram_table,
+            k_values=[8, 12, 16], reps=min(reps, 3),
+        )
+        all_results['E2'] = e2_results
+        plot_efficiency(e2_results, os.path.join(plots_dir, 'e2_efficiency.png'))
+
+    # E3: Dataset scaling (N = 10K .. 1M)
     if experiment in ('all', 'E3'):
         print("\n[BENCH] Running E3: Dataset scaling...")
-        e3_results = run_experiment_e3(domain_list, dictionary, ngram_table,
-                                       n_values=[10000, 50000, 100000, 500000],
-                                       k=8, reps=reps)
+        e3_results = run_experiment_e3(
+            domain_list, dictionary, ngram_table,
+            n_values=[10000, 50000, 100000, 500000, 1000000],
+            k=8, reps=min(reps, 3),
+        )
         all_results['E3'] = e3_results
         plot_throughput_scaling(e3_results, os.path.join(plots_dir, 'e3_throughput.png'))
 
+    # E4: Chunk size sweep
+    if experiment in ('all', 'E4'):
+        print("\n[BENCH] Running E4: Chunk size sweep...")
+        e4_results = run_experiment_e4(
+            domain_list, dictionary, ngram_table,
+            k=8, reps=min(reps, 3),
+        )
+        all_results['E4'] = e4_results
+        plot_chunk_sweep(e4_results, os.path.join(plots_dir, 'e4_chunk_sweep.png'))
+
     # E5-E7 need a trained feature matrix; extract with parallel at K=8
     if experiment in ('all', 'E5', 'E6', 'E7'):
-        print("\n[BENCH] Extracting features for E5/E6/E7 (sequential)...")
+        print("\n[BENCH] Extracting features for E5/E6/E7...")
         from src.parallel_engine import parallel_extract_features
         import psutil
         k = psutil.cpu_count(logical=False) or 8
@@ -476,8 +711,10 @@ def run_benchmark_suite(args) -> Dict[str, Any]:
 
     if experiment in ('all', 'E8'):
         print("\n[BENCH] Running E8: Weak scaling...")
-        e8_results = run_experiment_e8(domain_list, dictionary, ngram_table,
-                                       k_values=[1, 2, 4, 8], reps=reps)
+        e8_results = run_experiment_e8(
+            domain_list, dictionary, ngram_table,
+            k_values=[1, 2, 4, 8], reps=min(reps, 3),
+        )
         all_results['E8'] = e8_results
 
     metrics_path = os.path.join(output_dir, 'metrics.json')

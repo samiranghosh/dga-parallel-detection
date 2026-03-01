@@ -60,7 +60,10 @@ def extract_chunk_features(chunk: Chunk) -> np.ndarray:
 
 def parallel_extract_features(domain_list: list, k: int,
                               dictionary,
-                              ngram_table) -> np.ndarray:
+                              ngram_table,
+                              robust: bool = False,
+                              max_retries: int = 2,
+                              chunk_timeout: float = None) -> np.ndarray:
     """Orchestrate parallel feature extraction across K workers.
 
     Args:
@@ -68,11 +71,23 @@ def parallel_extract_features(domain_list: list, k: int,
         k: Number of worker processes.
         dictionary: English dictionary (will be shared via initializer).
         ngram_table: N-gram frequency table (will be shared via initializer).
+        robust: If True, use fault-tolerant extraction with validation
+                and retry logic (from fault_handler.py).
+        max_retries: Max retries per failed chunk (only if robust=True).
+        chunk_timeout: Per-chunk timeout in seconds (only if robust=True).
 
     Returns:
         np.ndarray of shape (N, 6) — merged feature matrix.
     """
     chunks = create_overlapping_chunks(domain_list, k)
+
+    if robust:
+        from src.fault_handler import robust_parallel_extract
+        return robust_parallel_extract(
+            chunks, k, dictionary, ngram_table,
+            max_retries=max_retries,
+            chunk_timeout=chunk_timeout,
+        )
 
     with multiprocessing.Pool(
         processes=k,
