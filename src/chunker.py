@@ -35,8 +35,21 @@ def create_overlapping_chunks(domain_list: list, k: int) -> List[Chunk]:
     Returns:
         List of K Chunk tuples.
     """
-    # TODO: Implement
-    raise NotImplementedError
+    n = len(domain_list)
+    chunk_size = n // k
+    remainder = n % k
+
+    chunks: List[Chunk] = []
+    start = 0
+    for i in range(k):
+        # Distribute remainder domains across the first `remainder` chunks
+        end = start + chunk_size + (1 if i < remainder else 0)
+        chunk_domains = domain_list[start:end]
+        context = domain_list[start - 1] if start > 0 else None
+        chunks.append((context, chunk_domains))
+        start = end
+
+    return chunks
 
 
 def auto_tune_k(domain_list: list, dictionary: set,
@@ -55,11 +68,23 @@ def auto_tune_k(domain_list: list, dictionary: set,
     Returns:
         Optimal K value.
     """
-    # TODO: Implement
-    # 1. Sample 10K domains from domain_list
-    # 2. For each K in candidates:
-    #    a. Create chunks
-    #    b. Run parallel_extract_features
-    #    c. Record wall-clock time
-    # 3. Return K with minimum time
-    raise NotImplementedError
+    from src.parallel_engine import parallel_extract_features
+
+    if candidates is None:
+        candidates = [2, 4, 8]
+
+    subset_size = min(10000, len(domain_list))
+    subset = domain_list[:subset_size]
+
+    best_k = candidates[0]
+    best_time = float('inf')
+
+    for k in candidates:
+        t0 = time.perf_counter()
+        parallel_extract_features(subset, k, dictionary, ngram_table)
+        elapsed = time.perf_counter() - t0
+        if elapsed < best_time:
+            best_time = elapsed
+            best_k = k
+
+    return best_k

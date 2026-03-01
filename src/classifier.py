@@ -42,8 +42,13 @@ def train_random_forest(X_train: np.ndarray, y_train: np.ndarray,
     Returns:
         Trained RandomForestClassifier.
     """
-    # TODO: Implement
-    raise NotImplementedError
+    rf = RandomForestClassifier(
+        n_estimators=n_estimators,
+        n_jobs=n_jobs,
+        random_state=random_state,
+    )
+    rf.fit(X_train, y_train)
+    return rf
 
 
 def train_decision_tree(X_train: np.ndarray, y_train: np.ndarray,
@@ -62,8 +67,12 @@ def train_decision_tree(X_train: np.ndarray, y_train: np.ndarray,
     Returns:
         Trained DecisionTreeClassifier.
     """
-    # TODO: Implement
-    raise NotImplementedError
+    dt = DecisionTreeClassifier(
+        max_depth=max_depth,
+        random_state=random_state,
+    )
+    dt.fit(X_train, y_train)
+    return dt
 
 
 def evaluate_model(model, X_test: np.ndarray,
@@ -74,11 +83,19 @@ def evaluate_model(model, X_test: np.ndarray,
         Dict with keys: accuracy, precision, recall, f1,
         confusion_matrix, classification_report, inference_latency_ms.
     """
-    # TODO: Implement
-    # 1. Predict on X_test, measure inference time
-    # 2. Compute all metrics
-    # 3. Return as dict
-    raise NotImplementedError
+    t0 = time.perf_counter()
+    y_pred = model.predict(X_test)
+    inference_ms = (time.perf_counter() - t0) * 1000
+
+    return {
+        'accuracy': float(accuracy_score(y_test, y_pred)),
+        'precision': float(precision_score(y_test, y_pred, zero_division=0)),
+        'recall': float(recall_score(y_test, y_pred, zero_division=0)),
+        'f1': float(f1_score(y_test, y_pred, zero_division=0)),
+        'confusion_matrix': confusion_matrix(y_test, y_pred).tolist(),
+        'classification_report': classification_report(y_test, y_pred),
+        'inference_latency_ms': inference_ms,
+    }
 
 
 def run_hyperparameter_sweep(X_train, y_train, X_test, y_test,
@@ -88,8 +105,22 @@ def run_hyperparameter_sweep(X_train, y_train, X_test, y_test,
     Returns:
         List of dicts: [{n_estimators, accuracy, f1, train_time_sec}, ...]
     """
-    # TODO: Implement
-    raise NotImplementedError
+    if estimator_values is None:
+        estimator_values = [50, 100, 200, 300, 500]
+
+    results = []
+    for n_est in estimator_values:
+        t0 = time.perf_counter()
+        model = train_random_forest(X_train, y_train, n_estimators=n_est)
+        train_time = time.perf_counter() - t0
+        metrics = evaluate_model(model, X_test, y_test)
+        results.append({
+            'n_estimators': n_est,
+            'accuracy': metrics['accuracy'],
+            'f1': metrics['f1'],
+            'train_time_sec': train_time,
+        })
+    return results
 
 
 def run_dt_vs_rf_comparison(X_train, y_train,
@@ -99,8 +130,19 @@ def run_dt_vs_rf_comparison(X_train, y_train,
     Returns:
         {'decision_tree': {metrics...}, 'random_forest': {metrics...}}
     """
-    # TODO: Implement
-    raise NotImplementedError
+    t0 = time.perf_counter()
+    dt = train_decision_tree(X_train, y_train)
+    dt_time = time.perf_counter() - t0
+    dt_metrics = evaluate_model(dt, X_test, y_test)
+    dt_metrics['train_time_sec'] = dt_time
+
+    t0 = time.perf_counter()
+    rf = train_random_forest(X_train, y_train)
+    rf_time = time.perf_counter() - t0
+    rf_metrics = evaluate_model(rf, X_test, y_test)
+    rf_metrics['train_time_sec'] = rf_time
+
+    return {'decision_tree': dt_metrics, 'random_forest': rf_metrics}
 
 
 def run_feature_ablation(X_train, y_train, X_test, y_test,
@@ -110,6 +152,21 @@ def run_feature_ablation(X_train, y_train, X_test, y_test,
     Returns:
         List of dicts: [{n_features, features_used, accuracy, f1}, ...]
     """
-    # TODO: Implement
-    # For i in 1..6: train RF on X[:, :i], evaluate, record
-    raise NotImplementedError
+    if feature_names is None:
+        feature_names = [
+            'length', 'numerical_ratio', 'meaningful_word_ratio',
+            'pronounceability', 'lms_percentage', 'levenshtein'
+        ]
+
+    results = []
+    for n_feat in range(1, len(feature_names) + 1):
+        used_features = feature_names[:n_feat]
+        model = train_random_forest(X_train[:, :n_feat], y_train)
+        metrics = evaluate_model(model, X_test[:, :n_feat], y_test)
+        results.append({
+            'n_features': n_feat,
+            'features_used': used_features,
+            'accuracy': metrics['accuracy'],
+            'f1': metrics['f1'],
+        })
+    return results

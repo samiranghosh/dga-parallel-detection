@@ -21,8 +21,7 @@ import numpy as np
 
 def calc_length(domain: str) -> float:
     """Return the character length of the domain string."""
-    # TODO: Implement
-    raise NotImplementedError
+    return float(len(domain))
 
 
 # ── Feature 2: Numerical Character Percentage ──
@@ -32,8 +31,9 @@ def calc_numerical_ratio(domain: str) -> float:
 
     Example: 'abc123' -> 0.5
     """
-    # TODO: Implement
-    raise NotImplementedError
+    if not domain:
+        return 0.0
+    return sum(c.isdigit() for c in domain) / len(domain)
 
 
 # ── Feature 3: Meaningful Word Ratio ──
@@ -44,8 +44,23 @@ def calc_meaningful_word_ratio(domain: str, dictionary: set) -> float:
     Uses greedy longest-match scanning across all substrings.
     Example: 'googlebot' with dictionary {'google', 'bot'} -> 1.0
     """
-    # TODO: Implement
-    raise NotImplementedError
+    if not domain:
+        return 0.0
+
+    n = len(domain)
+    # dp[i] = max characters covered from position 0 to i
+    covered = [0] * (n + 1)
+
+    for i in range(n):
+        # Carry forward previous coverage
+        covered[i + 1] = max(covered[i + 1], covered[i])
+        # Try all substrings starting at i
+        for j in range(i + 1, n + 1):
+            substring = domain[i:j]
+            if substring in dictionary:
+                covered[j] = max(covered[j], covered[i] + len(substring))
+
+    return covered[n] / n
 
 
 # ── Feature 4: Pronounceability Score ──
@@ -55,8 +70,12 @@ def calc_pronounceability(domain: str, ngram_table: dict) -> float:
 
     Higher score = more pronounceable = more likely benign.
     """
-    # TODO: Implement
-    raise NotImplementedError
+    if len(domain) < 3:
+        return 0.0
+
+    trigrams = [domain[i:i+3] for i in range(len(domain) - 2)]
+    probs = [ngram_table.get(t, 1e-10) for t in trigrams]
+    return float(np.mean(probs))
 
 
 # ── Feature 5: Longest Meaningful Substring (LMS) Percentage ──
@@ -66,8 +85,18 @@ def calc_lms_percentage(domain: str, dictionary: set) -> float:
 
     Scans all substrings of domain against the dictionary.
     """
-    # TODO: Implement
-    raise NotImplementedError
+    if not domain:
+        return 0.0
+
+    n = len(domain)
+    max_len = 0
+    for i in range(n):
+        for j in range(i + 1, n + 1):
+            sub = domain[i:j]
+            if sub in dictionary:
+                max_len = max(max_len, len(sub))
+
+    return max_len / n
 
 
 # ── Feature 6: Levenshtein Edit Distance ──
@@ -78,14 +107,25 @@ def calc_levenshtein(domain: str, prev_domain: str) -> float:
     Uses dynamic programming. O(m × n) where m, n are string lengths.
     If python-Levenshtein is installed, uses the C extension for speed.
     """
-    # TODO: Implement
     # Try fast C version first, fall back to pure Python DP
-    # try:
-    #     from Levenshtein import distance
-    #     return float(distance(domain, prev_domain))
-    # except ImportError:
-    #     pass  # Pure Python fallback below
-    raise NotImplementedError
+    try:
+        from Levenshtein import distance
+        return float(distance(domain, prev_domain))
+    except ImportError:
+        pass
+
+    # Pure Python DP fallback
+    m, n = len(domain), len(prev_domain)
+    dp = list(range(n + 1))
+    for i in range(1, m + 1):
+        prev_row = dp[:]
+        dp[0] = i
+        for j in range(1, n + 1):
+            if domain[i - 1] == prev_domain[j - 1]:
+                dp[j] = prev_row[j - 1]
+            else:
+                dp[j] = 1 + min(prev_row[j], dp[j - 1], prev_row[j - 1])
+    return float(dp[n])
 
 
 # ── Combined Extraction ──

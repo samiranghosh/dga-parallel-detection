@@ -134,38 +134,92 @@ def main():
 
     if args.mode == "preprocess":
         print("[MODE] Preprocessing — preparing datasets...")
-        # TODO: Import and call src.preprocess.run_preprocessing(args.data_path)
-        raise NotImplementedError("Implement in src/preprocess.py (Phase 2)")
+        import src.preprocess
+        src.preprocess.run_preprocessing(args.data_path)
 
     elif args.mode == "sequential":
         print("[MODE] Sequential — single-threaded baseline...")
-        # TODO: Import and call sequential pipeline
-        # 1. Load preprocessed data from args.data_path
-        # 2. Extract features sequentially (src.features.extract_all_sequential)
-        # 3. Train classifier (src.classifier.train_random_forest)
-        # 4. Evaluate and print results
-        raise NotImplementedError("Implement in Phase 3 + Phase 7")
+        import pandas as pd
+        from src.shared_resources import initialize_shared_resources
+        from src.features import extract_all_sequential
+        from src.classifier import train_random_forest, evaluate_model
+
+        train_df = pd.read_csv(os.path.join(args.data_path, 'train.csv'))
+        test_df = pd.read_csv(os.path.join(args.data_path, 'test.csv'))
+        dictionary, ngram_table = initialize_shared_resources(args.data_path)
+
+        print(f"  Extracting features for {len(train_df)} train domains (sequential)...")
+        t0 = time.time()
+        X_train = extract_all_sequential(train_df['domain'].tolist(), dictionary, ngram_table)
+        t_feat = time.time() - t0
+        print(f"  Feature extraction: {t_feat:.2f}s")
+
+        t0 = time.time()
+        X_test = extract_all_sequential(test_df['domain'].tolist(), dictionary, ngram_table)
+        print(f"  Test feature extraction: {time.time() - t0:.2f}s")
+
+        print(f"  Training Random Forest ({args.n_estimators} trees)...")
+        t0 = time.time()
+        model = train_random_forest(X_train, train_df['label'].values,
+                                    n_estimators=args.n_estimators)
+        t_train = time.time() - t0
+        print(f"  Training: {t_train:.2f}s")
+
+        metrics = evaluate_model(model, X_test, test_df['label'].values)
+        print(f"\n  Accuracy:  {metrics['accuracy']:.4f}")
+        print(f"  Precision: {metrics['precision']:.4f}")
+        print(f"  Recall:    {metrics['recall']:.4f}")
+        print(f"  F1:        {metrics['f1']:.4f}")
+        print(f"  Inference: {metrics['inference_latency_ms']:.1f} ms")
+        if args.verbose:
+            print(metrics['classification_report'])
 
     elif args.mode == "parallel":
         n_workers = detect_workers(args.workers)
         print(f"[MODE] Parallel — {n_workers} workers...")
-        # TODO: Import and call parallel pipeline
-        # 1. Load preprocessed data
-        # 2. Initialize shared resources (src.shared_resources)
-        # 3. Create overlapping chunks (src.chunker)
-        # 4. Parallel feature extraction (src.parallel_engine)
-        # 5. Train classifier with n_jobs=-1
-        # 6. Evaluate and print results
-        raise NotImplementedError("Implement in Phases 4-7")
+        import pandas as pd
+        from src.shared_resources import initialize_shared_resources
+        from src.parallel_engine import parallel_extract_features
+        from src.classifier import train_random_forest, evaluate_model
+
+        train_df = pd.read_csv(os.path.join(args.data_path, 'train.csv'))
+        test_df = pd.read_csv(os.path.join(args.data_path, 'test.csv'))
+        dictionary, ngram_table = initialize_shared_resources(args.data_path)
+
+        print(f"  Extracting features for {len(train_df)} train domains ({n_workers} workers)...")
+        t0 = time.time()
+        X_train = parallel_extract_features(train_df['domain'].tolist(), n_workers, dictionary, ngram_table)
+        t_feat = time.time() - t0
+        print(f"  Feature extraction: {t_feat:.2f}s")
+
+        t0 = time.time()
+        X_test = parallel_extract_features(test_df['domain'].tolist(), n_workers, dictionary, ngram_table)
+        print(f"  Test feature extraction: {time.time() - t0:.2f}s")
+
+        print(f"  Training Random Forest ({args.n_estimators} trees, n_jobs=-1)...")
+        t0 = time.time()
+        model = train_random_forest(X_train, train_df['label'].values,
+                                    n_estimators=args.n_estimators)
+        t_train = time.time() - t0
+        print(f"  Training: {t_train:.2f}s")
+
+        metrics = evaluate_model(model, X_test, test_df['label'].values)
+        print(f"\n  Accuracy:  {metrics['accuracy']:.4f}")
+        print(f"  Precision: {metrics['precision']:.4f}")
+        print(f"  Recall:    {metrics['recall']:.4f}")
+        print(f"  F1:        {metrics['f1']:.4f}")
+        print(f"  Inference: {metrics['inference_latency_ms']:.1f} ms")
+        if args.verbose:
+            print(metrics['classification_report'])
 
     elif args.mode == "benchmark":
         n_workers = detect_workers(args.workers)
         print(f"[MODE] Benchmark — experiment: {args.experiment}, {args.repetitions} reps...")
-        # TODO: Import and call benchmark suite
-        # src.benchmark.run_benchmark_suite(args)
-        raise NotImplementedError("Implement in Phase 8")
+        from src.benchmark import run_benchmark_suite
+        run_benchmark_suite(args)
 
     print("\n[DONE] Pipeline complete.")
+
 
 
 if __name__ == "__main__":

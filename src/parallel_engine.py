@@ -18,7 +18,7 @@ import multiprocessing
 import time
 from typing import List, Tuple, Optional
 
-from src.chunker import Chunk
+from src.chunker import Chunk, create_overlapping_chunks
 
 
 # ── Global worker state (set by initializer, avoids pickling) ──
@@ -27,7 +27,7 @@ _dictionary = None
 _ngram_table = None
 
 
-def _init_worker(dictionary: dict, ngram_table: dict):
+def _init_worker(dictionary, ngram_table):
     """Pool initializer: store shared resources in worker globals."""
     global _dictionary, _ngram_table
     _dictionary = dictionary
@@ -43,17 +43,24 @@ def extract_chunk_features(chunk: Chunk) -> np.ndarray:
     Returns:
         np.ndarray of shape (len(domain_list), 6).
     """
-    # TODO: Implement
-    # 1. Unpack (context, domains) from chunk
-    # 2. Set prev_domain = context if not None, else domains[0]
-    # 3. Loop through domains, extract_features for each
-    # 4. Return feature matrix
-    raise NotImplementedError
+    from src.features import extract_features
+
+    context, domains = chunk
+    n = len(domains)
+    features = np.zeros((n, 6), dtype=np.float64)
+
+    prev_domain = context if context is not None else domains[0]
+
+    for i, domain in enumerate(domains):
+        features[i] = extract_features(domain, prev_domain, _dictionary, _ngram_table)
+        prev_domain = domain
+
+    return features
 
 
 def parallel_extract_features(domain_list: list, k: int,
-                              dictionary: dict,
-                              ngram_table: dict) -> np.ndarray:
+                              dictionary,
+                              ngram_table) -> np.ndarray:
     """Orchestrate parallel feature extraction across K workers.
 
     Args:
@@ -65,9 +72,13 @@ def parallel_extract_features(domain_list: list, k: int,
     Returns:
         np.ndarray of shape (N, 6) — merged feature matrix.
     """
-    # TODO: Implement
-    # 1. Create overlapping chunks via chunker.create_overlapping_chunks()
-    # 2. Create Pool with _init_worker initializer
-    # 3. pool.map(extract_chunk_features, chunks)
-    # 4. np.vstack(results)
-    raise NotImplementedError
+    chunks = create_overlapping_chunks(domain_list, k)
+
+    with multiprocessing.Pool(
+        processes=k,
+        initializer=_init_worker,
+        initargs=(dictionary, ngram_table)
+    ) as pool:
+        results = pool.map(extract_chunk_features, chunks)
+
+    return np.vstack(results)

@@ -24,9 +24,11 @@ env/
 *.swo
 *~
 
-# --- Data (large files - download separately) ---
+# --- Data (large files - download separately via Git LFS clone) ---
 data/*.csv
 data/*.pkl
+data/*.gz
+data/*.json
 data/english_dictionary.txt
 !data/.gitkeep
 

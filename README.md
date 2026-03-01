@@ -31,7 +31,7 @@ This project implements a data-parallel pipeline for detecting malware that uses
 ```
 dga-parallel-detection/
 ├── data/
-│   ├── dga_training_data.json   # ExtraHop dataset (or separate DGA/benign CSVs)
+│   ├── dga_training_data.json.gz # ExtraHop dataset (via git lfs clone)
 │   ├── english_dictionary.txt   # NLTK English word corpus (auto-generated)
 │   ├── ngram_table.pkl          # Trigram frequency table (auto-generated)
 │   ├── train.csv                # 80% stratified split (auto-generated)
@@ -128,11 +128,25 @@ This is the simplest option. A single dataset with both DGA and benign domains, 
 - Format: `{"domain": "example", "threat": "benign"}` or `{"domain": "xyzabc", "threat": "dga"}`
 - TLDs already stripped — no extra preprocessing needed
 
+**Important:** The dataset file uses **Git LFS** (Large File Storage), so a direct
+browser download or `wget` on the raw URL will NOT work. You must clone with LFS:
+
 ```bash
-# Download and extract
-wget https://github.com/ExtraHop/DGA-Detection-Training-Dataset/raw/main/dga-training-data-encoded-v3.json.gz
-gunzip dga-training-data-encoded-v3.json.gz
+# Install Git LFS (one-time setup)
+git lfs install
+
+# Clone the repo (this downloads the actual data file via LFS)
+git clone https://github.com/ExtraHop/DGA-Detection-Training-Dataset.git
+
+# Copy the data file into your project
+cp DGA-Detection-Training-Dataset/dga-training-data-encoded.json.gz data/
+
+# Clean up the cloned repo (optional)
+rm -rf DGA-Detection-Training-Dataset
 ```
+
+On Windows, Git LFS is included with [Git for Windows](https://gitforwindows.org/).
+Verify with `git lfs version`.
 
 The preprocessing script will sample 500K DGA + 500K benign from this file.
 
