@@ -47,6 +47,7 @@ desktop.ini
 # --- Jupyter (if used for exploration) ---
 .ipynb_checkpoints/
 *.ipynb
+!P3_Experimental_Report.ipynb
 
 # --- Logs ---
 *.log
