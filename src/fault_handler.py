@@ -122,7 +122,7 @@ def robust_parallel_extract(chunks: list, k: int,
     Raises:
         RuntimeError: If any chunk fails after all retries.
     """
-    from src.parallel_engine import _init_worker, extract_chunk_features
+    from src.parallel_engine import _init_worker, extract_chunk_features, _safe_pool_size
 
     n_chunks = len(chunks)
     results = [None] * n_chunks
@@ -143,8 +143,9 @@ def robust_parallel_extract(chunks: list, k: int,
         items = [(i, chunks[i]) for i in pending]
 
         try:
+            pool_workers = _safe_pool_size(min(k, len(items)))
             pool = multiprocessing.Pool(
-                processes=min(k, len(items)),
+                processes=pool_workers,
                 initializer=_init_worker,
                 initargs=(dictionary, ngram_table),
             )

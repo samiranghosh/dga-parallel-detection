@@ -198,9 +198,10 @@ def run_experiment_e1(domain_list, dictionary, ngram_table,
             # Measure IPC overhead for this configuration
             chunks = create_overlapping_chunks(domain_list, k)
             # Simulate results for IPC measurement (quick re-extract of small sample)
-            from src.parallel_engine import _init_worker, extract_chunk_features
+            from src.parallel_engine import _init_worker, extract_chunk_features, _safe_pool_size
             import multiprocessing as mp
-            with mp.Pool(processes=k, initializer=_init_worker,
+            pool_sz = _safe_pool_size(k)
+            with mp.Pool(processes=pool_sz, initializer=_init_worker,
                          initargs=(dictionary, ngram_table)) as pool:
                 chunk_results = pool.map(extract_chunk_features, chunks)
             ipc = measure_ipc_overhead(chunks, chunk_results, elapsed)
@@ -317,9 +318,10 @@ def run_experiment_e2(domain_list, dictionary, ngram_table,
 
             # IPC overhead
             chunks = create_overlapping_chunks(domain_list, k)
-            from src.parallel_engine import _init_worker, extract_chunk_features
+            from src.parallel_engine import _init_worker, extract_chunk_features, _safe_pool_size
             import multiprocessing as mp
-            with mp.Pool(processes=k, initializer=_init_worker,
+            pool_sz = _safe_pool_size(k)
+            with mp.Pool(processes=pool_sz, initializer=_init_worker,
                          initargs=(dictionary, ngram_table)) as pool:
                 chunk_results = pool.map(extract_chunk_features, chunks)
             ipc = measure_ipc_overhead(chunks, chunk_results, elapsed)
@@ -364,7 +366,8 @@ def run_experiment_e4(domain_list, dictionary, ngram_table,
         for rep in range(reps):
             _, elapsed = measure_wall_time(
                 parallel_extract_features, domain_list, k_split,
-                dictionary, ngram_table
+                dictionary, ngram_table,
+                pool_size=k,  # Always use K=8 workers, vary chunks only
             )
             results.append({
                 'k_split': k_split,
