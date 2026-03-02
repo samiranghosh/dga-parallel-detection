@@ -12,9 +12,26 @@ Implements the 6 linguistic features from the base paper (Li et al., 2019):
   6. Levenshtein Edit Distance - O(m²)
 
 Each function takes a domain string and returns a float.
+
+Feature subsets:
+  FEATURE_NAMES_6: All 6 features (original configuration)
+  FEATURE_NAMES_5: Without Levenshtein (optimal configuration per E7 ablation)
 """
 
 import numpy as np
+
+
+# ── Feature Set Configurations ──
+
+FEATURE_NAMES_6 = [
+    'length', 'numerical_ratio', 'meaningful_word_ratio',
+    'pronounceability', 'lms_percentage', 'levenshtein',
+]
+
+FEATURE_NAMES_5 = [
+    'length', 'numerical_ratio', 'meaningful_word_ratio',
+    'pronounceability', 'lms_percentage',
+]
 
 
 # ── Feature 1: Length ──
@@ -131,32 +148,54 @@ def calc_levenshtein(domain: str, prev_domain: str) -> float:
 # ── Combined Extraction ──
 
 def extract_features(domain: str, prev_domain: str,
-                     dictionary: set, ngram_table: dict) -> np.ndarray:
-    """Extract all 6 linguistic features for a single domain.
+                     dictionary: set, ngram_table: dict,
+                     skip_levenshtein: bool = False) -> np.ndarray:
+    """Extract linguistic features for a single domain.
+
+    Args:
+        domain: Domain string to extract features from.
+        prev_domain: Previous domain (for Levenshtein distance).
+        dictionary: English dictionary set.
+        ngram_table: Trigram frequency table.
+        skip_levenshtein: If True, return 5 features (without Levenshtein).
+            The 5-feature configuration achieves higher accuracy (93.18%)
+            than the 6-feature configuration (92.60%) because Levenshtein
+            distance between adjacent domains in shuffled datasets is noise.
 
     Returns:
-        np.ndarray of shape (6,) with dtype float64.
+        np.ndarray of shape (5,) or (6,) with dtype float64.
     """
-    return np.array([
+    feats = [
         calc_length(domain),
         calc_numerical_ratio(domain),
         calc_meaningful_word_ratio(domain, dictionary),
         calc_pronounceability(domain, ngram_table),
         calc_lms_percentage(domain, dictionary),
-        calc_levenshtein(domain, prev_domain),
-    ], dtype=np.float64)
+    ]
+    if not skip_levenshtein:
+        feats.append(calc_levenshtein(domain, prev_domain))
+    return np.array(feats, dtype=np.float64)
 
 
 def extract_all_sequential(domain_list: list, dictionary: set,
-                           ngram_table: dict) -> np.ndarray:
+                           ngram_table: dict,
+                           skip_levenshtein: bool = False) -> np.ndarray:
     """Extract features for all domains sequentially (baseline).
 
+    Args:
+        domain_list: List of domain strings.
+        dictionary: English dictionary set.
+        ngram_table: Trigram frequency table.
+        skip_levenshtein: If True, extract 5 features only.
+
     Returns:
-        np.ndarray of shape (N, 6).
+        np.ndarray of shape (N, 5) or (N, 6).
     """
     N = len(domain_list)
-    features = np.zeros((N, 6), dtype=np.float64)
+    n_feats = 5 if skip_levenshtein else 6
+    features = np.zeros((N, n_feats), dtype=np.float64)
     for i, domain in enumerate(domain_list):
         prev = domain_list[i - 1] if i > 0 else domain
-        features[i] = extract_features(domain, prev, dictionary, ngram_table)
+        features[i] = extract_features(domain, prev, dictionary, ngram_table,
+                                       skip_levenshtein=skip_levenshtein)
     return features

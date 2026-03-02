@@ -43,13 +43,28 @@ def _safe_pool_size(requested: int) -> int:
 
 _dictionary = None
 _ngram_table = None
+_skip_levenshtein = False
 
 
-def _init_worker(dictionary, ngram_table):
+def _init_worker(dictionary, ngram_table, skip_levenshtein=False):
     """Pool initializer: store shared resources in worker globals."""
-    global _dictionary, _ngram_table
+    global _dictionary, _ngram_table, _skip_levenshtein
     _dictionary = dictionary
     _ngram_table = ngram_table
+    _skip_levenshtein = skip_levenshtein
+
+
+def _init_worker_shm(shm_names, skip_levenshtein=False):
+    """Pool initializer: attach to shared memory resources.
+
+    Priority 4 enhancement — avoids per-worker pickle serialization
+    of dictionary and n-gram table. Workers attach to pre-created
+    shared memory blocks by name.
+    """
+    global _dictionary, _ngram_table, _skip_levenshtein
+    from src.shared_resources import SharedMemoryResources
+    _dictionary, _ngram_table = SharedMemoryResources.attach(shm_names)
+    _skip_levenshtein = skip_levenshtein
 
 
 def extract_chunk_features(chunk: Chunk) -> np.ndarray:
@@ -59,18 +74,20 @@ def extract_chunk_features(chunk: Chunk) -> np.ndarray:
         chunk: Tuple of (context_domain_or_None, domain_list).
 
     Returns:
-        np.ndarray of shape (len(domain_list), 6).
+        np.ndarray of shape (len(domain_list), 5 or 6).
     """
     from src.features import extract_features
 
     context, domains = chunk
     n = len(domains)
-    features = np.zeros((n, 6), dtype=np.float64)
+    n_feats = 5 if _skip_levenshtein else 6
+    features = np.zeros((n, n_feats), dtype=np.float64)
 
     prev_domain = context if context is not None else domains[0]
 
     for i, domain in enumerate(domains):
-        features[i] = extract_features(domain, prev_domain, _dictionary, _ngram_table)
+        features[i] = extract_features(domain, prev_domain, _dictionary,
+                                       _ngram_table, skip_levenshtein=_skip_levenshtein)
         prev_domain = domain
 
     return features
@@ -80,6 +97,9 @@ def parallel_extract_features(domain_list: list, k: int,
                               dictionary,
                               ngram_table,
                               pool_size: int = None,
+                              skip_levenshtein: bool = False,
+                              use_shared_memory: bool = False,
+                              shm_names: dict = None,
                               robust: bool = False,
                               max_retries: int = 2,
                               chunk_timeout: float = None) -> np.ndarray:
@@ -100,13 +120,19 @@ def parallel_extract_features(domain_list: list, k: int,
         ngram_table: N-gram frequency table (will be shared via initializer).
         pool_size: Number of worker processes. Defaults to min(k, cores).
                    Automatically capped at 61 on Windows.
+        skip_levenshtein: If True, extract 5 features only (without
+            Levenshtein distance). Faster extraction and higher accuracy.
+        use_shared_memory: If True, use multiprocessing.shared_memory
+            instead of pickle-based Pool initializer. Requires shm_names.
+        shm_names: Dict from SharedMemoryResources.get_names(). Required
+            when use_shared_memory=True.
         robust: If True, use fault-tolerant extraction with validation
                 and retry logic (from fault_handler.py).
         max_retries: Max retries per failed chunk (only if robust=True).
         chunk_timeout: Per-chunk timeout in seconds (only if robust=True).
 
     Returns:
-        np.ndarray of shape (N, 6) — merged feature matrix.
+        np.ndarray of shape (N, 5 or 6) — merged feature matrix.
     """
     chunks = create_overlapping_chunks(domain_list, k)
 
@@ -125,10 +151,18 @@ def parallel_extract_features(domain_list: list, k: int,
             chunk_timeout=chunk_timeout,
         )
 
+    # Choose initializer based on shared memory flag
+    if use_shared_memory and shm_names is not None:
+        initializer = _init_worker_shm
+        initargs = (shm_names, skip_levenshtein)
+    else:
+        initializer = _init_worker
+        initargs = (dictionary, ngram_table, skip_levenshtein)
+
     with multiprocessing.Pool(
         processes=n_pool,
-        initializer=_init_worker,
-        initargs=(dictionary, ngram_table)
+        initializer=initializer,
+        initargs=initargs,
     ) as pool:
         results = pool.map(extract_chunk_features, chunks)
 

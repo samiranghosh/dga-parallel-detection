@@ -23,6 +23,7 @@ env/
 *.swp
 *.swo
 *~
+*.code-workspace
 
 # --- Data (large files - download separately via Git LFS clone) ---
 data/*.csv

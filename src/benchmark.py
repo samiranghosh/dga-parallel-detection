@@ -345,8 +345,8 @@ def run_experiment_e4(domain_list, dictionary, ngram_table,
     """E4: Chunk size sweep — fixed N and K=8, vary chunk granularity.
 
     Tests the effect of splitting N domains into different numbers of
-    chunks (k_split) while keeping the worker pool at K=8. When
-    k_split > k, Pool.map handles the load balancing automatically.
+    chunks (k_split) while keeping the worker pool at K=8. Pool.map
+    handles the load balancing automatically when k_split > pool_size.
 
     P1 Section 15: Sweep chunk sizes to find the optimal granularity.
 
@@ -602,6 +602,93 @@ def plot_chunk_sweep(results_e4: list, output_path: str):
     plt.savefig(output_path, dpi=150)
     plt.close()
     print(f"  [PLOT] Saved chunk sweep to {output_path}")
+
+
+# ── Priority 2: Per-Feature Profiling ──
+
+def profile_per_feature(domain_list: list, dictionary: set,
+                        ngram_table: dict,
+                        n_sample: int = 10000) -> Dict[str, Any]:
+    """Profile wall-clock time for each of the 6 feature functions.
+
+    Runs each feature independently on n_sample domains and measures
+    the time. This empirically derives the parallelizable fraction P
+    by showing how much of the sequential extraction time is spent
+    in each feature function.
+
+    Args:
+        domain_list: Full domain list (will be subsampled).
+        dictionary: English dictionary set.
+        ngram_table: Trigram frequency table.
+        n_sample: Number of domains to profile.
+
+    Returns:
+        Dict with per-feature times, total, and derived P:
+        {
+            'feature_times': {'length': ..., 'numerical_ratio': ..., ...},
+            'feature_percentages': {'length': ..., ...},
+            'total_extraction_sec': float,
+            'total_overhead_sec': float,  # loop, array alloc, etc.
+            'parallelizable_fraction_P': float,
+            'n_sample': int,
+        }
+    """
+    from src.features import (
+        calc_length, calc_numerical_ratio, calc_meaningful_word_ratio,
+        calc_pronounceability, calc_lms_percentage, calc_levenshtein,
+    )
+
+    # Subsample
+    if len(domain_list) > n_sample:
+        indices = np.random.RandomState(42).choice(len(domain_list), n_sample, replace=False)
+        indices.sort()
+        domains = [domain_list[i] for i in indices]
+    else:
+        domains = domain_list[:n_sample]
+
+    feature_funcs = {
+        'length': lambda d, p: calc_length(d),
+        'numerical_ratio': lambda d, p: calc_numerical_ratio(d),
+        'meaningful_word_ratio': lambda d, p: calc_meaningful_word_ratio(d, dictionary),
+        'pronounceability': lambda d, p: calc_pronounceability(d, ngram_table),
+        'lms_percentage': lambda d, p: calc_lms_percentage(d, dictionary),
+        'levenshtein': lambda d, p: calc_levenshtein(d, p),
+    }
+
+    feature_times = {}
+
+    for feat_name, func in feature_funcs.items():
+        t0 = time.perf_counter()
+        prev = domains[0]
+        for d in domains:
+            func(d, prev)
+            prev = d
+        elapsed = time.perf_counter() - t0
+        feature_times[feat_name] = elapsed
+
+    # Measure total sequential extraction for comparison
+    from src.features import extract_all_sequential
+    t0 = time.perf_counter()
+    extract_all_sequential(domains, dictionary, ngram_table)
+    total_extraction = time.perf_counter() - t0
+
+    sum_features = sum(feature_times.values())
+    overhead = total_extraction - sum_features
+
+    feature_pcts = {k: v / total_extraction * 100 for k, v in feature_times.items()}
+
+    # Derive P: all feature extraction is parallelizable;
+    # overhead (loop, array alloc) is sequential
+    P = sum_features / total_extraction if total_extraction > 0 else 0.0
+
+    return {
+        'feature_times': feature_times,
+        'feature_percentages': feature_pcts,
+        'total_extraction_sec': total_extraction,
+        'total_overhead_sec': max(0.0, overhead),
+        'parallelizable_fraction_P': P,
+        'n_sample': len(domains),
+    }
 
 
 # ── Suite Runner ──
