@@ -15,6 +15,9 @@ This project implements a data-parallel pipeline for detecting malware that uses
 - **Layer 2 — Model Parallelism:** Random Forest training with `n_jobs=-1` via scikit-learn's joblib backend
 - **Overlapping chunk strategy** to handle Levenshtein distance sequential dependencies at chunk boundaries
 - **Comprehensive benchmarking** with strong/weak scaling analysis, Amdahl's Law validation, and IPC overhead measurement
+- **5-feature production configuration** — feature ablation revealed that dropping Levenshtein improves both accuracy (93.18%) and throughput
+- **Statistical validation** — 5-fold cross-validation with paired t-tests for model and feature-set comparisons
+- **Real-time inference API** — FastAPI endpoint for single-domain and batch classification (~2–4ms per domain)
 
 ## Target Platform
 
@@ -42,7 +45,7 @@ dga-parallel-detection/
 │   ├── parallel_engine.py       # Pool-based parallel orchestration
 │   ├── chunker.py               # Overlapping chunk creation + adaptive sizing
 │   ├── shared_resources.py      # Shared memory setup for dict/n-grams
-│   ├── classifier.py            # RF training (n_jobs), DT comparison
+│   ├── classifier.py            # RF training (n_jobs), DT comparison, CV
 │   ├── benchmark.py             # Timing, profiling, and metrics collection
 │   ├── fault_handler.py         # Retry logic, validation, timeout wrapper
 │   └── preprocess.py            # Data loading, cleaning, TLD stripping
@@ -54,8 +57,11 @@ dga-parallel-detection/
 ├── results/
 │   ├── plots/                   # Generated benchmark visualizations
 │   └── metrics.json             # Raw benchmark data
+├── P3_Experimental_Report.ipynb # Final experimental report (81 cells)
+├── api.py                       # FastAPI inference endpoint
 ├── main.py                      # Entry point (sequential / parallel / benchmark)
 ├── requirements.txt             # Pinned Python dependencies
+├── .gitattributes               # Git LFS tracking rules
 ├── .gitignore
 └── README.md                    # This file
 ```
@@ -75,7 +81,7 @@ On Windows, you may need to use `python` instead of `python3`. If you have multi
 ### 2. Clone the Repository
 
 ```bash
-git clone https://github.com/<your-org>/dga-parallel-detection.git
+git clone https://github.com/samiranghosh/dga-parallel-detection.git
 cd dga-parallel-detection
 ```
 
@@ -221,6 +227,66 @@ python main.py --mode benchmark --experiment E6    # DT vs RF comparison
 python main.py --mode benchmark --experiment E7    # Feature ablation
 ```
 
+### P3 Experimental Report (Jupyter Notebook)
+
+The full experimental report with all 8 experiments, 6 enhancements, inline plots, and analysis:
+
+```bash
+pip install jupyter
+jupyter notebook P3_Experimental_Report.ipynb
+```
+
+The notebook runs all experiments end-to-end — data loading → feature extraction → parallel benchmarks → classification → acceptance criteria validation. Results are saved to `results/metrics.json` and plots to `results/plots/`.
+
+### Real-Time Inference API
+
+Start the FastAPI inference server (uses the 5-feature configuration and n_estimators=50):
+
+```bash
+pip install fastapi uvicorn
+python api.py
+```
+
+Classify a single domain:
+
+```bash
+curl -X POST http://localhost:8000/classify \
+  -H 'Content-Type: application/json' \
+  -d '{"domain": "xjk29df"}'
+```
+
+Batch classification (up to 1000 domains):
+
+```bash
+curl -X POST http://localhost:8000/classify/batch \
+  -H 'Content-Type: application/json' \
+  -d '{"domains": ["google", "xjk29df", "facebook", "a1b2c3d4"]}'
+```
+
+Health check:
+
+```bash
+curl http://localhost:8000/health
+```
+
+Example response:
+
+```json
+{
+  "domain": "xjk29df",
+  "label": "DGA",
+  "probability": 0.94,
+  "features": {
+    "length": 7.0,
+    "numerical_ratio": 0.2857,
+    "meaningful_word_ratio": 0.0,
+    "pronounceability": 0.0001,
+    "lms_percentage": 0.0
+  },
+  "latency_ms": 2.1
+}
+```
+
 ### Command-Line Arguments
 
 | Argument | Description | Default |
@@ -279,15 +345,24 @@ This extracts features from a 10K-domain subset using both modes and asserts ele
 | E7 | Feature ablation | 1–6 features | N = 1M, K = 8 |
 | E8 | Weak scaling | N/K = 125K constant | K = 1, 2, 4, 8 |
 
-## Performance Targets
+## Performance Targets & Measured Results
 
-| Metric | Target | Minimum Acceptable |
-|--------|--------|--------------------|
-| Speedup (8 cores) | ≥ 5.5x | ≥ 4.0x |
-| CPU Utilization | > 85% all cores | > 70% |
-| IPC Overhead | < 5% | < 10% |
-| Classification Accuracy | > 93% | > 90% |
-| Throughput (8 cores) | > 50K domains/sec | > 30K domains/sec |
+| Metric | Target | Minimum | Measured | Status |
+|--------|--------|---------|----------|--------|
+| Speedup (8 cores) | ≥ 5.5x | ≥ 4.0x | **5.75×** | ✅ Met |
+| CPU Utilization | > 85% all cores | > 70% | 51.8% system-wide (≈104% physical-core) | ✅ Explainable |
+| IPC Overhead | < 5% | < 10% | **1.30%** | ✅ Met |
+| Classification Accuracy | > 93% | > 90% | **93.18%** (5-feature) / 92.60% (6-feature) | ✅ Met |
+| Throughput (8 cores) | > 50K domains/sec | > 30K domains/sec | **63,048 dom/s** | ✅ Met |
+
+**Key findings from E1–E8 and enhancements:**
+
+- Amdahl's Law (P = 0.949) validated within 3.2% up to K=8; SMT (K=16) diverges by −28.2% due to CPU-bound contention
+- IPC overhead 3.7× lower than predicted — NumPy arrays serialize via pickle's zero-copy buffer protocol
+- Pronounceability is the single most important feature (+25.8% accuracy jump)
+- Levenshtein distance *hurts* accuracy in shuffled datasets — the 5-feature configuration is strictly better
+- K=12 is the practical sweet spot (6.94× speedup, 57.9% efficiency)
+- n_estimators=50 is sufficient (92.64% accuracy, 9× faster than 500 trees)
 
 ## 6 Linguistic Features
 
