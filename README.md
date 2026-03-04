@@ -63,6 +63,8 @@ dga-parallel-detection/
 ├── P3_Experimental_Report.html # Executed notebook with all outputs and plots
 ├── api.py                       # FastAPI inference endpoint
 ├── main.py                      # Entry point (sequential / parallel / benchmark)
+├── reproduce.sh                 # One-command reproduction (Linux/WSL2)
+├── reproduce.bat                # One-command reproduction (Windows)
 ├── requirements.txt             # Pinned Python dependencies
 ├── .gitattributes               # Git LFS tracking rules
 ├── .gitignore
@@ -293,6 +295,24 @@ Example response:
   "latency_ms": 2.1
 }
 ```
+
+### Reproduce All Results
+
+To re-run the entire pipeline — preprocessing, benchmarks, tests, and HTML report generation — in a single command:
+
+**Linux / WSL2:**
+
+```bash
+bash reproduce.sh
+```
+
+**Windows (Command Prompt):**
+
+```cmd
+reproduce.bat
+```
+
+Both scripts run all 5 stages: dependency install → preprocessing → E1–E8 benchmarks (3 repetitions) → test suite → notebook execution and HTML export. Expect 30–60 minutes depending on hardware. Use the `--quick` flag to skip preprocessing if `data/` is already populated.
 
 ### Command-Line Arguments
 
