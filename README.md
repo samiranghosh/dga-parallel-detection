@@ -387,11 +387,28 @@ This extracts features from a 10K-domain subset using both modes and asserts ele
 
 | Member | ID | Role |
 |--------|----|------|
-| Tushar Gajanan Lokhande | 2024CT05001 | Data pipeline & preprocessing |
-| Pradyumna Ray | 2024CT05003 | Feature extraction implementation |
-| Rohit Kumar Dubey | 2024CT05050 | Parallel engine & chunker |
-| Samiran Ghosh | 2023CT05033 | Classifier & ML evaluation |
-| Maliga Jaswanth | 2024CT05041 | Benchmarking & report |
+| Samiran Ghosh | 2023CT05033 | System Architect & Integration Lead |
+| Tushar Gajanan Lokhande | 2024CT05001 | Data Pipeline & Fault Tolerance |
+| Pradyumna Ray | 2024CT05003 | Feature Engineering |
+| Rohit Kumar Dubey | 2024CT05050 | Parallel Engine & Systems |
+| Maliga Jaswanth | 2024CT05041 | Benchmarking & Experimentation |
+
+### Contributions
+
+**Samiran Ghosh — System Architect & Integration Lead**
+Coordinated the team across all project phases (P1 → P2 → P3). Designed the end-to-end system architecture including the two-layer parallelism strategy, overlapping chunk scheme, and experimental plan (E1–E8). Authored the P1 revised design document. Built the classifier module (`classifier.py`) — Random Forest training, Decision Tree comparison, hyperparameter sweep, cross-validation, and paired significance tests. Integrated all modules into a cohesive pipeline, resolved cross-module interface issues, and authored the P3 experimental report notebook with analysis for all experiments and enhancements. Designed and implemented the FastAPI inference endpoint (`api.py`).
+
+**Tushar Gajanan Lokhande — Data Pipeline & Fault Tolerance**
+Implemented the data preprocessing pipeline (`preprocess.py`) — dataset loading, domain cleaning, TLD stripping via `tldextract`, English dictionary generation from NLTK, trigram frequency table computation, and stratified 80/20 train/test splitting. Implemented the fault tolerance module (`fault_handler.py`) — feature validation with shape/NaN/range checks, retry logic with configurable max attempts, and timeout wrappers. Contributed to the test suite (`test_features.py`, `test_boundary.py`).
+
+**Pradyumna Ray — Feature Engineering**
+Implemented all 6 linguistic feature extraction functions in `features.py` — domain length, numerical character ratio, meaningful word ratio (dictionary-based substring scanning), pronounceability score (trigram probability), longest meaningful substring percentage, and Levenshtein edit distance with pure-Python fallback when the C extension is unavailable. Implemented the sequential feature extractor used as the parallel correctness baseline.
+
+**Rohit Kumar Dubey — Parallel Engine & Systems**
+Built the parallel execution engine (`parallel_engine.py`) — `multiprocessing.Pool`-based orchestration, worker initialization, and result aggregation. Implemented the chunker module (`chunker.py`) — overlapping chunk creation with 1-domain boundary overlap for Levenshtein continuity, and adaptive chunk sizing. Discovered and fixed the Windows 63-handle pool limit (`WaitForMultipleObjects` MAXIMUM_WAIT_OBJECTS = 64) by implementing `_safe_pool_size()` that transparently caps the pool at 61 workers. Implemented shared resource initialization (`shared_resources.py`) including the `multiprocessing.shared_memory` benchmark.
+
+**Maliga Jaswanth — Benchmarking & Experimentation**
+Implemented the benchmark module (`benchmark.py`) — experiment runners for E1–E8, timing instrumentation, IPC overhead measurement, per-feature profiling, and all plot generation functions. Ran the full benchmark suite on Windows (HP OMEN 16) and the WSL2/Linux E1 cross-platform comparison. Generated `results/metrics.json` and `results/wsl2/metrics.json` with all raw experimental data.
 
 ## References
 
