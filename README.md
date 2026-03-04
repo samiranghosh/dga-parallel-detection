@@ -58,6 +58,7 @@ dga-parallel-detection/
 │   ├── plots/                   # Generated benchmark visualizations
 │   └── metrics.json             # Raw benchmark data
 ├── P3_Experimental_Report.ipynb # Final experimental report (81 cells)
+├── P3_Experimental_Report.html # Executed notebook with all outputs and plots
 ├── api.py                       # FastAPI inference endpoint
 ├── main.py                      # Entry point (sequential / parallel / benchmark)
 ├── requirements.txt             # Pinned Python dependencies
@@ -230,6 +231,10 @@ python main.py --mode benchmark --experiment E7    # Feature ablation
 ### P3 Experimental Report (Jupyter Notebook)
 
 The full experimental report with all 8 experiments, 6 enhancements, inline plots, and analysis:
+
+**View without running:** The pre-executed HTML report with all outputs and plots is available at [`P3_Experimental_Report.html`](P3_Experimental_Report.html). Download and open in any browser — no Python or Jupyter required.
+
+**Re-run from scratch:**
 
 ```bash
 pip install jupyter
