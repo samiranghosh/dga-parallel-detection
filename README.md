@@ -56,8 +56,10 @@ dga-parallel-detection/
 │   └── test_boundary.py         # Levenshtein overlap verification
 ├── results/
 │   ├── plots/                   # Generated benchmark visualizations
-│   └── metrics.json             # Raw benchmark data
-├── P3_Experimental_Report.ipynb # Final experimental report (81 cells)
+│   ├── wsl2/
+│   │   └── metrics.json         # WSL2/Linux E1 benchmark data
+│   └── metrics.json             # Windows benchmark data (all experiments)
+├── P3_Experimental_Report.ipynb # Final experimental report (82 cells)
 ├── P3_Experimental_Report.html # Executed notebook with all outputs and plots
 ├── api.py                       # FastAPI inference endpoint
 ├── main.py                      # Entry point (sequential / parallel / benchmark)
@@ -368,6 +370,7 @@ This extracts features from a 10K-domain subset using both modes and asserts ele
 - Levenshtein distance *hurts* accuracy in shuffled datasets — the 5-feature configuration is strictly better
 - K=12 is the practical sweet spot (6.94× speedup, 57.9% efficiency)
 - n_estimators=50 is sufficient (92.64% accuracy, 9× faster than 500 trees)
+- WSL2/Linux delivers a **41.4% sequential speed advantage** over Windows on the same hardware; at K=16, WSL2 achieves 9.52× vs Windows 6.52× (+46%)
 
 ## 6 Linguistic Features
 
