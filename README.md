@@ -59,7 +59,7 @@ dga-parallel-detection/
 │   ├── wsl2/
 │   │   └── metrics.json         # WSL2/Linux E1 benchmark data
 │   └── metrics.json             # Windows benchmark data (all experiments)
-├── P3_Experimental_Report.ipynb # Final experimental report (82 cells)
+├── P3_Experimental_Report.ipynb # Final experimental report (84 cells)
 ├── P3_Experimental_Report.html # Executed notebook with all outputs and plots
 ├── api.py                       # FastAPI inference endpoint
 ├── main.py                      # Entry point (sequential / parallel / benchmark)
@@ -376,21 +376,21 @@ This extracts features from a 10K-domain subset using both modes and asserts ele
 
 | Metric | Target | Minimum | Measured | Status |
 |--------|--------|---------|----------|--------|
-| Speedup (8 cores) | ≥ 5.5x | ≥ 4.0x | **5.75×** | ✅ Met |
-| CPU Utilization | > 85% all cores | > 70% | 51.8% system-wide (≈104% physical-core) | ✅ Explainable |
-| IPC Overhead | < 5% | < 10% | **1.30%** | ✅ Met |
+| Speedup (8 cores) | ≥ 5.5x | ≥ 4.0x | **7.13×** | ✅ Met |
+| CPU Utilization | > 85% all cores | > 70% | 49.4% system-wide (≈99% physical-core) | ✅ Explainable |
+| IPC Overhead | < 5% | < 10% | **1.32%** | ✅ Met |
 | Classification Accuracy | > 93% | > 90% | **93.18%** (5-feature) / 92.60% (6-feature) | ✅ Met |
-| Throughput (8 cores) | > 50K domains/sec | > 30K domains/sec | **63,048 dom/s** | ✅ Met |
+| Throughput (8 cores) | > 50K domains/sec | > 30K domains/sec | **78,800 dom/s** | ✅ Met |
 
 **Key findings from E1–E8 and enhancements:**
 
-- Amdahl's Law (P = 0.949) validated within 3.2% up to K=8; SMT (K=16) diverges by −28.2% due to CPU-bound contention
-- IPC overhead 3.7× lower than predicted — NumPy arrays serialize via pickle's zero-copy buffer protocol
+- Amdahl's Law (P = 0.949) predicted the scaling trend; K=8 measured 7.13× vs predicted 5.90× (baseline variance); SMT (K=16) at 8.41× vs predicted 9.07×
+- IPC overhead 3.6× lower than predicted — NumPy arrays serialize via pickle's zero-copy buffer protocol
 - Pronounceability is the single most important feature (+25.8% accuracy jump)
 - Levenshtein distance *hurts* accuracy in shuffled datasets — the 5-feature configuration is strictly better
 - K=12 is the practical sweet spot (6.94× speedup, 57.9% efficiency)
 - n_estimators=50 is sufficient (92.64% accuracy, 9× faster than 500 trees)
-- WSL2/Linux delivers a **41.4% sequential speed advantage** over Windows on the same hardware; at K=16, WSL2 achieves 9.52× vs Windows 6.52× (+46%)
+- WSL2/Linux delivers a **39.7% sequential speed advantage** over Windows on the same hardware; at K=16, WSL2 achieves 10.55× vs Windows 8.41× (+25.5%), with a 2.1× wall-clock advantage
 
 ## 6 Linguistic Features
 
