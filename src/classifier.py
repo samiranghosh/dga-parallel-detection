@@ -53,6 +53,38 @@ def train_random_forest(X_train: np.ndarray, y_train: np.ndarray,
     return rf
 
 
+def train_pruned_random_forest(X_train: np.ndarray, y_train: np.ndarray,
+                               n_estimators: int = 100,
+                               max_depth: int = None,
+                               ccp_alpha: float = 0.0,
+                               n_jobs: int = -1,
+                               random_state: int = 42) -> RandomForestClassifier:
+    """Train a structurally pruned Random Forest classifier.
+
+    Args:
+        X_train: Feature matrix, shape (N, 6 or 5).
+        y_train: Labels.
+        n_estimators: Number of trees.
+        max_depth: Max depth of trees (None = unlimited).
+        ccp_alpha: Complexity parameter for Minimal Cost-Complexity Pruning.
+                   0.0 means no pruning.
+        n_jobs: Cores for joblib (-1 = all).
+        random_state: Seed.
+
+    Returns:
+        Trained (pruned) RandomForestClassifier.
+    """
+    rf = RandomForestClassifier(
+        n_estimators=n_estimators,
+        max_depth=max_depth,
+        ccp_alpha=ccp_alpha,
+        n_jobs=n_jobs,
+        random_state=random_state,
+    )
+    rf.fit(X_train, y_train)
+    return rf
+
+
 def train_decision_tree(X_train: np.ndarray, y_train: np.ndarray,
                         max_depth: int = None,
                         random_state: int = 42) -> DecisionTreeClassifier:
@@ -122,6 +154,50 @@ def run_hyperparameter_sweep(X_train, y_train, X_test, y_test,
             'f1': metrics['f1'],
             'train_time_sec': train_time,
         })
+    return results
+
+
+def run_pruning_sweep(X_train, y_train, X_test, y_test,
+                      n_estimators: int = 100) -> list:
+    """Experiment: Sweep structural pruning parameters for RQ2.
+
+    Sweeps max_depth and ccp_alpha to find the best trade-off between
+    model size (nodes/depth) and accuracy.
+
+    Returns:
+        List of dicts: [{max_depth, ccp_alpha, accuracy, f1, num_nodes, size_bytes}, ...]
+    """
+    import pickle
+    
+    depths = [None, 20, 15, 10, 5]
+    alphas = [0.0, 0.001, 0.005, 0.01]
+    
+    results = []
+    for d in depths:
+        for a in alphas:
+            t0 = time.perf_counter()
+            model = train_pruned_random_forest(
+                X_train, y_train, n_estimators=n_estimators, max_depth=d, ccp_alpha=a
+            )
+            train_time = time.perf_counter() - t0
+            metrics = evaluate_model(model, X_test, y_test)
+            
+            # Calculate total nodes across all trees
+            total_nodes = sum(tree.tree_.node_count for tree in model.estimators_)
+            
+            # Approximate size in bytes via pickle
+            size_bytes = len(pickle.dumps(model, protocol=pickle.HIGHEST_PROTOCOL))
+            
+            results.append({
+                'max_depth': d if d is not None else -1,
+                'ccp_alpha': a,
+                'accuracy': metrics['accuracy'],
+                'f1': metrics['f1'],
+                'total_nodes': total_nodes,
+                'size_bytes': size_bytes,
+                'train_time_sec': train_time
+            })
+            
     return results
 
 
