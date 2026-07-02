@@ -46,12 +46,26 @@ _ngram_table = None
 _skip_levenshtein = False
 
 
-def _init_worker(dictionary, ngram_table, skip_levenshtein=False):
-    """Pool initializer: store shared resources in worker globals."""
+def _init_worker(dictionary, ngram_table, skip_levenshtein=False,
+                 automaton_blob=None):
+    """Pool initializer: store shared resources in worker globals.
+
+    B5 Step 4: when the fast feature kernel is active, the parent ships one
+    serialized AC automaton (automaton_blob) so workers attach (~0.06 s)
+    instead of each rebuilding from the set (~0.50 s); without a blob the
+    automaton is still pre-built here so the cost lands in pool startup,
+    not in the first chunk.
+    """
     global _dictionary, _ngram_table, _skip_levenshtein
     _dictionary = dictionary
     _ngram_table = ngram_table
     _skip_levenshtein = skip_levenshtein
+    from src import features
+    if automaton_blob is not None:
+        import pickle
+        features.warm_kernel(dictionary, pickle.loads(automaton_blob))
+    else:
+        features.warm_kernel(dictionary)
 
 
 def _init_worker_shm(shm_names, skip_levenshtein=False):
@@ -59,12 +73,17 @@ def _init_worker_shm(shm_names, skip_levenshtein=False):
 
     Priority 4 enhancement — avoids per-worker pickle serialization
     of dictionary and n-gram table. Workers attach to pre-created
-    shared memory blocks by name.
+    shared memory blocks by name. B5 Step 4: if the parent published a
+    serialized automaton block (see SharedMemoryResources.create), attach
+    to that single copy too; otherwise pre-build from the set.
     """
     global _dictionary, _ngram_table, _skip_levenshtein
     from src.shared_resources import SharedMemoryResources
     _dictionary, _ngram_table = SharedMemoryResources.attach(shm_names)
     _skip_levenshtein = skip_levenshtein
+    from src import features
+    features.warm_kernel(_dictionary,
+                         SharedMemoryResources.attach_automaton(shm_names))
 
 
 def extract_chunk_features(chunk: Chunk) -> np.ndarray:
@@ -157,7 +176,13 @@ def parallel_extract_features(domain_list: list, k: int,
         initargs = (shm_names, skip_levenshtein)
     else:
         initializer = _init_worker
-        initargs = (dictionary, ngram_table, skip_levenshtein)
+        # B5 Step 4: serialize the AC automaton once in the parent; every
+        # worker attaches to that one copy instead of rebuilding (no-op
+        # in legacy kernel mode).
+        from src import features
+        blob = (features.export_automaton_blob(dictionary)
+                if features.get_kernel_mode() == "fast" else None)
+        initargs = (dictionary, ngram_table, skip_levenshtein, blob)
 
     with multiprocessing.Pool(
         processes=n_pool,

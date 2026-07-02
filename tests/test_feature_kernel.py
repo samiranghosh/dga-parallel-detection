@@ -122,6 +122,36 @@ def test_rule_corners_small_dicts(dictionary):
 
 
 @needs_data
+def test_shm_path_with_automaton_block(resources):
+    """B5 Step 4: shm initializer path (one shared automaton copy) ==
+    sequential output; proves the extended _init_worker_shm API end-to-end."""
+    import pandas as pd
+    from src import features
+    from src.shared_resources import SharedMemoryResources
+    from src.parallel_engine import parallel_extract_features
+    from src.features import extract_all_sequential
+
+    dictionary, ngram_table = resources
+    domains = (pd.read_csv(os.path.join(DATA, "test.csv"))["domain"]
+               .astype(str).head(200).tolist())
+
+    set_kernel_mode("fast")
+    shm = SharedMemoryResources()
+    try:
+        names = shm.create(dictionary, ngram_table,
+                           automaton_blob=features.export_automaton_blob(dictionary))
+        assert "automaton_name" in names
+        par = parallel_extract_features(domains, 2, dictionary, ngram_table,
+                                        skip_levenshtein=True,
+                                        use_shared_memory=True, shm_names=names)
+    finally:
+        shm.cleanup()
+    seq = extract_all_sequential(domains, dictionary, ngram_table,
+                                 skip_levenshtein=True)
+    assert np.array_equal(par, seq)
+
+
+@needs_data
 def test_extract_features_vector_parity(resources):
     """Full 5-feature vectors identical across kernels (dtype and values)."""
     dictionary, ngram_table = resources

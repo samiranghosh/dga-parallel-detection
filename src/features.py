@@ -63,6 +63,32 @@ _AUTOMATON_CACHE = {}
 _AUTOMATON_CACHE_MAX = 8  # small test dictionaries; production uses one entry
 
 
+def warm_kernel(dictionary, automaton=None):
+    """Pre-build or adopt the AC automaton for `dictionary` (no-op in legacy).
+
+    Called from Pool initializers (B5 Step 4) so the build/attach cost lands
+    in pool startup, not in the first chunk. When `automaton` is given (a
+    deserialized copy shipped by the parent - 0.06 s attach vs 0.50 s
+    per-worker rebuild, results/kernel/attach_paths.json), it is adopted
+    into the cache for this dictionary object.
+    """
+    if _kernel_mode != "fast":
+        return
+    if automaton is not None:
+        key = (id(dictionary), len(dictionary))
+        if len(_AUTOMATON_CACHE) >= _AUTOMATON_CACHE_MAX:
+            _AUTOMATON_CACHE.pop(next(iter(_AUTOMATON_CACHE)))
+        _AUTOMATON_CACHE[key] = automaton
+    else:
+        _get_automaton(dictionary)
+
+
+def export_automaton_blob(dictionary) -> bytes:
+    """Serialize the automaton for `dictionary` once, for worker attach."""
+    import pickle
+    return pickle.dumps(_get_automaton(dictionary), pickle.HIGHEST_PROTOCOL)
+
+
 def _get_automaton(dictionary):
     if len(dictionary) == 0:
         # pyahocorasick cannot finalise a zero-word automaton; legacy

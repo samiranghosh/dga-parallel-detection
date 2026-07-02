@@ -87,16 +87,29 @@ class SharedMemoryResources:
     def __init__(self):
         self._dict_shm: Optional[shared_memory.SharedMemory] = None
         self._ngram_shm: Optional[shared_memory.SharedMemory] = None
+        self._automaton_shm: Optional[shared_memory.SharedMemory] = None
 
-    def create(self, dictionary: set, ngram_table: dict) -> Dict[str, str]:
+    def create(self, dictionary: set, ngram_table: dict,
+               automaton_blob: Optional[bytes] = None) -> Dict[str, str]:
         """Serialize resources and place them in shared memory.
 
         Args:
             dictionary: English dictionary set.
             ngram_table: Trigram frequency table dict.
+            automaton_blob: Optional pre-serialized AC automaton
+                (src.features.export_automaton_blob). One OS-shared copy;
+                workers deserialize on attach (0.06 s) instead of rebuilding
+                from the set (0.50 s) - B5 Step 4, results/kernel/
+                attach_paths.json. pyahocorasick has no mmap, so a private
+                per-worker heap copy after deserialization is inherent to
+                the AC backend; the true zero-copy alternative is the
+                marisa-trie DAWG (src/compact_dict.py: 0.7 MiB mmap, 5 ms)
+                at 1.6x the kernel latency - the measured trade-off is
+                documented in results/kernel/FINDINGS.md.
 
         Returns:
             Dict with shared memory names: {'dict_name': ..., 'ngram_name': ...}
+            (+ 'automaton_name'/'automaton_size' when automaton_blob given).
         """
         # Serialize to bytes
         dict_bytes = pickle.dumps(dictionary, protocol=pickle.HIGHEST_PROTOCOL)
@@ -114,16 +127,36 @@ class SharedMemoryResources:
         self._dict_shm.buf[:len(dict_bytes)] = dict_bytes
         self._ngram_shm.buf[:len(ngram_bytes)] = ngram_bytes
 
+        if automaton_blob is not None:
+            self._automaton_shm = shared_memory.SharedMemory(
+                create=True, size=len(automaton_blob)
+            )
+            self._automaton_shm.buf[:len(automaton_blob)] = automaton_blob
+
         return self.get_names()
 
     def get_names(self) -> Dict[str, str]:
         """Return shared memory block names for worker attachment."""
-        return {
+        names = {
             'dict_name': self._dict_shm.name,
             'dict_size': self._dict_shm.size,
             'ngram_name': self._ngram_shm.name,
             'ngram_size': self._ngram_shm.size,
         }
+        if self._automaton_shm is not None:
+            names['automaton_name'] = self._automaton_shm.name
+            names['automaton_size'] = self._automaton_shm.size
+        return names
+
+    @staticmethod
+    def attach_automaton(shm_names: Dict[str, str]):
+        """Deserialize the shared AC automaton, or None if not published."""
+        if 'automaton_name' not in shm_names:
+            return None
+        shm = shared_memory.SharedMemory(name=shm_names['automaton_name'])
+        automaton = pickle.loads(bytes(shm.buf[:shm_names['automaton_size']]))
+        shm.close()
+        return automaton
 
     @staticmethod
     def attach(shm_names: Dict[str, str]) -> Tuple[set, dict]:
@@ -151,7 +184,7 @@ class SharedMemoryResources:
 
     def cleanup(self):
         """Unlink shared memory blocks. Call after pool is closed."""
-        for shm in [self._dict_shm, self._ngram_shm]:
+        for shm in [self._dict_shm, self._ngram_shm, self._automaton_shm]:
             if shm is not None:
                 try:
                     shm.close()
@@ -160,6 +193,7 @@ class SharedMemoryResources:
                     pass
         self._dict_shm = None
         self._ngram_shm = None
+        self._automaton_shm = None
 
     def __del__(self):
         self.cleanup()
@@ -201,11 +235,15 @@ def benchmark_shared_memory(dictionary: set, ngram_table: dict,
         results['pickle_init']['times'].append(time.perf_counter() - t0)
 
     # Benchmark shared memory approach
+    from src import features
+    automaton_blob = (features.export_automaton_blob(dictionary)
+                      if features.get_kernel_mode() == "fast" else None)
     shm_create_time = 0.0
     for r in range(reps):
         shm = SharedMemoryResources()
         t0 = time.perf_counter()
-        shm_names = shm.create(dictionary, ngram_table)
+        shm_names = shm.create(dictionary, ngram_table,
+                               automaton_blob=automaton_blob)
         if r == 0:
             shm_create_time = time.perf_counter() - t0
 
