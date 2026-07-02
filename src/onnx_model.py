@@ -57,9 +57,13 @@ class OnnxPredictor(Predictor):
     def predict_proba(self, X: np.ndarray) -> np.ndarray:
         X = X.astype(np.float32)
         outputs = self.session.run([self.proba_name], {self.input_name: X})
-        # outputs[1] is a list of dicts: [{0: p0, 1: p1}, {0: p0, 1: p1}, ...]
-        # We need to convert this to an (N, 2) array
         probas = outputs[0]
+        # zipmap=False (current converter): plain (N, n_classes) float tensor.
+        if isinstance(probas, np.ndarray):
+            return probas.astype(np.float32)
+        # Legacy zipmap models: list of {class: proba} dicts. NOTE: this layout
+        # is the one skl2onnx 1.20.0 + ort 1.27.0 emit malformed probabilities
+        # through for binary RF — kept only for reading old model files.
         result = np.zeros((len(probas), 2), dtype=np.float32)
         for i, p_dict in enumerate(probas):
             result[i, 0] = p_dict.get(0, 0.0)
@@ -69,18 +73,27 @@ class OnnxPredictor(Predictor):
 
 def convert_to_onnx(sklearn_model, n_features: int, output_path: str):
     """Convert a trained scikit-learn model to ONNX format.
-    
+
     Must only be called during training/preprocessing, never during edge inference.
+
+    PARITY FIX (Batch-3 Step 2): skl2onnx 1.20.0 + onnxruntime 1.27.0 emit
+    malformed probabilities (negative, non-normalized) for binary RandomForest
+    through the default ZipMap output. Converting with zipmap=False makes the
+    probability output a plain (N, n_classes) float tensor, which this pairing
+    produces correctly. OnnxPredictor.predict_proba handles both layouts.
     """
     from skl2onnx import convert_sklearn
     from skl2onnx.common.data_types import FloatTensorType
-    
+
     initial_type = [('float_input', FloatTensorType([None, n_features]))]
-    
-    # Enable zipmap=False for better performance if possible, but we'll stick to default 
-    # to ensure it works correctly with dict outputs as handled in predict_proba.
-    onx = convert_sklearn(sklearn_model, initial_types=initial_type, target_opset=12)
-    
+
+    onx = convert_sklearn(
+        sklearn_model,
+        initial_types=initial_type,
+        target_opset=12,
+        options={id(sklearn_model): {'zipmap': False}},
+    )
+
     with open(output_path, "wb") as f:
         f.write(onx.SerializeToString())
 

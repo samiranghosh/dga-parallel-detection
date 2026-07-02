@@ -37,12 +37,15 @@ marisa-trie==1.4.1              # Compact, mmap-backed DAWG for the dictionary.
                                 # Also built by src/preprocess.py (build_english_dictionary),
                                 # so it is a hard runtime dep, not RQ2-only.
 onnx==1.22.0
-onnxruntime==1.27.0             # Serving backend that drops the heavy sklearn import
-skl2onnx==1.20.0                # sklearn -> ONNX conversion.
-                                # KNOWN ISSUE: this skl2onnx/onnxruntime pairing emits
-                                # malformed probabilities for binary RandomForest
-                                # (negative, non-normalized) -> tests/test_onnx.py fails.
-                                # Root-caused, deferred; not an environment install gap.
+onnxruntime==1.25.1             # Serving backend that drops the heavy sklearn import.
+                                # PINNED DOWN from 1.27.0 (Batch-3 Step 2): ort >= 1.26.0
+                                # has a TreeEnsembleClassifier kernel regression for
+                                # binary RF - emits probabilities (-p1, +p1) instead of
+                                # (1-p1, p1), which also corrupts the in-graph label
+                                # (argmax always 1). 1.25.1 = newest version with exact
+                                # parity (labels array_equal, probas within 1.2e-7).
+skl2onnx==1.20.0                # sklearn -> ONNX conversion (zipmap=False; not implicated
+                                # in the parity bug - 1.19.1 reproduced it identically).
 
 # --- Serving API (RQ3) ---
 fastapi==0.135.1                # Required by api.py (was previously unpinned/missing)
