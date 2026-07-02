@@ -65,3 +65,37 @@ def test_adaptive_bounds(test_domains, dictionary, ngram_table):
     assert stats["workers_spawned"] == 2
     assert stats["mean_active_workers"] >= 2.0
     assert stats["mean_active_workers"] <= 4.0
+
+
+def test_proportional_delta_scaling():
+    """RQ1: scaling magnitude is PROPORTIONAL to the queue-depth error (not a
+    fixed +/-1), holds inside the hysteresis dead-band, respects the min/max
+    band, and CPU headroom gates scale-up only.
+
+    Exercises the pure decision method directly (no worker processes), so it is
+    fast and deterministic.
+    """
+    from src.parallel_engine import AdaptiveController
+
+    c = AdaptiveController.__new__(AdaptiveController)  # bare instance, no __init__
+    c.min_workers = 1
+    c.max_workers = 8
+    c.target_queue_per_worker = 2
+    c.kp = 0.5
+    c.hysteresis = 1.0
+
+    # Large backlog with 1 worker -> add many at once (proportional), clamped to
+    # max. The old bang-bang controller could only ever add 1.
+    assert c._proportional_delta(qsize=500, num_workers=1) == 7   # ramps 1 -> 8
+    # Moderate backlog -> proportional step > 1, still under max.
+    d = c._proportional_delta(qsize=20, num_workers=2)
+    assert d > 1 and 2 + d <= 8
+    # Shallow queue at setpoint -> hold (hysteresis dead-band).
+    assert c._proportional_delta(qsize=4, num_workers=2) == 0
+    # Slack (near-empty queue, many workers) -> scale DOWN proportionally.
+    assert c._proportional_delta(qsize=0, num_workers=8) < -1
+    # Band respected at the edges.
+    assert c._proportional_delta(qsize=10_000, num_workers=8) == 0   # already max
+    assert c._proportional_delta(qsize=0, num_workers=1) == 0        # already min
+    # CPU saturated -> no scale-up despite heavy backlog.
+    assert c._proportional_delta(qsize=500, num_workers=1, cpu_ok_for_scale=False) == 0

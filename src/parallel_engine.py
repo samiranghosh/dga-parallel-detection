@@ -149,8 +149,19 @@ class AdaptiveController:
         self.running = True
         self.lock = threading.Lock()
         
-        self.scale_cooldown = 0.5  # Seconds between scaling actions
+        # ── Adaptive control policy (RQ1) ──
+        # Sample queue depth + CPU every `sample_interval` s; act at most once
+        # per `scale_cooldown` s (anti-thrash). Scaling is PROPORTIONAL: the
+        # number of workers added/removed is proportional to the queue-depth
+        # error (measured qsize vs a setpoint of `target_queue_per_worker`
+        # items per worker), scaled by gain `kp`, with a ±`hysteresis` dead-band
+        # (in worker-equivalent units) so small errors do not cause oscillation.
+        self.sample_interval = 0.5         # 500 ms sampling cadence (RQ1 spec)
+        self.scale_cooldown = 0.5          # min seconds between scaling actions
         self.last_scale_time = time.time()
+        self.target_queue_per_worker = 2   # setpoint: desired backlog per worker
+        self.kp = 0.5                      # proportional gain
+        self.hysteresis = 1.0              # dead-band, in worker-equivalent units
         
         # Instrumentation metrics (RQ1)
         self.workers_spawned = 0
@@ -185,10 +196,32 @@ class AdaptiveController:
         """Signal one worker to stop."""
         self.in_queue.put(None)
         
+    def _proportional_delta(self, qsize: int, num_workers: int,
+                            cpu_ok_for_scale: bool = True) -> int:
+        """Signed worker-count change from proportional control (pure/testable).
+
+        Returns workers to add (>0) or remove (<0). The magnitude is
+        PROPORTIONAL to the queue-depth error — error_workers = (qsize -
+        target_queue_per_worker * num_workers) / target_queue_per_worker —
+        scaled by gain ``kp`` and clamped to the [min_workers, max_workers]
+        band. Within the ±``hysteresis`` dead-band (worker-equivalent units) it
+        returns 0 (anti-thrash). CPU headroom gates scale-UP only.
+        """
+        setpoint = self.target_queue_per_worker * num_workers
+        error_workers = (qsize - setpoint) / self.target_queue_per_worker
+
+        if error_workers > self.hysteresis and num_workers < self.max_workers and cpu_ok_for_scale:
+            step = max(1, int(round(self.kp * error_workers)))
+            return min(step, self.max_workers - num_workers)
+        if error_workers < -self.hysteresis and num_workers > self.min_workers:
+            step = max(1, int(round(self.kp * -error_workers)))
+            return -min(step, num_workers - self.min_workers)
+        return 0
+
     def _monitor_loop(self):
         """Background thread to monitor and scale workers."""
         while self.running:
-            time.sleep(0.1)
+            time.sleep(self.sample_interval)
             with self.lock:
                 if not self.running:
                     break
@@ -204,27 +237,32 @@ class AdaptiveController:
                 try:
                     qsize = self.in_queue.qsize()
                 except NotImplementedError:
-                    qsize = 1  
-                    
+                    qsize = 1  # platforms without qsize() (e.g. macOS): hold steady
+
                 num_workers = len(self.workers)
-                
-                # Check CPU if psutil available
+
+                # CPU check (gates scale-UP only) if psutil available.
                 cpu_ok_for_scale = True
                 if self.has_psutil:
                     import psutil
                     if psutil.cpu_percent() > 85.0:
                         cpu_ok_for_scale = False
-                
-                if qsize > num_workers * 2 and num_workers < self.max_workers and cpu_ok_for_scale:
-                    self._start_worker()
+
+                # ── Proportional control (decision is pure; see _proportional_delta) ──
+                delta = self._proportional_delta(qsize, num_workers, cpu_ok_for_scale)
+                if delta > 0:
+                    for _ in range(delta):
+                        self._start_worker()
                     self.last_scale_time = now
-                elif qsize == 0 and num_workers > self.min_workers:
-                    # Scale down gracefully
-                    self._stop_worker()
-                    self.workers.pop()
-                    self.workers_retired += 1
+                    logger.debug(f"Scaled UP by {delta} (qsize={qsize}). Workers: {len(self.workers)}")
+                elif delta < 0:
+                    for _ in range(-delta):
+                        self._stop_worker()
+                        self.workers.pop()
+                        self.workers_retired += 1
                     self.last_scale_time = now
-                    logger.debug(f"Signaled worker to stop. Active tracked workers: {len(self.workers)}")
+                    logger.debug(f"Scaled DOWN by {-delta} (qsize={qsize}). Workers: {len(self.workers)}")
+                # else: within ±hysteresis dead-band → hold (anti-thrash)
                     
                 self.total_monitor_cpu_ms += (time.perf_counter() - t_start) * 1000.0
                     
