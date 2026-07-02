@@ -55,7 +55,7 @@ drun() {
   local cpus mem rc
   cpus=$(cpus_of "$prof"); mem=$(mem_of "$prof")
   log "run $name  [profile $prof: ${cpus}c/${mem}, kernel=$kern]"
-  timeout --signal=KILL "$tmo" docker run --rm \
+  timeout --signal=KILL "$tmo" docker run --rm --name "b6_$name" \
     --cpus="$cpus" --memory="$mem" --memory-swap="$mem" \
     -e FEATURE_KERNEL="$kern" \
     ${ORT_INTRA_OP_THREADS:+-e ORT_INTRA_OP_THREADS="$ORT_INTRA_OP_THREADS"} \
@@ -63,6 +63,8 @@ drun() {
     -v "$OUT":/out \
     "$img" "$@" >> "$OUT/driver.log" 2>&1
   rc=$?
+  # if timeout killed the CLIENT, the container may still be running - reap it
+  docker rm -f "b6_$name" >/dev/null 2>&1
   rec "$name" "$rc"
   [ "$rc" -ne 0 ] && log "  !! $name exited rc=$rc (137 = killed: OOM or timeout)"
   return 0
