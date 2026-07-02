@@ -162,10 +162,15 @@ class AdaptiveController:
         self.target_queue_per_worker = 2   # setpoint: desired backlog per worker
         self.kp = 0.5                      # proportional gain
         self.hysteresis = 1.0              # dead-band, in worker-equivalent units
-        
+
+        # Intended live-worker count. Scaling adjusts this; the monitor tops the
+        # live set back up to it when a worker dies unexpectedly (A5 recovery).
+        self.target_workers = min_workers
+
         # Instrumentation metrics (RQ1)
         self.workers_spawned = 0
         self.workers_retired = 0
+        self.workers_replaced = 0          # unexpected worker deaths recovered
         self.monitor_loop_iterations = 0
         self.total_monitor_cpu_ms = 0.0
         
@@ -195,6 +200,28 @@ class AdaptiveController:
     def _stop_worker(self):
         """Signal one worker to stop."""
         self.in_queue.put(None)
+
+    def _reap_and_replace(self) -> int:
+        """Reap dead workers; replace unexpected deaths up to target_workers.
+
+        Returns the number of replacements spawned (A5 recovery). Clean
+        scale-down lowers target before its sentinel is consumed, so a retired
+        worker never registers as a deficit. Orphaned CHUNKS are recovered
+        separately by the collector's re-queue. Call under self.lock.
+        """
+        alive = []
+        for p in self.workers:
+            if p.is_alive():
+                alive.append(p)
+            else:
+                p.join(timeout=0.1)  # reap terminated/exited process
+        self.workers = alive
+        deficit = self.target_workers - len(self.workers)
+        if deficit > 0:
+            for _ in range(deficit):
+                self._start_worker()
+            self.workers_replaced += deficit
+        return max(0, deficit)
         
     def _proportional_delta(self, qsize: int, num_workers: int,
                             cpu_ok_for_scale: bool = True) -> int:
@@ -228,7 +255,14 @@ class AdaptiveController:
                 
                 t_start = time.perf_counter()
                 self.monitor_loop_iterations += 1
-                
+
+                # ── Fault recovery (A5): reap dead workers, replace unexpected
+                # deaths so the live count tracks target. Orphaned CHUNKS are
+                # recovered separately by the collector's re-queue.
+                replaced = self._reap_and_replace()
+                if replaced:
+                    logger.warning(f"Replaced {replaced} dead worker(s). Workers: {len(self.workers)}")
+
                 now = time.time()
                 if now - self.last_scale_time < self.scale_cooldown:
                     self.total_monitor_cpu_ms += (time.perf_counter() - t_start) * 1000.0
@@ -239,8 +273,6 @@ class AdaptiveController:
                 except NotImplementedError:
                     qsize = 1  # platforms without qsize() (e.g. macOS): hold steady
 
-                num_workers = len(self.workers)
-
                 # CPU check (gates scale-UP only) if psutil available.
                 cpu_ok_for_scale = True
                 if self.has_psutil:
@@ -248,20 +280,25 @@ class AdaptiveController:
                     if psutil.cpu_percent() > 85.0:
                         cpu_ok_for_scale = False
 
-                # ── Proportional control (decision is pure; see _proportional_delta) ──
-                delta = self._proportional_delta(qsize, num_workers, cpu_ok_for_scale)
+                # ── Proportional control ──
+                # Decide on the INTENDED count (target_workers), not the live
+                # count, so a pending scale-down (sentinel not yet consumed)
+                # cannot trigger a second scale-down. Fault recovery above keeps
+                # the live count equal to target between scaling actions.
+                delta = self._proportional_delta(qsize, self.target_workers, cpu_ok_for_scale)
                 if delta > 0:
+                    self.target_workers = min(self.max_workers, self.target_workers + delta)
                     for _ in range(delta):
                         self._start_worker()
                     self.last_scale_time = now
-                    logger.debug(f"Scaled UP by {delta} (qsize={qsize}). Workers: {len(self.workers)}")
+                    logger.debug(f"Scaled UP by {delta} (qsize={qsize}). target={self.target_workers}")
                 elif delta < 0:
+                    self.target_workers = max(self.min_workers, self.target_workers + delta)
                     for _ in range(-delta):
-                        self._stop_worker()
-                        self.workers.pop()
+                        self._stop_worker()   # sentinel; worker exits after draining
                         self.workers_retired += 1
                     self.last_scale_time = now
-                    logger.debug(f"Scaled DOWN by {-delta} (qsize={qsize}). Workers: {len(self.workers)}")
+                    logger.debug(f"Scaled DOWN by {-delta} (qsize={qsize}). target={self.target_workers}")
                 # else: within ±hysteresis dead-band → hold (anti-thrash)
                     
                 self.total_monitor_cpu_ms += (time.perf_counter() - t_start) * 1000.0
@@ -404,20 +441,52 @@ def parallel_extract_features(domain_list: list, k: int,
         
         controller = AdaptiveController(in_queue, out_queue, min_workers, max_workers, shm_names, skip_levenshtein)
         
-        # Collect results
-        results = [None] * len(chunks)
-        for _ in range(len(chunks)):
-            idx, res = out_queue.get()
+        # Collect results with bounded fault recovery (A5). A killed worker can
+        # orphan its in-flight chunk (and corrupt buffered queue items), so if
+        # collection stalls we re-queue whatever has not yet arrived. Duplicate
+        # results from a re-queue race are idempotent (same idx → same values),
+        # so we dedupe by chunk index and never hang (bounded rounds + timeout).
+        n = len(chunks)
+        results = [None] * n
+        received = set()
+        requeue_rounds = 0
+        MAX_REQUEUE_ROUNDS = 3
+        COLLECT_TIMEOUT = 3.0  # seconds of silence before suspecting worker loss
+        while len(received) < n:
+            try:
+                idx, res = out_queue.get(timeout=COLLECT_TIMEOUT)
+            except queue.Empty:
+                missing = [i for i in range(n) if i not in received]
+                if not missing:
+                    break
+                requeue_rounds += 1
+                if requeue_rounds > MAX_REQUEUE_ROUNDS:
+                    controller.shutdown()
+                    raise RuntimeError(
+                        f"Extraction stalled: {len(missing)} chunk(s) unrecovered "
+                        f"after {MAX_REQUEUE_ROUNDS} re-queue rounds"
+                    )
+                logger.warning(
+                    f"Collection stalled — re-queueing {len(missing)} orphaned "
+                    f"chunk(s) (round {requeue_rounds}/{MAX_REQUEUE_ROUNDS})"
+                )
+                for i in missing:
+                    in_queue.put((i, chunks[i]))
+                continue
             if isinstance(res, Exception):
                 controller.shutdown()
                 raise RuntimeError(f"Worker failed on chunk {idx}: {res}") from res
-            results[idx] = res
+            if idx not in received:
+                results[idx] = res
+                received.add(idx)
             
         controller.shutdown()
         
         stats = {
             "workers_spawned": controller.workers_spawned,
             "workers_retired": controller.workers_retired,
+            "workers_replaced": controller.workers_replaced,
+            "requeue_rounds": requeue_rounds,
             "monitor_loop_iterations": controller.monitor_loop_iterations,
             "total_monitor_cpu_ms": controller.total_monitor_cpu_ms
         }

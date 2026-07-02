@@ -110,3 +110,60 @@ class TestRobustParallelExtract:
         )
         assert result.shape[1] in VALID_FEATURE_COUNTS
         assert result.shape[0] == len(self.DOMAINS)
+
+
+class TestAdaptiveWorkerRecovery:
+    """RQ1 A5: the adaptive controller reaps and replaces dead workers.
+
+    Deterministic (no process-killing) — uses fake worker handles so it cannot
+    flake on timing. The full end-to-end worker-kill recovery (controller
+    replacement + collector re-queue -> output identical to sequential) is
+    exercised by scripts/fault injection; this locks the decision logic in CI.
+    """
+
+    class _FakeWorker:
+        def __init__(self, alive):
+            self._alive = alive
+        def is_alive(self):
+            return self._alive
+        def join(self, timeout=None):
+            pass
+
+    def _bare_controller(self, target):
+        from src.parallel_engine import AdaptiveController
+        c = AdaptiveController.__new__(AdaptiveController)  # skip __init__/processes
+        c.target_workers = target
+        c.workers_replaced = 0
+        return c
+
+    def test_replaces_dead_worker_up_to_target(self):
+        c = self._bare_controller(target=3)
+        c.workers = [self._FakeWorker(True), self._FakeWorker(False),
+                     self._FakeWorker(True)]  # one dead
+        spawned = []
+        c._start_worker = lambda: (c.workers.append(self._FakeWorker(True)),
+                                   spawned.append(1))
+
+        replaced = c._reap_and_replace()
+        assert replaced == 1                              # one death -> one replacement
+        assert c.workers_replaced == 1
+        assert len(c.workers) == 3                        # live count restored to target
+        assert all(w.is_alive() for w in c.workers)
+        assert len(spawned) == 1
+
+    def test_no_replacement_when_all_alive(self):
+        c = self._bare_controller(target=2)
+        c.workers = [self._FakeWorker(True), self._FakeWorker(True)]
+        c._start_worker = lambda: (_ for _ in ()).throw(
+            AssertionError("must not spawn when healthy"))
+        assert c._reap_and_replace() == 0
+        assert c.workers_replaced == 0
+
+    def test_pending_scale_down_is_not_a_deficit(self):
+        # target already lowered (e.g. mid scale-down); live count still higher.
+        c = self._bare_controller(target=1)
+        c.workers = [self._FakeWorker(True), self._FakeWorker(True)]
+        c._start_worker = lambda: (_ for _ in ()).throw(
+            AssertionError("must not spawn above target"))
+        assert c._reap_and_replace() == 0                 # surplus, not deficit
+        assert len(c.workers) == 2
