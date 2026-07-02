@@ -1,0 +1,45 @@
+{
+  "note": "fresh subprocess per stack; DT-12 ONNX; RSS after gc.collect(); first inference included before the final snapshot. Contrast vs results/kernel/step5_memory.json onnx_fast (set retained).",
+  "platform": "win32",
+  "stacks": {
+    "onnx_fast_set_retained": {
+      "stages_rss_mib": {
+        "interpreter": 21.4,
+        "model_onnx_session": 57.0,
+        "dict_resources_plus_trigram": 121.1,
+        "first_inference": 121.4
+      },
+      "total_rss_mib": 121.4,
+      "load_sec": {
+        "dict_resources": 0.454,
+        "whole_stack": 0.793
+      }
+    },
+    "onnx_fast_kernel_only": {
+      "stages_rss_mib": {
+        "interpreter": 21.4,
+        "model_onnx_session": 57.2,
+        "dict_resources_plus_trigram": 101.3,
+        "first_inference": 101.6
+      },
+      "total_rss_mib": 101.6,
+      "load_sec": {
+        "dict_resources": 0.439,
+        "whole_stack": 0.757
+      }
+    },
+    "onnx_marisa_kernel_only": {
+      "stages_rss_mib": {
+        "interpreter": 21.4,
+        "model_onnx_session": 57.0,
+        "dict_resources_plus_trigram": 62.6,
+        "first_inference": 63.0
+      },
+      "total_rss_mib": 63.0,
+      "load_sec": {
+        "dict_resources": 0.007,
+        "whole_stack": 0.347
+      }
+    }
+  }
+}

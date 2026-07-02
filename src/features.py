@@ -23,14 +23,21 @@ import os
 import numpy as np
 
 
-# ── Feature kernel switch (Batch 5) ──
+# ── Feature kernel switch (Batch 5; third mode Batch 6 Step 0b) ──
 #
 # FEATURE_KERNEL selects the implementation of the two dictionary features
 # (meaningful_word_ratio, lms_percentage):
-#   'legacy' - original O(m^2) substring scans against the set
-#   'fast'   - Aho-Corasick kernel (pyahocorasick, C automaton): one pass per
-#              domain enumerates every dictionary-word occurrence, then an
-#              O(m + matches) DP reproduces the legacy values exactly.
+#   'legacy'      - original O(m^2) substring scans against the set
+#   'fast'        - Aho-Corasick kernel (pyahocorasick, C automaton): one pass
+#                   per domain enumerates every dictionary-word occurrence,
+#                   then an O(m + matches) DP reproduces the legacy values
+#                   exactly.
+#   'fast_marisa' - marisa-trie prefix sweep: per position i,
+#                   trie.prefixes(domain[i:]) enumerates the same match set,
+#                   fed to the same DP. ~1.6x the AC kernel latency but the
+#                   trie mmaps at 0.7 MiB vs the automaton's ~34.5 MiB
+#                   (results/kernel/bench_backends.json) - the tight-profile
+#                   option for B6.
 # Default 'fast' - flipped after the Step-3 A2 gate passed: golden v2
 # (1,049 domains incl. A4 edge cases) bit-identical under both kernels, and
 # the full train+test corpus (999,927 domains) swept with max|delta| = 0.0
@@ -38,9 +45,11 @@ import numpy as np
 # selectable for A/B and rollback via the environment variable or
 # set_kernel_mode().
 
+_KERNEL_MODES = ("legacy", "fast", "fast_marisa")
+
 _kernel_mode = os.environ.get("FEATURE_KERNEL", "fast").strip().lower()
-if _kernel_mode not in ("legacy", "fast"):
-    raise ValueError(f"FEATURE_KERNEL must be 'legacy' or 'fast', got {_kernel_mode!r}")
+if _kernel_mode not in _KERNEL_MODES:
+    raise ValueError(f"FEATURE_KERNEL must be one of {_KERNEL_MODES}, got {_kernel_mode!r}")
 
 
 def get_kernel_mode() -> str:
@@ -56,62 +65,130 @@ def set_kernel_mode(mode: str):
     inherit it); this setter alone does not reach them.
     """
     global _kernel_mode
-    if mode not in ("legacy", "fast"):
-        raise ValueError(f"kernel mode must be 'legacy' or 'fast', got {mode!r}")
+    if mode not in _KERNEL_MODES:
+        raise ValueError(f"kernel mode must be one of {_KERNEL_MODES}, got {mode!r}")
     _kernel_mode = mode
 
 
-# Automata are built once per dictionary object and memoised. Keyed by
-# (id, len): the id alone could be reused after a dictionary is garbage
+class DictKernel:
+    """Pre-built dictionary matcher, passable in place of the raw word set.
+
+    B6 Step 0a: the serving process previously had to keep the 23 MiB set
+    alive because the matcher cache keys on the set object. Building a
+    DictKernel and passing it as the `dictionary` argument lets the set be
+    released - the handle owns only the matcher structure (pyahocorasick
+    automaton under 'fast', marisa trie under 'fast_marisa'). Legacy mode
+    has no handle form; it scans the raw set.
+    """
+    __slots__ = ("mode", "matcher", "n_words")
+
+    def __init__(self, mode, matcher, n_words):
+        self.mode = mode
+        self.matcher = matcher
+        self.n_words = n_words
+
+    def __len__(self):
+        return self.n_words
+
+
+def build_kernel(words=None, mode=None, marisa_path=None) -> DictKernel:
+    """Build a DictKernel from a word iterable or an on-disk marisa trie.
+
+    Args:
+        words: word iterable (e.g. the dictionary set); consumed once, so
+            the caller may release it afterwards.
+        mode: 'fast' or 'fast_marisa'; defaults to the active kernel mode.
+        marisa_path: under 'fast_marisa', mmap this trie file (0.7 MiB
+            resident) instead of building from `words`.
+    """
+    mode = mode or _kernel_mode
+    if mode == "legacy":
+        raise ValueError("legacy mode scans the raw set; no kernel handle form")
+    if mode == "fast_marisa" and marisa_path is not None:
+        import marisa_trie
+        trie = marisa_trie.Trie()
+        trie.mmap(marisa_path)
+        return DictKernel(mode, trie, len(trie))
+    if words is None:
+        raise ValueError("words required unless mmapping a marisa_path")
+    words = list(words) if not hasattr(words, "__len__") else words
+    return DictKernel(mode, _build_matcher(words, mode), len(words))
+
+
+# Matchers are built once per dictionary object and memoised. Keyed by
+# (mode, id, len): the id alone could be reused after a dictionary is garbage
 # collected (sets are not weakref-able); len makes a stale hit implausible.
-# Production processes hold exactly one dictionary for their lifetime.
-_AUTOMATON_CACHE = {}
-_AUTOMATON_CACHE_MAX = 8  # small test dictionaries; production uses one entry
+# Production processes hold exactly one dictionary for their lifetime -
+# and serving processes should prefer a DictKernel handle, which bypasses
+# this cache entirely and lets the set itself be released.
+_KERNEL_CACHE = {}
+_KERNEL_CACHE_MAX = 8  # small test dictionaries; production uses one entry
 
 
 def warm_kernel(dictionary, automaton=None):
-    """Pre-build or adopt the AC automaton for `dictionary` (no-op in legacy).
+    """Pre-build or adopt the matcher for `dictionary` (no-op in legacy).
 
     Called from Pool initializers (B5 Step 4) so the build/attach cost lands
     in pool startup, not in the first chunk. When `automaton` is given (a
-    deserialized copy shipped by the parent - 0.06 s attach vs 0.50 s
+    deserialized AC copy shipped by the parent - 0.06 s attach vs 0.50 s
     per-worker rebuild, results/kernel/attach_paths.json), it is adopted
-    into the cache for this dictionary object.
+    into the cache for this dictionary object; that path is 'fast'-specific
+    and ignored under 'fast_marisa' (workers build the trie instead).
     """
-    if _kernel_mode != "fast":
+    if _kernel_mode == "legacy" or isinstance(dictionary, DictKernel):
         return
-    if automaton is not None:
-        key = (id(dictionary), len(dictionary))
-        if len(_AUTOMATON_CACHE) >= _AUTOMATON_CACHE_MAX:
-            _AUTOMATON_CACHE.pop(next(iter(_AUTOMATON_CACHE)))
-        _AUTOMATON_CACHE[key] = automaton
+    if automaton is not None and _kernel_mode == "fast":
+        key = (_kernel_mode, id(dictionary), len(dictionary))
+        if len(_KERNEL_CACHE) >= _KERNEL_CACHE_MAX:
+            _KERNEL_CACHE.pop(next(iter(_KERNEL_CACHE)))
+        _KERNEL_CACHE[key] = automaton
     else:
-        _get_automaton(dictionary)
+        _get_matcher(dictionary)
 
 
 def export_automaton_blob(dictionary) -> bytes:
-    """Serialize the automaton for `dictionary` once, for worker attach."""
+    """Serialize the AC automaton for worker attach ('fast' mode only)."""
     import pickle
-    return pickle.dumps(_get_automaton(dictionary), pickle.HIGHEST_PROTOCOL)
+    if _kernel_mode != "fast":
+        raise RuntimeError("export_automaton_blob requires FEATURE_KERNEL=fast")
+    return pickle.dumps(_get_matcher(dictionary), pickle.HIGHEST_PROTOCOL)
 
 
-def _get_automaton(dictionary):
-    if len(dictionary) == 0:
-        # pyahocorasick cannot finalise a zero-word automaton; legacy
-        # semantics for an empty dictionary are simply "no matches".
-        return None
-    key = (id(dictionary), len(dictionary))
-    automaton = _AUTOMATON_CACHE.get(key)
-    if automaton is None:
+def _build_matcher(words, mode):
+    if mode == "fast":
+        if len(words) == 0:
+            # pyahocorasick cannot finalise a zero-word automaton; legacy
+            # semantics for an empty dictionary are simply "no matches".
+            return None
         import ahocorasick
         automaton = ahocorasick.Automaton()
-        for word in dictionary:
+        for word in words:
             automaton.add_word(word, len(word))
         automaton.make_automaton()
-        if len(_AUTOMATON_CACHE) >= _AUTOMATON_CACHE_MAX:
-            _AUTOMATON_CACHE.pop(next(iter(_AUTOMATON_CACHE)))
-        _AUTOMATON_CACHE[key] = automaton
-    return automaton
+        return automaton
+    import marisa_trie
+    return marisa_trie.Trie(words)
+
+
+def _get_matcher(dictionary):
+    """Matcher for `dictionary` under the active mode: a DictKernel's own
+    matcher (mode must agree), or a per-set memoised build."""
+    if isinstance(dictionary, DictKernel):
+        if dictionary.mode != _kernel_mode:
+            raise ValueError(
+                f"DictKernel built for {dictionary.mode!r} used under "
+                f"{_kernel_mode!r}; rebuild with build_kernel()")
+        return dictionary.matcher
+    if len(dictionary) == 0:
+        return None
+    key = (_kernel_mode, id(dictionary), len(dictionary))
+    matcher = _KERNEL_CACHE.get(key)
+    if matcher is None:
+        matcher = _build_matcher(dictionary, _kernel_mode)
+        if len(_KERNEL_CACHE) >= _KERNEL_CACHE_MAX:
+            _KERNEL_CACHE.pop(next(iter(_KERNEL_CACHE)))
+        _KERNEL_CACHE[key] = matcher
+    return matcher
 
 
 # Semantic rules extracted from the legacy implementations (the parity
@@ -162,6 +239,54 @@ def _dict_features_fast(domain: str, automaton) -> tuple:
     return covered[n] / n, max_len / n
 
 
+def _dict_features_marisa(domain: str, trie) -> tuple:
+    """(meaningful_word_ratio, lms_percentage) via marisa prefix sweep.
+
+    Same match set and same DP as _dict_features_fast (rules R1-R5):
+    trie.prefixes(domain[i:]) enumerates every dictionary word starting at
+    position i, i.e. exactly the AC match set (cross-checked equal on 10k
+    domains in results/kernel/bench_backends.json). The per-position slice
+    keeps this O(m^2) in string copies, traded for the 0.7 MiB mmap-able
+    structure.
+    """
+    n = len(domain)
+    if n == 0 or trie is None:
+        return 0.0, 0.0
+    max_len = 0
+    by_end = [None] * (n + 1)
+    prefixes = trie.prefixes
+    for i in range(n):
+        for w in prefixes(domain[i:]):
+            length = len(w)
+            if length > max_len:
+                max_len = length
+            j = i + length
+            if by_end[j] is None:
+                by_end[j] = [length]
+            else:
+                by_end[j].append(length)
+    if max_len == 0:
+        return 0.0, 0.0
+    covered = [0] * (n + 1)
+    for j in range(1, n + 1):
+        best = covered[j - 1]
+        lengths = by_end[j]
+        if lengths is not None:
+            for length in lengths:
+                c = covered[j - length] + length
+                if c > best:
+                    best = c
+        covered[j] = best
+    return covered[n] / n, max_len / n
+
+
+def _dict_features(domain: str, dictionary) -> tuple:
+    """Dispatch the one-pass (mwr, lms) computation for the active fast mode."""
+    if _kernel_mode == "fast":
+        return _dict_features_fast(domain, _get_matcher(dictionary))
+    return _dict_features_marisa(domain, _get_matcher(dictionary))
+
+
 # ── Feature Set Configurations ──
 
 FEATURE_NAMES_6 = [
@@ -202,8 +327,8 @@ def calc_meaningful_word_ratio(domain: str, dictionary: set) -> float:
     Uses greedy longest-match scanning across all substrings.
     Example: 'googlebot' with dictionary {'google', 'bot'} -> 1.0
     """
-    if _kernel_mode == "fast":
-        return _dict_features_fast(domain, _get_automaton(dictionary))[0]
+    if _kernel_mode != "legacy":
+        return _dict_features(domain, dictionary)[0]
 
     if not domain:
         return 0.0
@@ -246,8 +371,8 @@ def calc_lms_percentage(domain: str, dictionary: set) -> float:
 
     Scans all substrings of domain against the dictionary.
     """
-    if _kernel_mode == "fast":
-        return _dict_features_fast(domain, _get_automaton(dictionary))[1]
+    if _kernel_mode != "legacy":
+        return _dict_features(domain, dictionary)[1]
 
     if not domain:
         return 0.0
@@ -302,7 +427,8 @@ def extract_features(domain: str, prev_domain: str,
     Args:
         domain: Domain string to extract features from.
         prev_domain: Previous domain (for Levenshtein distance).
-        dictionary: English dictionary set.
+        dictionary: English dictionary set, or a DictKernel handle under
+            the fast modes (lets the serving process release the set).
         ngram_table: Trigram frequency table.
         skip_levenshtein: If True, return 5 features (without Levenshtein).
             The 5-feature configuration achieves higher accuracy (93.18%)
@@ -312,9 +438,9 @@ def extract_features(domain: str, prev_domain: str,
     Returns:
         np.ndarray of shape (5,) or (6,) with dtype float64.
     """
-    if _kernel_mode == "fast":
-        # one automaton pass yields both dictionary features
-        mwr, lms = _dict_features_fast(domain, _get_automaton(dictionary))
+    if _kernel_mode != "legacy":
+        # one matcher pass yields both dictionary features
+        mwr, lms = _dict_features(domain, dictionary)
     else:
         mwr = calc_meaningful_word_ratio(domain, dictionary)
         lms = calc_lms_percentage(domain, dictionary)

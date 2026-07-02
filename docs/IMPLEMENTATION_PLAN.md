@@ -1,7 +1,7 @@
 # DGA Dissertation — Implementation Plan (Claude Code)
 
 Gated batches. Execute one, report, then the next is issued. Files in `src/` unless noted.
-**Status (03 Jul):** B1 ✅ · B2 ✅ · B3 ✅ (decisions resolved) · **B4 ✅ (all 4 gates PASS → DT-12 PRIMARY locked, SamG; RF-pruned·ONNX fallback)** · B5 next (`feature-kernel`) · B6 partially pre-run (WSL2 E1) · B7 pending.
+**Status (03 Jul):** B1 ✅ · B2 ✅ · B3 ✅ (decisions resolved) · B4 ✅ (all 4 gates PASS → DT-12 PRIMARY locked, SamG; RF-pruned·ONNX fallback) · **B5 ✅ (`feature-kernel`: A2 bit-identical, 45.8 µs single-request, 1.93× batch)** · **B6 next (`rq3-edge`)** — partially pre-run (WSL2 E1) · B7 pending.
 Acceptance IDs (A1–A5 / B1–B5 / C1–C5 / D / E) reference the Testing Approach doc.
 **Revised after Batch-1 measurement:** single-request latency and RSS are **model-dominated, not feature-dominated** (predict = 99% of ~4.6 ms; features ~145 µs / <1%; model 473 of 657 MiB). Sequencing updated accordingly: **model compression is the shared lever for RQ2 memory *and* RQ3 latency**; AC/DAWG is demoted to a conditional batch-throughput lever. RQ1 stays front-loaded (independent, feeds Mid-Sem).
 

@@ -66,6 +66,45 @@ def initialize_shared_resources(data_path: str) -> Tuple[set, dict]:
     return dictionary, ngram_table
 
 
+def initialize_serving_resources(data_path: str):
+    """Load resources for a SERVING process, retaining no dictionary set.
+
+    B6 Step 0a: under FEATURE_KERNEL=fast / fast_marisa the word set is
+    converted to a features.DictKernel and released before returning, so the
+    server holds only the matcher (AC automaton ~34.5 MiB, or marisa trie
+    0.7 MiB - mmapped from data/english_dictionary.marisa when present)
+    instead of set + matcher. Legacy mode returns the raw set unchanged
+    (it scans it directly).
+
+    Returns:
+        Tuple of (dictionary_or_kernel, ngram_table) - the first element is
+        passable wherever extract_features takes `dictionary`.
+    """
+    from src import features
+
+    mode = features.get_kernel_mode()
+    marisa_path = os.path.join(data_path, 'english_dictionary.marisa')
+    if mode == "fast_marisa" and os.path.exists(marisa_path):
+        # No need to materialise the set at all on this path.
+        ngram_path = os.path.join(data_path, 'ngram_table.pkl')
+        if not os.path.exists(ngram_path):
+            raise FileNotFoundError(
+                f"N-gram table not found at {ngram_path}. "
+                "Run `python main.py --mode preprocess` first."
+            )
+        kernel = features.build_kernel(marisa_path=marisa_path)
+        with open(ngram_path, 'rb') as f:
+            ngram_table = pickle.load(f)
+        return kernel, ngram_table
+
+    dictionary, ngram_table = initialize_shared_resources(data_path)
+    if mode == "legacy":
+        return dictionary, ngram_table
+    kernel = features.build_kernel(dictionary, mode=mode)
+    del dictionary  # the whole point: only the matcher stays resident
+    return kernel, ngram_table
+
+
 # ── Priority 4: Shared Memory Optimization ──
 
 class SharedMemoryResources:
