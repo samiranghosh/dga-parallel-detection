@@ -20,7 +20,7 @@ COPY requirements.txt .
 # older PyPI wheels ("THESE PACKAGES DO NOT MATCH THE HASHES ... unknown
 # package"); current pip verifies correctly.
 RUN pip install --no-cache-dir --upgrade pip \
- && pip install --no-cache-dir -r requirements.txt
+ && pip install --no-cache-dir --retries 10 --resume-retries 5 -r requirements.txt
 
 # gcc for tl2cgen native compilation (B6 Step 4); after the pip layer to
 # keep the expensive dependency cache intact.
