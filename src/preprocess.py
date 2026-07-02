@@ -130,7 +130,14 @@ def build_english_dictionary(output_path: str) -> set:
         for word in sorted(words):
             f.write(word + '\n')
             
-    logger.info(f"Saved {len(words)} words to {output_path}")
+    # Also build the compact marisa trie
+    from src.compact_dict import build_marisa_trie
+    marisa_path = output_path.replace('.txt', '.marisa')
+    if marisa_path == output_path:
+        marisa_path += '.marisa'
+    build_marisa_trie(sorted(words), marisa_path)
+            
+    logger.info(f"Saved {len(words)} words to {output_path} and {marisa_path}")
     return words
 
 
