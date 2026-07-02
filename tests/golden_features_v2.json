@@ -1,0 +1,8416 @@
+{
+  "version": 2,
+  "feature_names": [
+    "length",
+    "numerical_ratio",
+    "meaningful_word_ratio",
+    "pronounceability",
+    "lms_percentage"
+  ],
+  "skip_levenshtein": true,
+  "provenance": {
+    "generator": "scripts/kernel/make_golden_v2.py",
+    "oracle": "legacy src/features.py at feature-kernel branch point (eb7758d)",
+    "n_dictionary_words": 234377,
+    "n_trigrams": 32556,
+    "seed": 42,
+    "sample_spec": "1000 stratified across train+test x label, proportional, pandas random_state=42"
+  },
+  "quarantined": {},
+  "sources": {
+    "": "v1",
+    "a": "v1",
+    "ab": "v1",
+    "google": "v1",
+    "googlebot": "v1",
+    "microsoftonline": "v1",
+    "read-fx": "v1",
+    "columbia-ca": "v1",
+    "12345": "v1",
+    "abc123": "v1",
+    "shonan-sinkyu": "v1",
+    "stephensconstruction": "v1",
+    "ocymmekqogkw": "v1",
+    "vaqemxhdhekfwu": "v1",
+    "xkcdqwertzuiop": "v1",
+    "facebooklogin": "v1",
+    "the": "v1",
+    "supercalifragilistic": "v1",
+    "zzzzzzzz": "v1",
+    "news24": "v1",
+    "q": "edge",
+    "7": "edge",
+    "-": "edge",
+    ".": "edge",
+    "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa": "edge",
+    "999999999999999999999999999999999999999999999999999999999999999": "edge",
+    "0123456789": "edge",
+    "-leading": "edge",
+    "trailing-": "edge",
+    "a-b-c-d": "edge",
+    "co-operate-now": "edge",
+    "xn--mnchen-3ya": "edge",
+    "xn--fiqs8s": "edge",
+    "xn--80ak6aa92e": "edge",
+    "m\u00fcnchen": "edge",
+    "b\u00fccher": "edge",
+    "\u0663\u0664\u0665": "edge",
+    "paypalpaypal": "edge",
+    "googlegoogle": "edge",
+    "thethethe": "edge",
+    "catcatcat": "edge",
+    "345": "edge",
+    "0-0-0": "edge",
+    "---": "edge",
+    "12-34": "edge",
+    "GOOGLE": "edge",
+    "PayPal": "edge",
+    "www.google.com": "edge",
+    "attention-securite-infecte-immediatement-ordinateur-a7wmqx3-344": "edge:real-max-length",
+    "hp-selection": "sample:test:0",
+    "mazeltogether": "sample:test:0",
+    "actionalliancecr": "sample:test:0",
+    "yellowpath": "sample:test:0",
+    "flashquickbinaries": "sample:test:0",
+    "lacathode": "sample:test:0",
+    "grossvargula": "sample:test:0",
+    "hotgaysex": "sample:test:0",
+    "moderncar": "sample:test:0",
+    "f-kurimoto": "sample:test:0",
+    "womenatwarp": "sample:test:0",
+    "peterslarson": "sample:test:0",
+    "primus-muenzen": "sample:test:0",
+    "mfsa": "sample:test:0",
+    "gravesinternationalart": "sample:test:0",
+    "vinhomesthanglonghanoi": "sample:test:0",
+    "maranonchocolate": "sample:test:0",
+    "altermodus": "sample:test:0",
+    "ruw": "sample:test:0",
+    "security-systems-for-home": "sample:test:0",
+    "canoozgener": "sample:test:0",
+    "celestinesweddings": "sample:test:0",
+    "uschihugo": "sample:test:0",
+    "bullysticksonline": "sample:test:0",
+    "gillesmolinier": "sample:test:0",
+    "kenwoodcookingblog": "sample:test:0",
+    "konditorei-hollhorst": "sample:test:0",
+    "seoulistic": "sample:test:0",
+    "jirri": "sample:test:0",
+    "saudervillage": "sample:test:0",
+    "136734": "sample:test:0",
+    "architecturalconcretesite": "sample:test:0",
+    "munichjuli": "sample:test:0",
+    "shareresearch": "sample:test:0",
+    "s-luca": "sample:test:0",
+    "morelandbus": "sample:test:0",
+    "nassl": "sample:test:0",
+    "suiranrou": "sample:test:0",
+    "copetexas": "sample:test:0",
+    "ajaxcomm": "sample:test:0",
+    "hearr": "sample:test:0",
+    "everyarabstudent": "sample:test:0",
+    "apteka24": "sample:test:0",
+    "moringen": "sample:test:0",
+    "duoresonante": "sample:test:0",
+    "solturatravel": "sample:test:0",
+    "toursofatlanta": "sample:test:0",
+    "fan-pages": "sample:test:0",
+    "solleysicecream": "sample:test:0",
+    "soulshinetavern": "sample:test:0",
+    "rallyappraisal": "sample:test:0",
+    "21-mtf": "sample:test:0",
+    "1860-1960": "sample:test:0",
+    "aplik": "sample:test:0",
+    "honvieew": "sample:test:0",
+    "survivalinstinct": "sample:test:0",
+    "well-wish": "sample:test:0",
+    "vanderbilthealth": "sample:test:0",
+    "liveactioncombatleague": "sample:test:0",
+    "ericwagnermusic": "sample:test:0",
+    "univ-paris-diderot": "sample:test:0",
+    "dukescastlepines": "sample:test:0",
+    "petlandflorida": "sample:test:0",
+    "forhealthandliving": "sample:test:0",
+    "itranscript360": "sample:test:0",
+    "nathanshipley": "sample:test:0",
+    "pontosporopinioes": "sample:test:0",
+    "drunksouls": "sample:test:0",
+    "greatwestmech": "sample:test:0",
+    "partner-points": "sample:test:0",
+    "noahm": "sample:test:0",
+    "domdemarcos": "sample:test:0",
+    "housemama": "sample:test:0",
+    "drawingclouds": "sample:test:0",
+    "ludtke": "sample:test:0",
+    "ftama": "sample:test:0",
+    "solteszrezso": "sample:test:0",
+    "daoineile": "sample:test:0",
+    "creativehasnothingforyou": "sample:test:0",
+    "hollowayscustomupholstery": "sample:test:0",
+    "fppq": "sample:test:0",
+    "editionstiresias": "sample:test:0",
+    "nwfin": "sample:test:0",
+    "vidalinux": "sample:test:0",
+    "theoj": "sample:test:0",
+    "givejewellery": "sample:test:0",
+    "monoistanbul": "sample:test:0",
+    "1hy": "sample:test:0",
+    "jfreestar": "sample:test:0",
+    "toughrun": "sample:test:0",
+    "crowdfundingrama": "sample:test:0",
+    "brickcavemedia": "sample:test:0",
+    "crescolines": "sample:test:0",
+    "dnafinanceiro": "sample:test:0",
+    "1kraise": "sample:test:0",
+    "minaloto": "sample:test:0",
+    "eandcpainters": "sample:test:0",
+    "monroevillekia": "sample:test:0",
+    "adelanteconcarlos": "sample:test:0",
+    "150415": "sample:test:0",
+    "rynupnlyk": "sample:test:1",
+    "fhjliinaokjdenpnf": "sample:test:1",
+    "rynedugyjevanidetapylo": "sample:test:1",
+    "76exg41ludgbut5": "sample:test:1",
+    "tucypaqygikeqosetywawej": "sample:test:1",
+    "rycafupicafu": "sample:test:1",
+    "aasmmywcoouwwueisecoqiqegqaikms": "sample:test:1",
+    "lrsqlecofmwkdvv": "sample:test:1",
+    "jywanmmnnbqfegvlxgj": "sample:test:1",
+    "tucymiqygiwequgitukived": "sample:test:1",
+    "hefraqsmxaal": "sample:test:1",
+    "ezzqvftiiov": "sample:test:1",
+    "qgqyscsqywskmeoqkmkw": "sample:test:1",
+    "regqytecp": "sample:test:1",
+    "efxalgs": "sample:test:1",
+    "qgqeaaeecywuc": "sample:test:1",
+    "zbbtlebmw330i": "sample:test:1",
+    "rdharkgnnk": "sample:test:1",
+    "ywyeuqgyosgecyaqqkaiwoiwewskq": "sample:test:1",
+    "vonhznyabiql": "sample:test:1",
+    "enelcjot10any2k": "sample:test:1",
+    "mavyjytitafupi": "sample:test:1",
+    "aervrancisco": "sample:test:1",
+    "1xwiufs10g1zio1gxzeow2qep7g": "sample:test:1",
+    "iuhrjmxrs": "sample:test:1",
+    "ljmouuxcekpelrth": "sample:test:1",
+    "tmsszipqtqm": "sample:test:1",
+    "qsspplefrostbitecycz": "sample:test:1",
+    "mymyasoykeywaqawkeqskoy": "sample:test:1",
+    "d4qp0xjdswwo1ytxonl1s978u0": "sample:test:1",
+    "nmxjfpvksip": "sample:test:1",
+    "iycyowelcamino": "sample:test:1",
+    "yyrwsbmddkpf": "sample:test:1",
+    "eguqlysjb": "sample:test:1",
+    "ucqidbs": "sample:test:1",
+    "owbhrancisco": "sample:test:1",
+    "goduhozavaxuqyp": "sample:test:1",
+    "xynybgsadud": "sample:test:1",
+    "ujcqojij": "sample:test:1",
+    "imysleasuredehydratorysagp": "sample:test:1",
+    "7bevypefsfstup3rilw": "sample:test:1",
+    "kathtdxsvx": "sample:test:1",
+    "qxmrkwtxlceuaw": "sample:test:1",
+    "vtvda21utdnel7ui9cr1ofbop9": "sample:test:1",
+    "eiuooioacyscwyakekimauqa": "sample:test:1",
+    "gfjkxyloryxx": "sample:test:1",
+    "bjgdupnhg": "sample:test:1",
+    "kibouuiqvxqy": "sample:test:1",
+    "1ntcy9pygyimm1txzazixicokk": "sample:test:1",
+    "feggbguel": "sample:test:1",
+    "ppoetmbyvexy": "sample:test:1",
+    "xxtmsagabardinedazyx": "sample:test:1",
+    "wsqoaoksouueqiyqiwgiqs": "sample:test:1",
+    "xttnom": "sample:test:1",
+    "foxyxawavuqevakixohalij": "sample:test:1",
+    "pfuaor1y26ml417p7jkn1ji9fjy": "sample:test:1",
+    "bijwyoeboeccrofsx": "sample:test:1",
+    "ofxvho": "sample:test:1",
+    "g3l2to1azrhvvibxqeh1dylr8d": "sample:test:1",
+    "wglrgwyqmixhidpthogdhv": "sample:test:1",
+    "imwgsemitismgavenuteq": "sample:test:1",
+    "hgbkrxjtawaz": "sample:test:1",
+    "bexrlanwuacdgsyf": "sample:test:1",
+    "lhdpolfytkypxswr": "sample:test:1",
+    "1jmvcjs1vwm4651js3jwvwpzg27": "sample:test:1",
+    "yqnyupjusrqzon": "sample:test:1",
+    "sjfpfjgphhtgmhvpq": "sample:test:1",
+    "exsvydanub5xq238gryvqd1": "sample:test:1",
+    "rhrbwctu": "sample:test:1",
+    "qfivqhan1vs6mr1": "sample:test:1",
+    "wncbwj72erqdcjebkxs0q25": "sample:test:1",
+    "thcsggtdj": "sample:test:1",
+    "rggamane": "sample:test:1",
+    "cecwgmcckaicwkamsyusu": "sample:test:1",
+    "qgmyiguicqwyq": "sample:test:1",
+    "wybwiywqsxrl": "sample:test:1",
+    "ckwwenhancedysb": "sample:test:1",
+    "pzsbdhockey": "sample:test:1",
+    "skieecgog": "sample:test:1",
+    "qmpeork": "sample:test:1",
+    "kgpdehm": "sample:test:1",
+    "auhedme": "sample:test:1",
+    "xplrlpruwqhpmven": "sample:test:1",
+    "iexcardenslavetusul": "sample:test:1",
+    "rbrpbbpe": "sample:test:1",
+    "kezygadopekilaherabexyf": "sample:test:1",
+    "jeoqyrjja": "sample:test:1",
+    "xrcnfaaxlohrhue": "sample:test:1",
+    "mihtehgmiizviv": "sample:test:1",
+    "vgnuqnbwrdxzfjqlawmzmaz": "sample:test:1",
+    "wmmqquerque": "sample:test:1",
+    "eigcciwqmkqymygkgme": "sample:test:1",
+    "tru7yukcvq9v1q1rg2l1l52e05": "sample:test:1",
+    "beyyrnpdqkaa": "sample:test:1",
+    "nzvikxxtvpexoygkdkkfe": "sample:test:1",
+    "rfrmalitydevonianizuwb": "sample:test:1",
+    "wsaoagcqc": "sample:test:1",
+    "dqwacyzdzepe": "sample:test:1",
+    "qneehnrynnrotplav": "sample:test:1",
+    "oirkork": "sample:test:1",
+    "topcyprus": "sample:train:0",
+    "centre4developmentresults": "sample:train:0",
+    "orgelpate": "sample:train:0",
+    "westlanddistributinginc": "sample:train:0",
+    "mybitbox": "sample:train:0",
+    "club414": "sample:train:0",
+    "minikissonline": "sample:train:0",
+    "helenleathers": "sample:train:0",
+    "brittonair": "sample:train:0",
+    "kamera-express": "sample:train:0",
+    "fitbellavei": "sample:train:0",
+    "viswadevji": "sample:train:0",
+    "tdhcreative": "sample:train:0",
+    "baybed": "sample:train:0",
+    "a-turist": "sample:train:0",
+    "iiche": "sample:train:0",
+    "asisucedegto": "sample:train:0",
+    "latenitebooks": "sample:train:0",
+    "wrfy": "sample:train:0",
+    "camsoftdata": "sample:train:0",
+    "purposed4leadership": "sample:train:0",
+    "infinitegrowth": "sample:train:0",
+    "dereconstruction": "sample:train:0",
+    "51moba": "sample:train:0",
+    "unitarier": "sample:train:0",
+    "sunny-storecafe": "sample:train:0",
+    "digitalsevilla": "sample:train:0",
+    "bucketofyum": "sample:train:0",
+    "unitileus": "sample:train:0",
+    "302299": "sample:train:0",
+    "woods-o": "sample:train:0",
+    "acousticmusicworks": "sample:train:0",
+    "itswide": "sample:train:0",
+    "ufa-room": "sample:train:0",
+    "curtincpa": "sample:train:0",
+    "jamiebrightmore": "sample:train:0",
+    "soudan-sitai": "sample:train:0",
+    "trcindustries": "sample:train:0",
+    "janusetcie": "sample:train:0",
+    "clubedocafe": "sample:train:0",
+    "bayareabehaviorconsultants": "sample:train:0",
+    "emoto": "sample:train:0",
+    "rural-texas": "sample:train:0",
+    "internetretailer": "sample:train:0",
+    "298452": "sample:train:0",
+    "canadianmaplesyrup": "sample:train:0",
+    "tibetdiy": "sample:train:0",
+    "shooterwebs": "sample:train:0",
+    "plymouthcreate": "sample:train:0",
+    "briancardoza": "sample:train:0",
+    "iroad": "sample:train:0",
+    "386324": "sample:train:0",
+    "campushomepage": "sample:train:0",
+    "mrw": "sample:train:0",
+    "sumandigital": "sample:train:0",
+    "lawmh": "sample:train:0",
+    "flyassociated": "sample:train:0",
+    "theatrum-mainz": "sample:train:0",
+    "landsbergandsons": "sample:train:0",
+    "94822": "sample:train:0",
+    "karisei": "sample:train:0",
+    "gulp3d": "sample:train:0",
+    "tomato-leaf": "sample:train:0",
+    "themaineventonline": "sample:train:0",
+    "k-9cottages": "sample:train:0",
+    "tapsushi": "sample:train:0",
+    "oban-rits": "sample:train:0",
+    "gawb": "sample:train:0",
+    "iloinstitute": "sample:train:0",
+    "interviewonomy": "sample:train:0",
+    "thefirstworldwidewebsitewerenothinghappens": "sample:train:0",
+    "lovefortheelderly": "sample:train:0",
+    "adroltenia": "sample:train:0",
+    "oribikejapan": "sample:train:0",
+    "sungodboards": "sample:train:0",
+    "oldlollyshop": "sample:train:0",
+    "431627": "sample:train:0",
+    "ecocolmena": "sample:train:0",
+    "montura": "sample:train:0",
+    "sensefronteres": "sample:train:0",
+    "anne-mariedavid": "sample:train:0",
+    "unbuying": "sample:train:0",
+    "339505": "sample:train:0",
+    "353041": "sample:train:0",
+    "66859": "sample:train:0",
+    "lr-valentinavidak": "sample:train:0",
+    "hazalgo": "sample:train:0",
+    "koifishguide": "sample:train:0",
+    "miabonyunk": "sample:train:0",
+    "flynnamps": "sample:train:0",
+    "tsukasanoyu": "sample:train:0",
+    "soicauviet": "sample:train:0",
+    "muchosingresospasivos": "sample:train:0",
+    "jeffology": "sample:train:0",
+    "tampa-seo": "sample:train:0",
+    "dampfsauger-beam": "sample:train:0",
+    "240559": "sample:train:0",
+    "pilos": "sample:train:0",
+    "hotelsparga": "sample:train:0",
+    "scaffoldersforum": "sample:train:0",
+    "dawgzrus": "sample:train:0",
+    "poebunchik": "sample:train:0",
+    "salzschreiber": "sample:train:0",
+    "psocenter": "sample:train:0",
+    "australiansocceroos": "sample:train:0",
+    "hotelsitges": "sample:train:0",
+    "eluting": "sample:train:0",
+    "bashplease": "sample:train:0",
+    "wolseleymedia": "sample:train:0",
+    "kamiyahairdressing": "sample:train:0",
+    "getupmusic": "sample:train:0",
+    "jayjaboneta": "sample:train:0",
+    "180218": "sample:train:0",
+    "musik-therapie": "sample:train:0",
+    "incur": "sample:train:0",
+    "markocen": "sample:train:0",
+    "rachelpassions": "sample:train:0",
+    "edinburghlibdems": "sample:train:0",
+    "somushi": "sample:train:0",
+    "we4399": "sample:train:0",
+    "25pweq27r27s": "sample:train:0",
+    "softmetaware": "sample:train:0",
+    "fcuh": "sample:train:0",
+    "pipnaguabo": "sample:train:0",
+    "radiodangdutindonesia": "sample:train:0",
+    "teatroarbole": "sample:train:0",
+    "neoluxor": "sample:train:0",
+    "lessb": "sample:train:0",
+    "nancycampbell": "sample:train:0",
+    "ctcdistribution": "sample:train:0",
+    "135264": "sample:train:0",
+    "lawyersusaonline": "sample:train:0",
+    "fashionandwomen": "sample:train:0",
+    "oddix": "sample:train:0",
+    "safkaty": "sample:train:0",
+    "lifecathedralchurch": "sample:train:0",
+    "mygooddaycafe": "sample:train:0",
+    "campingtonnara": "sample:train:0",
+    "speedpool": "sample:train:0",
+    "earthpledge": "sample:train:0",
+    "worldoptometry": "sample:train:0",
+    "philipglass": "sample:train:0",
+    "selectmedia": "sample:train:0",
+    "desmachyme": "sample:train:0",
+    "indiemusicimpact": "sample:train:0",
+    "organicparade": "sample:train:0",
+    "c-nergy": "sample:train:0",
+    "cclasarenas": "sample:train:0",
+    "kelleherrealty": "sample:train:0",
+    "lickspits": "sample:train:0",
+    "alholman": "sample:train:0",
+    "womenssoccershow": "sample:train:0",
+    "durhamcosa": "sample:train:0",
+    "greenwoodms": "sample:train:0",
+    "virtueplanet": "sample:train:0",
+    "antiwrinklecreamblog": "sample:train:0",
+    "isango": "sample:train:0",
+    "larouchein2004": "sample:train:0",
+    "40639": "sample:train:0",
+    "heidisdish": "sample:train:0",
+    "magnoliaroseco": "sample:train:0",
+    "coincidences": "sample:train:0",
+    "rowanellis": "sample:train:0",
+    "bagatello": "sample:train:0",
+    "loopnaardepomp": "sample:train:0",
+    "fanbranded": "sample:train:0",
+    "multireflexology": "sample:train:0",
+    "mengdental": "sample:train:0",
+    "feedstats": "sample:train:0",
+    "frankfort-elberta": "sample:train:0",
+    "unimog-museum": "sample:train:0",
+    "conceptcaravans": "sample:train:0",
+    "archerie-wuilbaut": "sample:train:0",
+    "schuylkillriver": "sample:train:0",
+    "easycleanerpro": "sample:train:0",
+    "mentorcoreedu": "sample:train:0",
+    "imagendeautos": "sample:train:0",
+    "food-providing": "sample:train:0",
+    "bluerosecafetulsa": "sample:train:0",
+    "gardenbedettishop": "sample:train:0",
+    "prahost": "sample:train:0",
+    "n-clinic": "sample:train:0",
+    "mujestic": "sample:train:0",
+    "degiheugi": "sample:train:0",
+    "cedisa": "sample:train:0",
+    "howlearnspanish": "sample:train:0",
+    "univairparts": "sample:train:0",
+    "neukomm": "sample:train:0",
+    "goldetectors": "sample:train:0",
+    "garciastowingtx": "sample:train:0",
+    "cambodgenouveau": "sample:train:0",
+    "theopening": "sample:train:0",
+    "stonethegardener": "sample:train:0",
+    "abolishpestcontrol": "sample:train:0",
+    "srilankamirror": "sample:train:0",
+    "edmontongreencentre": "sample:train:0",
+    "jeremielenoir": "sample:train:0",
+    "bizzbee": "sample:train:0",
+    "avalonstructural": "sample:train:0",
+    "bioinformatics-brazil": "sample:train:0",
+    "iredge": "sample:train:0",
+    "essenburgplumbing": "sample:train:0",
+    "nippn": "sample:train:0",
+    "kainetech": "sample:train:0",
+    "ibforum": "sample:train:0",
+    "thehairyfig": "sample:train:0",
+    "bait3dmovie": "sample:train:0",
+    "aipumps": "sample:train:0",
+    "123date": "sample:train:0",
+    "assisibenessere": "sample:train:0",
+    "spd-fraktion-hessen": "sample:train:0",
+    "gustav-mahler-vereinigung": "sample:train:0",
+    "oisofarm": "sample:train:0",
+    "zoumeshiya": "sample:train:0",
+    "slabunova": "sample:train:0",
+    "swoman": "sample:train:0",
+    "top-home-security-systems": "sample:train:0",
+    "291423": "sample:train:0",
+    "artctic-fox": "sample:train:0",
+    "littleapple": "sample:train:0",
+    "markware": "sample:train:0",
+    "bridepub": "sample:train:0",
+    "anmatt": "sample:train:0",
+    "michiganherbalremedies": "sample:train:0",
+    "181731": "sample:train:0",
+    "ckrh": "sample:train:0",
+    "bookmyname": "sample:train:0",
+    "nutsakgames": "sample:train:0",
+    "mariaspadafora": "sample:train:0",
+    "viapenedes": "sample:train:0",
+    "irfan-irsyad": "sample:train:0",
+    "casuesweets": "sample:train:0",
+    "279447": "sample:train:0",
+    "comicnewsi": "sample:train:0",
+    "caudleandcaudle": "sample:train:0",
+    "baoshanw": "sample:train:0",
+    "copitima": "sample:train:0",
+    "unegui": "sample:train:0",
+    "saintmonicatx": "sample:train:0",
+    "cart-rcv": "sample:train:0",
+    "chicagocornea": "sample:train:0",
+    "crafthill": "sample:train:0",
+    "ekwb": "sample:train:0",
+    "tl80s": "sample:train:0",
+    "chaabpress": "sample:train:0",
+    "manhattaneyeworks": "sample:train:0",
+    "332677": "sample:train:0",
+    "drkentgabriel": "sample:train:0",
+    "mossycreekoutfitters": "sample:train:0",
+    "furniturevision": "sample:train:0",
+    "packetimpact": "sample:train:0",
+    "kcat": "sample:train:0",
+    "itispivotal": "sample:train:0",
+    "kedke": "sample:train:0",
+    "signifytechnology": "sample:train:0",
+    "vedantadfw": "sample:train:0",
+    "305948": "sample:train:0",
+    "muucih": "sample:train:0",
+    "jeanpaulschmitt": "sample:train:0",
+    "drgoodtooth": "sample:train:0",
+    "papiliodress": "sample:train:0",
+    "scoutlounge": "sample:train:0",
+    "meshopfa": "sample:train:0",
+    "klerer": "sample:train:0",
+    "dipp": "sample:train:0",
+    "youritdept": "sample:train:0",
+    "mainewoodsnationalpark": "sample:train:0",
+    "allianz-vertrieb": "sample:train:0",
+    "alength": "sample:train:0",
+    "anywhereride": "sample:train:0",
+    "prestonpugmire": "sample:train:0",
+    "noggblog": "sample:train:0",
+    "christianlifeok": "sample:train:0",
+    "gift-group": "sample:train:0",
+    "poppaganda": "sample:train:0",
+    "kraeved-gatchina": "sample:train:0",
+    "ysumathstat": "sample:train:0",
+    "37222": "sample:train:0",
+    "artepaleoliticoenasturias": "sample:train:0",
+    "maggiessewvac": "sample:train:0",
+    "shavercars": "sample:train:0",
+    "dittatori": "sample:train:0",
+    "royal-commission-elderly": "sample:train:0",
+    "evangelarchitect": "sample:train:0",
+    "hot97svg": "sample:train:0",
+    "onlinebook": "sample:train:0",
+    "nikkiuberti": "sample:train:0",
+    "agapelive": "sample:train:0",
+    "rosachiclets": "sample:train:0",
+    "amherstdaily": "sample:train:0",
+    "gtscomputers": "sample:train:0",
+    "flower-recipe": "sample:train:0",
+    "tanya-jain": "sample:train:0",
+    "ohiostadium": "sample:train:0",
+    "blinkcloudservices": "sample:train:0",
+    "scape-project": "sample:train:0",
+    "watermarker": "sample:train:0",
+    "omazingkidsllc": "sample:train:0",
+    "89478": "sample:train:0",
+    "municipiocuauhtemoc": "sample:train:0",
+    "goodlives": "sample:train:0",
+    "allprinters": "sample:train:0",
+    "460875": "sample:train:0",
+    "jrc-law": "sample:train:0",
+    "jdsutter": "sample:train:0",
+    "xbladesracing": "sample:train:0",
+    "i-rin": "sample:train:0",
+    "ah3b": "sample:train:0",
+    "dpopup": "sample:train:0",
+    "wwwbeyondbullying": "sample:train:0",
+    "balancenortheast": "sample:train:0",
+    "brownbrothersfarms": "sample:train:0",
+    "crosst": "sample:train:0",
+    "kamessenbilder3": "sample:train:0",
+    "citizensedmond": "sample:train:0",
+    "morseandbeggsmonument": "sample:train:0",
+    "pixelmateindia": "sample:train:0",
+    "endocrineonfifth": "sample:train:0",
+    "359268": "sample:train:0",
+    "congelative": "sample:train:0",
+    "neozoic": "sample:train:0",
+    "whistlerslidingcentre": "sample:train:0",
+    "lembrancinhas15anos": "sample:train:0",
+    "rnamedical": "sample:train:0",
+    "tsirang": "sample:train:0",
+    "geriatricsocialclub": "sample:train:0",
+    "sophiessteakhouse": "sample:train:0",
+    "ic-fca": "sample:train:0",
+    "americansoccernetwork": "sample:train:0",
+    "buyclassiccars": "sample:train:0",
+    "paulduane": "sample:train:0",
+    "alphabendi": "sample:train:0",
+    "tvcocina": "sample:train:0",
+    "geoby-russia": "sample:train:0",
+    "altavia-coach": "sample:train:0",
+    "playminiongames": "sample:train:0",
+    "enlavall": "sample:train:0",
+    "loosechangelive": "sample:train:0",
+    "larnedu": "sample:train:0",
+    "nasu-lid": "sample:train:0",
+    "tubuli": "sample:train:0",
+    "janyaa": "sample:train:0",
+    "stephaniefalaschetti": "sample:train:0",
+    "georgealarm": "sample:train:0",
+    "catholicregister": "sample:train:0",
+    "crazyontheoutsidethemovie": "sample:train:0",
+    "icurrex": "sample:train:0",
+    "sakura-server": "sample:train:0",
+    "pokemon-tcg": "sample:train:0",
+    "mattpomroy": "sample:train:0",
+    "as-admin": "sample:train:0",
+    "foresthillfarmiowa": "sample:train:0",
+    "theplacetoshop4everything": "sample:train:0",
+    "karsts": "sample:train:0",
+    "healingmango": "sample:train:0",
+    "montanaclay": "sample:train:0",
+    "gwonline": "sample:train:0",
+    "kreativaweb": "sample:train:0",
+    "thequinnfuneralhome": "sample:train:0",
+    "graphez": "sample:train:0",
+    "bre-xminerals": "sample:train:0",
+    "elsouth": "sample:train:0",
+    "claromizuno": "sample:train:0",
+    "piecejointe": "sample:train:0",
+    "stylerspanel": "sample:train:0",
+    "siliconloons": "sample:train:0",
+    "halodestiny": "sample:train:0",
+    "21stcenturyplowshare": "sample:train:0",
+    "periwinklehandbags": "sample:train:0",
+    "ascanal": "sample:train:0",
+    "sharepointecm": "sample:train:0",
+    "careerquest": "sample:train:0",
+    "tlcproperties": "sample:train:0",
+    "album-share": "sample:train:0",
+    "currandesigncenter": "sample:train:0",
+    "eating-america": "sample:train:0",
+    "kringloopapp": "sample:train:0",
+    "novynynauky": "sample:train:0",
+    "watchonline9": "sample:train:0",
+    "salon35": "sample:train:0",
+    "max-apple": "sample:train:0",
+    "captureintegration": "sample:train:0",
+    "arquidiocesistegucigalpa": "sample:train:0",
+    "statravel": "sample:train:0",
+    "squaredancingccha": "sample:train:0",
+    "beautyartgallery": "sample:train:0",
+    "luvattumaa": "sample:train:0",
+    "vaper": "sample:train:0",
+    "lgbtlaughs": "sample:train:0",
+    "andrewherbstart": "sample:train:0",
+    "karbayambalaj": "sample:train:0",
+    "1-800-publicrelations": "sample:train:0",
+    "laaky": "sample:train:0",
+    "jayqeu": "sample:train:0",
+    "moneygroup": "sample:train:0",
+    "wso-boxing": "sample:train:0",
+    "buymyexplorer": "sample:train:0",
+    "joebidensteeth": "sample:train:0",
+    "mosken": "sample:train:0",
+    "goose-shaped": "sample:train:0",
+    "qetotolugocyz": "sample:train:1",
+    "gkedjgfmmudo": "sample:train:1",
+    "ywiuwcosqiqusoocgmakuqowoqci": "sample:train:1",
+    "lonpvcicyuclkxtfrpdvfviml": "sample:train:1",
+    "goqunuwovuxeqof": "sample:train:1",
+    "fmwynyeqwmeaeaccj": "sample:train:1",
+    "eygi7njpnscb1brmhrh1abxbtc": "sample:train:1",
+    "ddxqwuqapppyfhwrvwgl": "sample:train:1",
+    "yifqxwzwj": "sample:train:1",
+    "btycficjam": "sample:train:1",
+    "wsqmswewauskycygowwgow": "sample:train:1",
+    "etlyaxmtq": "sample:train:1",
+    "cl3burwlqrihara8kvs": "sample:train:1",
+    "kayhaatychhhrq": "sample:train:1",
+    "vopakofiforowecugyz": "sample:train:1",
+    "hkwvzybn": "sample:train:1",
+    "1f5f04t5s7x3f3n9hi71iqv6lv": "sample:train:1",
+    "uqlewwmks": "sample:train:1",
+    "tlrcdtyjrlew": "sample:train:1",
+    "pebwiosbfahxuvjoy": "sample:train:1",
+    "qbgtwdkhqhu4sp16g0o": "sample:train:1",
+    "7rad3tyjcd3lubopc07pan1": "sample:train:1",
+    "ufcbsutspqddcvd": "sample:train:1",
+    "dikagewotake": "sample:train:1",
+    "1igqu671bcmr5vvndchr3f7j5v": "sample:train:1",
+    "cinydocecyvigo": "sample:train:1",
+    "vihahimucevawenaz": "sample:train:1",
+    "kaypqiakz": "sample:train:1",
+    "1j16mdw0cdq4qnonova4svm": "sample:train:1",
+    "llxbky": "sample:train:1",
+    "yrxglzfelegfwfuaxshdnbuk": "sample:train:1",
+    "rlfgfsnjvhpw": "sample:train:1",
+    "skeoiecqyggqwqyygguomsiouyeeka": "sample:train:1",
+    "akgckodl": "sample:train:1",
+    "yb7jy8y21h1f5bwlurm": "sample:train:1",
+    "udfroqfolqtpoosm": "sample:train:1",
+    "nwrgzjhgxyn": "sample:train:1",
+    "347tepmbcfuxytgjotg0123": "sample:train:1",
+    "vmcatyz": "sample:train:1",
+    "eygkestnessbiophysicalohax": "sample:train:1",
+    "irytk6i0utgvw2c": "sample:train:1",
+    "myqosumswq": "sample:train:1",
+    "yv1da2ije8gfytsn147": "sample:train:1",
+    "wxupbrp": "sample:train:1",
+    "qhldcg": "sample:train:1",
+    "tjeuball": "sample:train:1",
+    "who2uxy636i6q4i": "sample:train:1",
+    "narywekeg": "sample:train:1",
+    "dttjbwynaeud": "sample:train:1",
+    "ntyubcuqoaxkgx": "sample:train:1",
+    "aaogovln": "sample:train:1",
+    "wlolyxwhexmlods": "sample:train:1",
+    "cjfwxqv3nqrh17a3d1cnbtjc6": "sample:train:1",
+    "hhktwktctxgti": "sample:train:1",
+    "1izaapt1kle01212h148otc6k5i": "sample:train:1",
+    "xtlcdhockey": "sample:train:1",
+    "qyiuengerjet": "sample:train:1",
+    "pfgainalcentricem": "sample:train:1",
+    "wsomgsowaayemqckewysgekyo": "sample:train:1",
+    "phiyinglane": "sample:train:1",
+    "uoakmuakuw": "sample:train:1",
+    "skyeesqowusywcg": "sample:train:1",
+    "xdynland": "sample:train:1",
+    "ejgdyn72o278cb7": "sample:train:1",
+    "qzqmrhopcvds": "sample:train:1",
+    "lyrasaxemyfususeqyb": "sample:train:1",
+    "pssnerfoclimswdoipevovh": "sample:train:1",
+    "zzzzdi": "sample:train:1",
+    "iqukowcsosekcgcqqmqysiummqcc": "sample:train:1",
+    "fsnwrpedbpybyclxm": "sample:train:1",
+    "gmamowmswgww": "sample:train:1",
+    "kukwgaoiayocqoyio": "sample:train:1",
+    "qurbquerque": "sample:train:1",
+    "vulkqx": "sample:train:1",
+    "wbrjgcczbkiw": "sample:train:1",
+    "ckrsmskbea": "sample:train:1",
+    "vppxviidgblr": "sample:train:1",
+    "omqomerer": "sample:train:1",
+    "ygugetball": "sample:train:1",
+    "mafncgodtfzbtkaprpprlyoh": "sample:train:1",
+    "rymjnicasov": "sample:train:1",
+    "blkranerraticallyqozaw": "sample:train:1",
+    "1pijepmn5vofe8o8ehub14c": "sample:train:1",
+    "ogzzdp": "sample:train:1",
+    "tfdgdozer": "sample:train:1",
+    "galozuhapefas": "sample:train:1",
+    "acbswxdctfqo": "sample:train:1",
+    "axgjorsfyj36arkxipovelo": "sample:train:1",
+    "tlamsikathrinezad": "sample:train:1",
+    "zpdrdozer": "sample:train:1",
+    "eeibttlvnbsoo": "sample:train:1",
+    "rjzdvltdjqvy": "sample:train:1",
+    "xudatyjymone": "sample:train:1",
+    "kpooyohuapdsx": "sample:train:1",
+    "dfedjmtltdun": "sample:train:1",
+    "kbbtmmjkj": "sample:train:1",
+    "nzelihxkbx": "sample:train:1",
+    "cobnfordlinnetavox": "sample:train:1",
+    "ah5rkfotcrqvmpg": "sample:train:1",
+    "xjqaacivic": "sample:train:1",
+    "puvaciqatokezabutub": "sample:train:1",
+    "pyagdmfczt": "sample:train:1",
+    "cbfetbbwwltt": "sample:train:1",
+    "gwhfrdeijvy": "sample:train:1",
+    "ceobhjfqhyiizdxd": "sample:train:1",
+    "kmceiego": "sample:train:1",
+    "wycyhapilyzupefemufu": "sample:train:1",
+    "iqmginalcentricem": "sample:train:1",
+    "dbkdtbbvcwfo": "sample:train:1",
+    "u2qdslsf1t5tqno": "sample:train:1",
+    "kobuwqvplq": "sample:train:1",
+    "7jkvup7nwlmd30c8k6wf76m": "sample:train:1",
+    "vugwxhgmqccfinavh": "sample:train:1",
+    "cfs8edibcpaf7fip5hqb7hi": "sample:train:1",
+    "yhfvvoehtadnevfk": "sample:train:1",
+    "sbkddipqwinosr": "sample:train:1",
+    "xlyeld1nmdhb8olz2mf1pu08pu": "sample:train:1",
+    "7lctyp5850axmx1": "sample:train:1",
+    "sndvsiv": "sample:train:1",
+    "ijoiebggcnjoebg": "sample:train:1",
+    "lyvuvunuxu": "sample:train:1",
+    "ayypowlfus": "sample:train:1",
+    "fodysesumynivu": "sample:train:1",
+    "xugevexolebuginebijyn": "sample:train:1",
+    "fotytihofamanoda": "sample:train:1",
+    "digehybynicoxolywoqexu": "sample:train:1",
+    "rpmmxpauaddgoqjboww": "sample:train:1",
+    "gdmbupy6mv5hc0e": "sample:train:1",
+    "ofidiqqefwjjoibvx": "sample:train:1",
+    "okmdflyukmxewavyugeinkvg": "sample:train:1",
+    "mcusrogycgxxbbryqd": "sample:train:1",
+    "diqihcxtl": "sample:train:1",
+    "qgggcgukgqmouykaqkoqw": "sample:train:1",
+    "utk2u0eh1f76opw0mli": "sample:train:1",
+    "upg6kbsnipa4sbm": "sample:train:1",
+    "uuqsgaqvxk": "sample:train:1",
+    "ryhaqiqociqe": "sample:train:1",
+    "nvtphvgw": "sample:train:1",
+    "vxktnxbqhc": "sample:train:1",
+    "mtqvtpyfxma": "sample:train:1",
+    "jhtvlebmw330i": "sample:train:1",
+    "phyfepictom": "sample:train:1",
+    "ej187nsrkjm454wvwjc": "sample:train:1",
+    "jibhkdqwmfeh": "sample:train:1",
+    "yhznsrcosqheyrsn": "sample:train:1",
+    "esxskitxnbpbtbve": "sample:train:1",
+    "xjtvay": "sample:train:1",
+    "psqgbcbxhgr": "sample:train:1",
+    "eiomqiugcuykiwgmisyy": "sample:train:1",
+    "ubofmxalyrmx50s47hw": "sample:train:1",
+    "ylaroxq0ohc0c8w": "sample:train:1",
+    "qgoocysoguwiuosa": "sample:train:1",
+    "txayfssvxq": "sample:train:1",
+    "vdvxtrlzec": "sample:train:1",
+    "lriqeeofwfoadiswd": "sample:train:1",
+    "disagiwatide": "sample:train:1",
+    "uzdppgx": "sample:train:1",
+    "myuemyomaukiqckaewgmi": "sample:train:1",
+    "ienvvunfl": "sample:train:1",
+    "iqyzdisjrrgofibfjxnr": "sample:train:1",
+    "xmfxnqncpso": "sample:train:1",
+    "qf3ps0ejylqbc8eryfcnm8o": "sample:train:1",
+    "gpq6khajululgtm": "sample:train:1",
+    "ijq45lqvibedcd1hifmbapu": "sample:train:1",
+    "pefadatmsofgmmbezo": "sample:train:1",
+    "aayocgwaoosmauocmwoqoegkaqgs": "sample:train:1",
+    "tupyqypakoluqa": "sample:train:1",
+    "165nmbynqhqn1n3jexidari": "sample:train:1",
+    "ctruvqxktaripkf": "sample:train:1",
+    "wmaixpvejktu": "sample:train:1",
+    "121cdt01i787mi1toarlq17jd6ue": "sample:train:1",
+    "icztjybobhqnbwifmndp": "sample:train:1",
+    "iudwiego": "sample:train:1",
+    "dapqvkt": "sample:train:1",
+    "xja1mdqo3n7nvkse311voufc4": "sample:train:1",
+    "yxsyblhcxolfrth": "sample:train:1",
+    "iqcuqaawayycwssmcesycawm": "sample:train:1",
+    "ttonuoljkmhdjcdg": "sample:train:1",
+    "lbxzrasildeafeninguvuc": "sample:train:1",
+    "qequloqiju": "sample:train:1",
+    "rfcrdrwmbige": "sample:train:1",
+    "i66f48a7eeee689e53b018ec8f437fee97": "sample:train:1",
+    "wjnypj14kvck5bzgyxk1b6lukg": "sample:train:1",
+    "gsbrtexwuzakzvsesxfllailr": "sample:train:1",
+    "srcf7revwpq6sfij5lw8yp1": "sample:train:1",
+    "ugjkksnurxf": "sample:train:1",
+    "w4ejqr32wbyfy4mfgruxe0q": "sample:train:1",
+    "h2oy7voiht6o10qitwq35mffr": "sample:train:1",
+    "uqfqongleu": "sample:train:1",
+    "jezocyrocemysycyda": "sample:train:1",
+    "ganyfybokev": "sample:train:1",
+    "ep18a8adgxc474cdqnm": "sample:train:1",
+    "neaofmwkkmp": "sample:train:1",
+    "rdqwkikhnlcmnelc": "sample:train:1",
+    "korvort": "sample:train:1",
+    "jerpjfnvawqxkxgf": "sample:train:1",
+    "alk2wte8ot3bul3": "sample:train:1",
+    "norabocofoni": "sample:train:1",
+    "bpqjrulegacy": "sample:train:1",
+    "ndakerrari": "sample:train:1",
+    "iysjknaefuw": "sample:train:1",
+    "lfsyopcomp": "sample:train:1",
+    "snlmtig": "sample:train:1",
+    "dpkqsaywfpabdbxywnbjg": "sample:train:1",
+    "wukolztl": "sample:train:1",
+    "xrcyqdwvjmhisux": "sample:train:1",
+    "qmfndzp": "sample:train:1",
+    "rycypiq": "sample:train:1",
+    "ceaqqqmyssusgmywoscwyggm": "sample:train:1",
+    "9j1tqrpw74t0h101qozotrof": "sample:train:1",
+    "smdsorcajanunal": "sample:train:1",
+    "gmggussii": "sample:train:1",
+    "npzsqsckaic": "sample:train:1",
+    "wtola8ox7dgxc41bov7fifc": "sample:train:1",
+    "mqrbdctlddxytex": "sample:train:1",
+    "ejotjgmwlhj": "sample:train:1",
+    "impmygfmoeq": "sample:train:1",
+    "aaswccscsqumsomwguuy": "sample:train:1",
+    "yxgxyti2adkb1bs": "sample:train:1",
+    "fybgspdfieens": "sample:train:1",
+    "fogytyzefykunela": "sample:train:1",
+    "abwlct3lede2shc": "sample:train:1",
+    "gdmgjsrjjqhn": "sample:train:1",
+    "jfipmnyyhkti": "sample:train:1",
+    "fdrwsjvurq": "sample:train:1",
+    "miauvbozammtmctmdrjlng": "sample:train:1",
+    "adqtifjmojdjsdmjhwl": "sample:train:1",
+    "lxqxerrari": "sample:train:1",
+    "fphjdgvtxjxdlqhom": "sample:train:1",
+    "zsrpcjsnkdkrqcopryrmvmh": "sample:train:1",
+    "svrwkxixkdn": "sample:train:1",
+    "bnkvciqondvxcdl": "sample:train:1",
+    "vxhpngeles": "sample:train:1",
+    "xdbesemitismgavenuteq": "sample:train:1",
+    "zejbaduvcrjrtjqglviskkxv": "sample:train:1",
+    "forhspinsoidaoahlm": "sample:train:1",
+    "7lypexsd76ylw63h56q0cx5": "sample:train:1",
+    "dukvbvpxxt": "sample:train:1",
+    "7bw4i630ohqdax7": "sample:train:1",
+    "lxnfinglane": "sample:train:1",
+    "cnkjq4cb7d3tapu6w2atu4c": "sample:train:1",
+    "queldg": "sample:train:1",
+    "cecaocwqimgswokiieasie": "sample:train:1",
+    "kikirulegacy": "sample:train:1",
+    "l6e782338a4a63ff7a46a02416961b42cd": "sample:train:1",
+    "1b801br1dujzhvi6qc4ylqe221": "sample:train:1",
+    "drcmay": "sample:train:1",
+    "otkffpvnaplfos": "sample:train:1",
+    "fosyqisefifiniwa": "sample:train:1",
+    "tizuhayuvup": "sample:train:1",
+    "tcpstausbwcx": "sample:train:1",
+    "mywmeaicyycccawoqqyiokwiqqku": "sample:train:1",
+    "ehg4mdgxyxg4ebsxqreluns": "sample:train:1",
+    "sufdyifxrtqlgxyug": "sample:train:1",
+    "farfxpgl": "sample:train:1",
+    "id1fy27438ed3jg0c0er1na": "sample:train:1",
+    "ztpjirish": "sample:train:1",
+    "aacciaeqigekqcgoocy": "sample:train:1",
+    "pxexbqyfjohb": "sample:train:1",
+    "wmqudiajiitvmxn": "sample:train:1",
+    "bqnxvwjgjrtipeg": "sample:train:1",
+    "avajbmujfaitp": "sample:train:1",
+    "cncfaqkpktauundnsqucgcp": "sample:train:1",
+    "imivvmwspmfei": "sample:train:1",
+    "mgttyxvqf": "sample:train:1",
+    "kdkkbwyqfuhodlbug": "sample:train:1",
+    "uvqvgaydvvduckwdv": "sample:train:1",
+    "tfysdhockey": "sample:train:1",
+    "lxawujocyqaftod": "sample:train:1",
+    "iv78o0mvg8qj7t3dwrohoxg": "sample:train:1",
+    "sxm6od7x32e4up1xq8mveha": "sample:train:1",
+    "ffijdcmwwbjtgqeubam": "sample:train:1",
+    "ryqenopygesuqipuvacog": "sample:train:1",
+    "wxy4i0ir5jwfu6o4ovo": "sample:train:1",
+    "547l70cxqfmxcj7budo": "sample:train:1",
+    "jkijjwxarbz": "sample:train:1",
+    "dhdranerraticallyqozaw": "sample:train:1",
+    "jxrxrancisco": "sample:train:1",
+    "ocaockasycs": "sample:train:1",
+    "kemypujapiceleweciqyzyf": "sample:train:1",
+    "1gxponblz7du18cunyt1ahxuc1": "sample:train:1",
+    "lsbjbcwheeqn": "sample:train:1",
+    "rplyfordlinnetavox": "sample:train:1",
+    "zzbktetf": "sample:train:1",
+    "tosxalxnkgnp": "sample:train:1",
+    "xisqsaenql": "sample:train:1",
+    "jecyparul": "sample:train:1",
+    "qetyxuvacur": "sample:train:1",
+    "fobefisi": "sample:train:1",
+    "wswksumqaiwasykeyiuwwqea": "sample:train:1",
+    "kuwwykoiymeosaouc": "sample:train:1",
+    "dvtdrulegacy": "sample:train:1",
+    "ztporze": "sample:train:1",
+    "titnwj": "sample:train:1",
+    "eiyeegokoikmqs": "sample:train:1",
+    "whjbdetgt": "sample:train:1",
+    "qetatolicutybowuvyc": "sample:train:1",
+    "vvkaerrari": "sample:train:1",
+    "qgqmeuicieeggymsmsuyiaoqkysksi": "sample:train:1",
+    "nvokamentalistfanchonut": "sample:train:1",
+    "zogfpbpoomfs": "sample:train:1",
+    "ibvddxlb": "sample:train:1",
+    "lysysunomav": "sample:train:1",
+    "u41265dz3lcy1u86hia1ygz4jf": "sample:train:1",
+    "yyhmhkiizmklwjeite": "sample:train:1",
+    "qrgwvkplt": "sample:train:1",
+    "nyymbqnhphnxube": "sample:train:1",
+    "nfqqererwyatanb": "sample:train:1",
+    "htimstring": "sample:train:1",
+    "eurgyfrfzyzhem": "sample:train:1",
+    "wsasaoweayoeqmkgeouqaywyekagy": "sample:train:1",
+    "gmqekymkaouakiki": "sample:train:1",
+    "bojyzafaperogutadoso": "sample:train:1",
+    "acyepartbulkyf": "sample:train:1",
+    "qetufeveje": "sample:train:1",
+    "tslnxnzghksy": "sample:train:1",
+    "qekuxuvyqykigam": "sample:train:1",
+    "nczncqdbskv": "sample:train:1",
+    "gb65a67fbc688b32282518fb721aeec179": "sample:train:1",
+    "latqowtqh": "sample:train:1",
+    "ptiwland": "sample:train:1",
+    "hnbnancorml": "sample:train:1",
+    "mgouetball": "sample:train:1",
+    "387j50gpibkjix3p5t3": "sample:train:1",
+    "egyafswsvbdnoklvmfy": "sample:train:1",
+    "iijqey": "sample:train:1",
+    "mqptbnnwbttv": "sample:train:1",
+    "drbyrulegacy": "sample:train:1",
+    "ywumggwuoycekqmm": "sample:train:1",
+    "qgmwiciooymekqeecwo": "sample:train:1",
+    "nnbdgfjmeiain": "sample:train:1",
+    "ixmnoxuhytibm6y432c": "sample:train:1",
+    "ofzwpoxudgxx": "sample:train:1",
+    "fmvjckldrtdvfldk": "sample:train:1",
+    "nfxvcar": "sample:train:1",
+    "xlekey": "sample:train:1",
+    "tvvma1008": "sample:train:1",
+    "igjkksbhntuf": "sample:train:1",
+    "qgysuugaewwcmoccsy": "sample:train:1",
+    "qocjxulahlfdgkdm": "sample:train:1",
+    "kesugh10618df2p7mxpl94xxc": "sample:train:1",
+    "ywmmskacqaeoaqqcoumesi": "sample:train:1",
+    "komfgcdhtjxgthhirilyjult": "sample:train:1",
+    "mamehefo": "sample:train:1",
+    "qegafupycomubajiwov": "sample:train:1",
+    "hquzzpibxqrgba": "sample:train:1",
+    "gfivqx5hsrydihi0mbat3p7": "sample:train:1",
+    "u21xcnetm4ync0i4oj5fsf1": "sample:train:1",
+    "jfihxwgskjwg": "sample:train:1",
+    "osinotijcofqgo": "sample:train:1",
+    "itstg25bg61lk2kx3bg": "sample:train:1",
+    "hekqafok": "sample:train:1",
+    "oleyfjuovtuboxjtyug": "sample:train:1",
+    "makewita": "sample:train:1",
+    "vyhyzcqakfenolwtgsmcqxcl": "sample:train:1",
+    "kejygoxupunulodedekyqyw": "sample:train:1",
+    "cffxdxbgfovl": "sample:train:1",
+    "dciisdyvrhjjrtev": "sample:train:1",
+    "130kqcn1muxq8xpw46km1o5dlax": "sample:train:1",
+    "xeunlcwoymapqn": "sample:train:1",
+    "hrjwwalk": "sample:train:1",
+    "gkhiqtmmnstu": "sample:train:1",
+    "wbwrcx76gl1jmni": "sample:train:1",
+    "sigolos": "sample:train:1",
+    "shtdcyru": "sample:train:1",
+    "kqjedasgxjbuqkrdvpbljz": "sample:train:1",
+    "gptvabnavfqzzmarclme": "sample:train:1",
+    "jhrhcqut": "sample:train:1",
+    "yollxcdo": "sample:train:1",
+    "rtydball": "sample:train:1",
+    "wctsrajdfdstvfmr": "sample:train:1",
+    "i8onorirsjevix32ydwde4a": "sample:train:1",
+    "ceaqoswqcuskmgcu": "sample:train:1",
+    "bhyzficlight": "sample:train:1",
+    "duvcljplxvlncf": "sample:train:1",
+    "xjpccar": "sample:train:1",
+    "mamygatikawudolo": "sample:train:1",
+    "1009ornlbm937dayatc3qe6ad": "sample:train:1",
+    "1hmrybmbofg4gf5": "sample:train:1",
+    "xqtutet": "sample:train:1",
+    "pnzfkandfield": "sample:train:1",
+    "fedmefgjghil": "sample:train:1",
+    "ucptvqpbyfe": "sample:train:1",
+    "uqddererwyatanb": "sample:train:1",
+    "keivjvwqrqv": "sample:train:1",
+    "eufqwis": "sample:train:1",
+    "hexebnhwmzbn": "sample:train:1",
+    "1rolkt78etobu0s": "sample:train:1",
+    "skueiaacwogqueskwqw": "sample:train:1",
+    "u8u8wx36ov58165": "sample:train:1",
+    "wdepm8yf14grabu": "sample:train:1",
+    "y6utk4edqfsrwnyv1ho2s8u": "sample:train:1",
+    "sokavskdsdwiqmhtm": "sample:train:1",
+    "fjfjinalcentricem": "sample:train:1",
+    "najesacyresirupynymuwy": "sample:train:1",
+    "cpnfdumr": "sample:train:1",
+    "kjpvmculuuveecpn": "sample:train:1",
+    "gmsioioigemsqoq": "sample:train:1",
+    "mkxgxlorjhfhckd": "sample:train:1",
+    "wfql7hkjcds470u": "sample:train:1"
+  },
+  "vectors": {
+    "": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "a": [
+      1.0,
+      0.0,
+      1.0,
+      0.0,
+      1.0
+    ],
+    "ab": [
+      2.0,
+      0.0,
+      1.0,
+      0.0,
+      1.0
+    ],
+    "google": [
+      6.0,
+      0.0,
+      1.0,
+      0.000146050468505391,
+      0.6666666666666666
+    ],
+    "googlebot": [
+      9.0,
+      0.0,
+      1.0,
+      0.00018057148833393796,
+      0.4444444444444444
+    ],
+    "microsoftonline": [
+      15.0,
+      0.0,
+      1.0,
+      0.0007945962552251342,
+      0.3333333333333333
+    ],
+    "read-fx": [
+      7.0,
+      0.0,
+      0.8571428571428571,
+      0.00040097492262389163,
+      0.5714285714285714
+    ],
+    "columbia-ca": [
+      11.0,
+      0.0,
+      0.9090909090909091,
+      0.000257443739589223,
+      0.7272727272727273
+    ],
+    "12345": [
+      5.0,
+      1.0,
+      0.0,
+      4.6436559217098674e-05,
+      0.0
+    ],
+    "abc123": [
+      6.0,
+      0.5,
+      0.5,
+      3.5184885594480555e-05,
+      0.3333333333333333
+    ],
+    "shonan-sinkyu": [
+      13.0,
+      0.0,
+      0.9230769230769231,
+      0.0004263039549241272,
+      0.38461538461538464
+    ],
+    "stephensconstruction": [
+      20.0,
+      0.0,
+      1.0,
+      0.0009796389078629668,
+      0.6
+    ],
+    "ocymmekqogkw": [
+      12.0,
+      0.0,
+      1.0,
+      3.0966784650933245e-05,
+      0.16666666666666666
+    ],
+    "vaqemxhdhekfwu": [
+      14.0,
+      0.0,
+      1.0,
+      1.2936871336141861e-05,
+      0.14285714285714285
+    ],
+    "xkcdqwertzuiop": [
+      14.0,
+      0.0,
+      1.0,
+      0.0001230704996846127,
+      0.2857142857142857
+    ],
+    "facebooklogin": [
+      13.0,
+      0.0,
+      1.0,
+      0.00039963790625613724,
+      0.38461538461538464
+    ],
+    "the": [
+      3.0,
+      0.0,
+      1.0,
+      0.0034055292460445858,
+      1.0
+    ],
+    "supercalifragilistic": [
+      20.0,
+      0.0,
+      1.0,
+      0.0006358131817731194,
+      0.25
+    ],
+    "zzzzzzzz": [
+      8.0,
+      0.0,
+      1.0,
+      6.12799168554088e-06,
+      0.125
+    ],
+    "news24": [
+      6.0,
+      0.3333333333333333,
+      0.6666666666666666,
+      0.00032595809107339535,
+      0.6666666666666666
+    ],
+    "q": [
+      1.0,
+      0.0,
+      1.0,
+      0.0,
+      1.0
+    ],
+    "7": [
+      1.0,
+      1.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "-": [
+      1.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    ".": [
+      1.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa": [
+      63.0,
+      0.0,
+      1.0,
+      3.4929552607583015e-05,
+      0.031746031746031744
+    ],
+    "999999999999999999999999999999999999999999999999999999999999999": [
+      63.0,
+      1.0,
+      0.0,
+      2.7780228974451997e-05,
+      0.0
+    ],
+    "0123456789": [
+      10.0,
+      1.0,
+      0.0,
+      3.467421962068549e-05,
+      0.0
+    ],
+    "-leading": [
+      8.0,
+      0.0,
+      0.875,
+      0.0013076453368979178,
+      0.875
+    ],
+    "trailing-": [
+      9.0,
+      0.0,
+      0.8888888888888888,
+      0.0015664605793881906,
+      0.8888888888888888
+    ],
+    "a-b-c-d": [
+      7.0,
+      0.0,
+      0.5714285714285714,
+      1.760776277645413e-05,
+      0.14285714285714285
+    ],
+    "co-operate-now": [
+      14.0,
+      0.0,
+      0.8571428571428571,
+      0.0005063082908186887,
+      0.5
+    ],
+    "xn--mnchen-3ya": [
+      14.0,
+      0.07142857142857142,
+      0.7142857142857143,
+      0.00021221575651010597,
+      0.2857142857142857
+    ],
+    "xn--fiqs8s": [
+      10.0,
+      0.1,
+      0.7,
+      1.8588266446140673e-05,
+      0.2
+    ],
+    "xn--80ak6aa92e": [
+      14.0,
+      0.35714285714285715,
+      0.5,
+      5.889705897769845e-06,
+      0.14285714285714285
+    ],
+    "m\u00fcnchen": [
+      7.0,
+      0.0,
+      0.8571428571428571,
+      0.0004500806026640259,
+      0.5714285714285714
+    ],
+    "b\u00fccher": [
+      6.0,
+      0.0,
+      0.8333333333333334,
+      0.00066029115411703,
+      0.5
+    ],
+    "\u0663\u0664\u0665": [
+      3.0,
+      1.0,
+      0.0,
+      1e-10,
+      0.0
+    ],
+    "paypalpaypal": [
+      12.0,
+      0.0,
+      1.0,
+      0.00014768459962153524,
+      0.3333333333333333
+    ],
+    "googlegoogle": [
+      12.0,
+      0.0,
+      1.0,
+      0.00017479074951057773,
+      0.3333333333333333
+    ],
+    "thethethe": [
+      9.0,
+      0.0,
+      1.0,
+      0.0016421266862482267,
+      0.3333333333333333
+    ],
+    "catcatcat": [
+      9.0,
+      0.0,
+      1.0,
+      0.0003784764388641201,
+      0.3333333333333333
+    ],
+    "345": [
+      3.0,
+      1.0,
+      0.0,
+      3.247835593336667e-05,
+      0.0
+    ],
+    "0-0-0": [
+      5.0,
+      0.6,
+      0.0,
+      8.851543545781273e-07,
+      0.0
+    ],
+    "---": [
+      3.0,
+      0.0,
+      0.0,
+      1.0213319475901468e-05,
+      0.0
+    ],
+    "12-34": [
+      5.0,
+      0.8,
+      0.0,
+      1.0213652809234803e-06,
+      0.0
+    ],
+    "GOOGLE": [
+      6.0,
+      0.0,
+      0.0,
+      1e-10,
+      0.0
+    ],
+    "PayPal": [
+      6.0,
+      0.0,
+      0.6666666666666666,
+      1e-10,
+      0.3333333333333333
+    ],
+    "www.google.com": [
+      14.0,
+      0.0,
+      0.8571428571428571,
+      0.0001452845195446984,
+      0.2857142857142857
+    ],
+    "attention-securite-infecte-immediatement-ordinateur-a7wmqx3-344": [
+      63.0,
+      0.07936507936507936,
+      0.8253968253968254,
+      0.0005730408924434723,
+      0.14285714285714285
+    ],
+    "hp-selection": [
+      12.0,
+      0.0,
+      0.9166666666666666,
+      0.0010023760266428736,
+      0.75
+    ],
+    "mazeltogether": [
+      13.0,
+      0.0,
+      1.0,
+      0.0006055755662338597,
+      0.6153846153846154
+    ],
+    "actionalliancecr": [
+      16.0,
+      0.0,
+      1.0,
+      0.0011635451260638779,
+      0.5
+    ],
+    "yellowpath": [
+      10.0,
+      0.0,
+      1.0,
+      0.00040937537789282057,
+      0.6
+    ],
+    "flashquickbinaries": [
+      18.0,
+      0.0,
+      1.0,
+      0.0004662252674255572,
+      0.2777777777777778
+    ],
+    "lacathode": [
+      9.0,
+      0.0,
+      1.0,
+      0.000499051970505334,
+      0.7777777777777778
+    ],
+    "grossvargula": [
+      12.0,
+      0.0,
+      1.0,
+      0.000252718377111706,
+      0.4166666666666667
+    ],
+    "hotgaysex": [
+      9.0,
+      0.0,
+      1.0,
+      0.00021938210234236354,
+      0.3333333333333333
+    ],
+    "moderncar": [
+      9.0,
+      0.0,
+      1.0,
+      0.0006441102879759232,
+      0.6666666666666666
+    ],
+    "f-kurimoto": [
+      10.0,
+      0.0,
+      0.9,
+      0.00030318238864213506,
+      0.4
+    ],
+    "womenatwarp": [
+      11.0,
+      0.0,
+      1.0,
+      0.0005057635804466407,
+      0.36363636363636365
+    ],
+    "peterslarson": [
+      12.0,
+      0.0,
+      1.0,
+      0.0009698976707095072,
+      0.4166666666666667
+    ],
+    "primus-muenzen": [
+      14.0,
+      0.0,
+      0.9285714285714286,
+      0.00021349242144459368,
+      0.42857142857142855
+    ],
+    "mfsa": [
+      4.0,
+      0.0,
+      1.0,
+      1.3175182123912895e-05,
+      0.5
+    ],
+    "gravesinternationalart": [
+      22.0,
+      0.0,
+      1.0,
+      0.0012919951270210118,
+      0.5909090909090909
+    ],
+    "vinhomesthanglonghanoi": [
+      22.0,
+      0.0,
+      1.0,
+      0.0005978979354387478,
+      0.18181818181818182
+    ],
+    "maranonchocolate": [
+      16.0,
+      0.0,
+      1.0,
+      0.0007696319843347523,
+      0.5625
+    ],
+    "altermodus": [
+      10.0,
+      0.0,
+      1.0,
+      0.0007123535001454376,
+      0.5
+    ],
+    "ruw": [
+      3.0,
+      0.0,
+      1.0,
+      4.493860569396646e-06,
+      0.3333333333333333
+    ],
+    "security-systems-for-home": [
+      25.0,
+      0.0,
+      0.88,
+      0.00041786686492229576,
+      0.32
+    ],
+    "canoozgener": [
+      11.0,
+      0.0,
+      1.0,
+      0.00046114272246970233,
+      0.36363636363636365
+    ],
+    "celestinesweddings": [
+      18.0,
+      0.0,
+      1.0,
+      0.0011836854273089455,
+      0.5
+    ],
+    "uschihugo": [
+      9.0,
+      0.0,
+      1.0,
+      0.00036881755673119626,
+      0.4444444444444444
+    ],
+    "bullysticksonline": [
+      17.0,
+      0.0,
+      1.0,
+      0.0008186860714289605,
+      0.35294117647058826
+    ],
+    "gillesmolinier": [
+      14.0,
+      0.0,
+      1.0,
+      0.000799498648573567,
+      0.42857142857142855
+    ],
+    "kenwoodcookingblog": [
+      18.0,
+      0.0,
+      1.0,
+      0.0006774239475378545,
+      0.3888888888888889
+    ],
+    "konditorei-hollhorst": [
+      20.0,
+      0.0,
+      0.95,
+      0.00044995346357721465,
+      0.25
+    ],
+    "seoulistic": [
+      10.0,
+      0.0,
+      1.0,
+      0.0006622061015187615,
+      0.4
+    ],
+    "jirri": [
+      5.0,
+      0.0,
+      1.0,
+      0.00012473867519900995,
+      0.4
+    ],
+    "saudervillage": [
+      13.0,
+      0.0,
+      1.0,
+      0.0006778115894361445,
+      0.5384615384615384
+    ],
+    "136734": [
+      6.0,
+      1.0,
+      0.0,
+      2.71163632085184e-05,
+      0.0
+    ],
+    "architecturalconcretesite": [
+      25.0,
+      0.0,
+      1.0,
+      0.0007245772893573019,
+      0.52
+    ],
+    "munichjuli": [
+      10.0,
+      0.0,
+      1.0,
+      0.0003229451618280044,
+      0.6
+    ],
+    "shareresearch": [
+      13.0,
+      0.0,
+      1.0,
+      0.0008837678190856413,
+      0.6153846153846154
+    ],
+    "s-luca": [
+      6.0,
+      0.0,
+      0.8333333333333334,
+      9.074534354338455e-05,
+      0.5
+    ],
+    "morelandbus": [
+      11.0,
+      0.0,
+      1.0,
+      0.0009276417635978773,
+      0.5454545454545454
+    ],
+    "nassl": [
+      5.0,
+      0.0,
+      1.0,
+      0.00044325806525412375,
+      0.6
+    ],
+    "suiranrou": [
+      9.0,
+      0.0,
+      1.0,
+      0.00045738162704365607,
+      0.4444444444444444
+    ],
+    "copetexas": [
+      9.0,
+      0.0,
+      1.0,
+      0.00031217740500912543,
+      0.5555555555555556
+    ],
+    "ajaxcomm": [
+      8.0,
+      0.0,
+      1.0,
+      0.00028413454781957883,
+      0.25
+    ],
+    "hearr": [
+      5.0,
+      0.0,
+      1.0,
+      0.0008611190094115058,
+      0.8
+    ],
+    "everyarabstudent": [
+      16.0,
+      0.0,
+      1.0,
+      0.0007290559251026352,
+      0.4375
+    ],
+    "apteka24": [
+      8.0,
+      0.25,
+      0.75,
+      7.976602510679048e-05,
+      0.375
+    ],
+    "moringen": [
+      8.0,
+      0.0,
+      1.0,
+      0.001523588955016728,
+      0.625
+    ],
+    "duoresonante": [
+      12.0,
+      0.0,
+      1.0,
+      0.0009419336019844888,
+      0.6666666666666666
+    ],
+    "solturatravel": [
+      13.0,
+      0.0,
+      1.0,
+      0.0006490471678576511,
+      0.46153846153846156
+    ],
+    "toursofatlanta": [
+      14.0,
+      0.0,
+      1.0,
+      0.0006303150114552592,
+      0.5
+    ],
+    "fan-pages": [
+      9.0,
+      0.0,
+      0.8888888888888888,
+      0.00033076564645526617,
+      0.4444444444444444
+    ],
+    "solleysicecream": [
+      15.0,
+      0.0,
+      1.0,
+      0.0006143547356742639,
+      0.3333333333333333
+    ],
+    "soulshinetavern": [
+      15.0,
+      0.0,
+      1.0,
+      0.0007832673270064806,
+      0.4
+    ],
+    "rallyappraisal": [
+      14.0,
+      0.0,
+      1.0,
+      0.0004914819553795052,
+      0.6428571428571429
+    ],
+    "21-mtf": [
+      6.0,
+      0.3333333333333333,
+      0.5,
+      2.5533298689753674e-06,
+      0.16666666666666666
+    ],
+    "1860-1960": [
+      9.0,
+      0.8888888888888888,
+      0.0,
+      1.7771175888068555e-05,
+      0.0
+    ],
+    "aplik": [
+      5.0,
+      0.0,
+      1.0,
+      0.00014216940710454844,
+      0.4
+    ],
+    "honvieew": [
+      8.0,
+      0.0,
+      1.0,
+      0.00021492228617121987,
+      0.375
+    ],
+    "survivalinstinct": [
+      16.0,
+      0.0,
+      1.0,
+      0.0007775254212439846,
+      0.5
+    ],
+    "well-wish": [
+      9.0,
+      0.0,
+      0.8888888888888888,
+      0.0004133476296461266,
+      0.4444444444444444
+    ],
+    "vanderbilthealth": [
+      16.0,
+      0.0,
+      1.0,
+      0.0010191579695874192,
+      0.375
+    ],
+    "liveactioncombatleague": [
+      22.0,
+      0.0,
+      1.0,
+      0.0007081507191811044,
+      0.2727272727272727
+    ],
+    "ericwagnermusic": [
+      15.0,
+      0.0,
+      1.0,
+      0.0005319882423009168,
+      0.3333333333333333
+    ],
+    "univ-paris-diderot": [
+      18.0,
+      0.0,
+      0.8888888888888888,
+      0.0004891669362983008,
+      0.2777777777777778
+    ],
+    "dukescastlepines": [
+      16.0,
+      0.0,
+      1.0,
+      0.0006276084817941453,
+      0.375
+    ],
+    "petlandflorida": [
+      14.0,
+      0.0,
+      1.0,
+      0.0007273415464763231,
+      0.5
+    ],
+    "forhealthandliving": [
+      18.0,
+      0.0,
+      1.0,
+      0.001034685862804888,
+      0.3333333333333333
+    ],
+    "itranscript360": [
+      14.0,
+      0.21428571428571427,
+      0.7857142857142857,
+      0.00046055261956665024,
+      0.7142857142857143
+    ],
+    "nathanshipley": [
+      13.0,
+      0.0,
+      1.0,
+      0.000558501448285841,
+      0.46153846153846156
+    ],
+    "pontosporopinioes": [
+      17.0,
+      0.0,
+      1.0,
+      0.00043260897748058374,
+      0.29411764705882354
+    ],
+    "drunksouls": [
+      10.0,
+      0.0,
+      1.0,
+      0.00018723567929196367,
+      0.5
+    ],
+    "greatwestmech": [
+      13.0,
+      0.0,
+      1.0,
+      0.0006813769664168229,
+      0.38461538461538464
+    ],
+    "partner-points": [
+      14.0,
+      0.0,
+      0.9285714285714286,
+      0.0006427412168176059,
+      0.5
+    ],
+    "noahm": [
+      5.0,
+      0.0,
+      1.0,
+      3.315924389842676e-05,
+      0.8
+    ],
+    "domdemarcos": [
+      11.0,
+      0.0,
+      1.0,
+      0.00048088847345644517,
+      0.5454545454545454
+    ],
+    "housemama": [
+      9.0,
+      0.0,
+      1.0,
+      0.0006046868747989435,
+      0.5555555555555556
+    ],
+    "drawingclouds": [
+      13.0,
+      0.0,
+      1.0,
+      0.0006527239628689755,
+      0.5384615384615384
+    ],
+    "ludtke": [
+      6.0,
+      0.0,
+      1.0,
+      1.8690374640899686e-05,
+      0.3333333333333333
+    ],
+    "ftama": [
+      5.0,
+      0.0,
+      1.0,
+      0.00038361227951485915,
+      0.8
+    ],
+    "solteszrezso": [
+      12.0,
+      0.0,
+      1.0,
+      0.0001656804685380736,
+      0.25
+    ],
+    "daoineile": [
+      9.0,
+      0.0,
+      1.0,
+      0.000555400313099522,
+      0.6666666666666666
+    ],
+    "creativehasnothingforyou": [
+      24.0,
+      0.0,
+      1.0,
+      0.0008042989087272405,
+      0.3333333333333333
+    ],
+    "hollowayscustomupholstery": [
+      25.0,
+      0.0,
+      1.0,
+      0.0005702407103553752,
+      0.4
+    ],
+    "fppq": [
+      4.0,
+      0.0,
+      1.0,
+      1.0213319475901467e-06,
+      0.25
+    ],
+    "editionstiresias": [
+      16.0,
+      0.0,
+      1.0,
+      0.001134699793772653,
+      0.4375
+    ],
+    "nwfin": [
+      5.0,
+      0.0,
+      1.0,
+      0.00019936399616959664,
+      0.6
+    ],
+    "vidalinux": [
+      9.0,
+      0.0,
+      1.0,
+      0.0006612394837826492,
+      0.4444444444444444
+    ],
+    "theoj": [
+      5.0,
+      0.0,
+      1.0,
+      0.0011673824160955378,
+      0.8
+    ],
+    "givejewellery": [
+      13.0,
+      0.0,
+      1.0,
+      0.0006049441973935313,
+      0.38461538461538464
+    ],
+    "monoistanbul": [
+      12.0,
+      0.0,
+      1.0,
+      0.0006265462965686515,
+      0.3333333333333333
+    ],
+    "1hy": [
+      3.0,
+      0.3333333333333333,
+      0.6666666666666666,
+      2.0426638951802938e-07,
+      0.6666666666666666
+    ],
+    "jfreestar": [
+      9.0,
+      0.0,
+      1.0,
+      0.001034725986559972,
+      0.5555555555555556
+    ],
+    "toughrun": [
+      8.0,
+      0.0,
+      1.0,
+      0.00016154066971050822,
+      0.625
+    ],
+    "crowdfundingrama": [
+      16.0,
+      0.0,
+      1.0,
+      0.0007865715042083546,
+      0.375
+    ],
+    "brickcavemedia": [
+      14.0,
+      0.0,
+      1.0,
+      0.0005858360051377082,
+      0.35714285714285715
+    ],
+    "crescolines": [
+      11.0,
+      0.0,
+      1.0,
+      0.0012913948107984837,
+      0.45454545454545453
+    ],
+    "dnafinanceiro": [
+      13.0,
+      0.0,
+      1.0,
+      0.0005040737403151734,
+      0.5384615384615384
+    ],
+    "1kraise": [
+      7.0,
+      0.14285714285714285,
+      0.8571428571428571,
+      0.00030018988603569595,
+      0.7142857142857143
+    ],
+    "minaloto": [
+      8.0,
+      0.0,
+      1.0,
+      0.0007291629217828589,
+      0.5
+    ],
+    "eandcpainters": [
+      13.0,
+      0.0,
+      1.0,
+      0.0013365335562882405,
+      0.5384615384615384
+    ],
+    "monroevillekia": [
+      14.0,
+      0.0,
+      1.0,
+      0.00047679179753333355,
+      0.35714285714285715
+    ],
+    "adelanteconcarlos": [
+      17.0,
+      0.0,
+      1.0,
+      0.0009058261131973518,
+      0.35294117647058826
+    ],
+    "150415": [
+      6.0,
+      1.0,
+      0.0,
+      2.691209681900037e-05,
+      0.0
+    ],
+    "rynupnlyk": [
+      9.0,
+      0.0,
+      1.0,
+      2.0981076294780445e-05,
+      0.2222222222222222
+    ],
+    "fhjliinaokjdenpnf": [
+      17.0,
+      0.0,
+      1.0,
+      0.00015354024278771875,
+      0.23529411764705882
+    ],
+    "rynedugyjevanidetapylo": [
+      22.0,
+      0.0,
+      1.0,
+      0.0002238759629117602,
+      0.18181818181818182
+    ],
+    "76exg41ludgbut5": [
+      15.0,
+      0.3333333333333333,
+      0.6666666666666666,
+      1.9201063691617838e-05,
+      0.2
+    ],
+    "tucypaqygikeqosetywawej": [
+      23.0,
+      0.0,
+      1.0,
+      7.842856660399386e-05,
+      0.13043478260869565
+    ],
+    "rycafupicafu": [
+      12.0,
+      0.0,
+      1.0,
+      0.0002605622064691983,
+      0.3333333333333333
+    ],
+    "aasmmywcoouwwueisecoqiqegqaikms": [
+      31.0,
+      0.0,
+      1.0,
+      9.516700995786532e-05,
+      0.0967741935483871
+    ],
+    "lrsqlecofmwkdvv": [
+      15.0,
+      0.0,
+      1.0,
+      0.0001377541105311203,
+      0.13333333333333333
+    ],
+    "jywanmmnnbqfegvlxgj": [
+      19.0,
+      0.0,
+      1.0,
+      2.643448570233321e-05,
+      0.15789473684210525
+    ],
+    "tucymiqygiwequgitukived": [
+      23.0,
+      0.0,
+      1.0,
+      0.00011957365363548264,
+      0.13043478260869565
+    ],
+    "hefraqsmxaal": [
+      12.0,
+      0.0,
+      1.0,
+      7.702885548724887e-05,
+      0.25
+    ],
+    "ezzqvftiiov": [
+      11.0,
+      0.0,
+      1.0,
+      1.0848837132179781e-05,
+      0.18181818181818182
+    ],
+    "qgqyscsqywskmeoqkmkw": [
+      20.0,
+      0.0,
+      1.0,
+      1.2358122121396333e-05,
+      0.15
+    ],
+    "regqytecp": [
+      9.0,
+      0.0,
+      1.0,
+      0.0001841899215196859,
+      0.3333333333333333
+    ],
+    "efxalgs": [
+      7.0,
+      0.0,
+      1.0,
+      3.4602726384354174e-05,
+      0.2857142857142857
+    ],
+    "qgqeaaeecywuc": [
+      13.0,
+      0.0,
+      1.0,
+      1.6062766084826855e-05,
+      0.15384615384615385
+    ],
+    "zbbtlebmw330i": [
+      13.0,
+      0.23076923076923078,
+      0.7692307692307693,
+      7.422297808214213e-05,
+      0.07692307692307693
+    ],
+    "rdharkgnnk": [
+      10.0,
+      0.0,
+      1.0,
+      0.0002649590405035739,
+      0.4
+    ],
+    "ywyeuqgyosgecyaqqkaiwoiwewskq": [
+      29.0,
+      0.0,
+      1.0,
+      4.1715735992682004e-05,
+      0.10344827586206896
+    ],
+    "vonhznyabiql": [
+      12.0,
+      0.0,
+      1.0,
+      6.219912560823993e-05,
+      0.16666666666666666
+    ],
+    "enelcjot10any2k": [
+      15.0,
+      0.2,
+      0.8,
+      0.00012618949032456106,
+      0.2
+    ],
+    "mavyjytitafupi": [
+      14.0,
+      0.0,
+      1.0,
+      0.00013764150213689877,
+      0.21428571428571427
+    ],
+    "aervrancisco": [
+      12.0,
+      0.0,
+      1.0,
+      0.0005572591372441359,
+      0.4166666666666667
+    ],
+    "1xwiufs10g1zio1gxzeow2qep7g": [
+      27.0,
+      0.25925925925925924,
+      0.7407407407407407,
+      5.4580339279217455e-06,
+      0.07407407407407407
+    ],
+    "iuhrjmxrs": [
+      9.0,
+      0.0,
+      1.0,
+      2.042663895180294e-06,
+      0.1111111111111111
+    ],
+    "ljmouuxcekpelrth": [
+      16.0,
+      0.0,
+      1.0,
+      8.354495331287402e-05,
+      0.1875
+    ],
+    "tmsszipqtqm": [
+      11.0,
+      0.0,
+      1.0,
+      6.990460885728117e-06,
+      0.2727272727272727
+    ],
+    "qsspplefrostbitecycz": [
+      20.0,
+      0.0,
+      1.0,
+      0.00028497430964315304,
+      0.45
+    ],
+    "mymyasoykeywaqawkeqskoy": [
+      23.0,
+      0.0,
+      1.0,
+      4.383945797894088e-05,
+      0.13043478260869565
+    ],
+    "d4qp0xjdswwo1ytxonl1s978u0": [
+      26.0,
+      0.3076923076923077,
+      0.6923076923076923,
+      3.5738157066091885e-05,
+      0.07692307692307693
+    ],
+    "nmxjfpvksip": [
+      11.0,
+      0.0,
+      1.0,
+      1.0939599971965574e-05,
+      0.2727272727272727
+    ],
+    "iycyowelcamino": [
+      14.0,
+      0.0,
+      1.0,
+      0.0003115913550106273,
+      0.35714285714285715
+    ],
+    "yyrwsbmddkpf": [
+      12.0,
+      0.0,
+      1.0,
+      3.492955260758302e-06,
+      0.16666666666666666
+    ],
+    "eguqlysjb": [
+      9.0,
+      0.0,
+      1.0,
+      3.910243742202277e-05,
+      0.3333333333333333
+    ],
+    "ucqidbs": [
+      7.0,
+      0.0,
+      1.0,
+      6.577377742480546e-06,
+      0.2857142857142857
+    ],
+    "owbhrancisco": [
+      12.0,
+      0.0,
+      1.0,
+      0.0004883600840597046,
+      0.4166666666666667
+    ],
+    "goduhozavaxuqyp": [
+      15.0,
+      0.0,
+      1.0,
+      5.229219571661552e-05,
+      0.2
+    ],
+    "xynybgsadud": [
+      11.0,
+      0.0,
+      1.0,
+      3.5746618165655145e-05,
+      0.2727272727272727
+    ],
+    "ujcqojij": [
+      8.0,
+      0.0,
+      1.0,
+      7.62597854200643e-06,
+      0.25
+    ],
+    "imysleasuredehydratorysagp": [
+      26.0,
+      0.0,
+      1.0,
+      0.0003668794577735073,
+      0.38461538461538464
+    ],
+    "7bevypefsfstup3rilw": [
+      19.0,
+      0.10526315789473684,
+      0.8947368421052632,
+      7.316341445736946e-05,
+      0.21052631578947367
+    ],
+    "kathtdxsvx": [
+      10.0,
+      0.0,
+      1.0,
+      0.00011709570779121033,
+      0.4
+    ],
+    "qxmrkwtxlceuaw": [
+      14.0,
+      0.0,
+      1.0,
+      9.379231718702848e-06,
+      0.14285714285714285
+    ],
+    "vtvda21utdnel7ui9cr1ofbop9": [
+      26.0,
+      0.23076923076923078,
+      0.7692307692307693,
+      2.433325448466858e-05,
+      0.11538461538461539
+    ],
+    "eiuooioacyscwyakekimauqa": [
+      24.0,
+      0.0,
+      1.0,
+      9.7992157953331e-05,
+      0.20833333333333334
+    ],
+    "gfjkxyloryxx": [
+      12.0,
+      0.0,
+      1.0,
+      0.00010466611798903825,
+      0.3333333333333333
+    ],
+    "bjgdupnhg": [
+      9.0,
+      0.0,
+      1.0,
+      9.77560578407712e-06,
+      0.3333333333333333
+    ],
+    "kibouuiqvxqy": [
+      12.0,
+      0.0,
+      1.0,
+      4.009751226238916e-05,
+      0.25
+    ],
+    "1ntcy9pygyimm1txzazixicokk": [
+      26.0,
+      0.11538461538461539,
+      0.8846153846153846,
+      4.934736360106393e-05,
+      0.07692307692307693
+    ],
+    "feggbguel": [
+      9.0,
+      0.0,
+      1.0,
+      6.726200397700825e-05,
+      0.3333333333333333
+    ],
+    "ppoetmbyvexy": [
+      12.0,
+      0.0,
+      1.0,
+      3.9770666039160314e-05,
+      0.3333333333333333
+    ],
+    "xxtmsagabardinedazyx": [
+      20.0,
+      0.0,
+      1.0,
+      0.00039159001683881337,
+      0.45
+    ],
+    "wsqoaoksouueqiyqiwgiqs": [
+      22.0,
+      0.0,
+      1.0,
+      4.462199279021352e-05,
+      0.13636363636363635
+    ],
+    "xttnom": [
+      6.0,
+      0.0,
+      1.0,
+      6.54163112431489e-05,
+      0.3333333333333333
+    ],
+    "foxyxawavuqevakixohalij": [
+      23.0,
+      0.0,
+      1.0,
+      0.00012678134385609498,
+      0.17391304347826086
+    ],
+    "pfuaor1y26ml417p7jkn1ji9fjy": [
+      27.0,
+      0.3333333333333333,
+      0.6666666666666666,
+      3.2683062322884696e-06,
+      0.07407407407407407
+    ],
+    "bijwyoeboeccrofsx": [
+      17.0,
+      0.0,
+      1.0,
+      7.847914685282687e-05,
+      0.23529411764705882
+    ],
+    "ofxvho": [
+      6.0,
+      0.0,
+      1.0,
+      2.093730492559801e-06,
+      0.3333333333333333
+    ],
+    "g3l2to1azrhvvibxqeh1dylr8d": [
+      26.0,
+      0.19230769230769232,
+      0.8076923076923077,
+      3.45552725601333e-06,
+      0.07692307692307693
+    ],
+    "wglrgwyqmixhidpthogdhv": [
+      22.0,
+      0.0,
+      1.0,
+      4.506116552767727e-05,
+      0.13636363636363635
+    ],
+    "imwgsemitismgavenuteq": [
+      21.0,
+      0.0,
+      1.0,
+      0.00024605499246837566,
+      0.38095238095238093
+    ],
+    "hgbkrxjtawaz": [
+      12.0,
+      0.0,
+      1.0,
+      4.463220610968942e-05,
+      0.3333333333333333
+    ],
+    "bexrlanwuacdgsyf": [
+      16.0,
+      0.0,
+      1.0,
+      0.00015193042243223136,
+      0.1875
+    ],
+    "lhdpolfytkypxswr": [
+      16.0,
+      0.0,
+      1.0,
+      4.616420403107464e-05,
+      0.1875
+    ],
+    "1jmvcjs1vwm4651js3jwvwpzg27": [
+      27.0,
+      0.3333333333333333,
+      0.6666666666666666,
+      2.3205061849248135e-06,
+      0.037037037037037035
+    ],
+    "yqnyupjusrqzon": [
+      14.0,
+      0.0,
+      1.0,
+      3.152512111561587e-05,
+      0.14285714285714285
+    ],
+    "sjfpfjgphhtgmhvpq": [
+      17.0,
+      0.0,
+      1.0,
+      3.0639958427704406e-06,
+      0.058823529411764705
+    ],
+    "exsvydanub5xq238gryvqd1": [
+      23.0,
+      0.21739130434782608,
+      0.782608695652174,
+      4.276952927194167e-05,
+      0.13043478260869565
+    ],
+    "rhrbwctu": [
+      8.0,
+      0.0,
+      1.0,
+      3.356777667746283e-05,
+      0.25
+    ],
+    "qfivqhan1vs6mr1": [
+      15.0,
+      0.2,
+      0.8,
+      7.689848540778738e-05,
+      0.2
+    ],
+    "wncbwj72erqdcjebkxs0q25": [
+      23.0,
+      0.21739130434782608,
+      0.782608695652174,
+      3.7157505140898663e-06,
+      0.08695652173913043
+    ],
+    "thcsggtdj": [
+      9.0,
+      0.0,
+      1.0,
+      2.325718749226706e-05,
+      0.2222222222222222
+    ],
+    "rggamane": [
+      8.0,
+      0.0,
+      1.0,
+      0.0005827379648966849,
+      0.5
+    ],
+    "cecwgmcckaicwkamsyusu": [
+      21.0,
+      0.0,
+      1.0,
+      5.638827436958232e-05,
+      0.14285714285714285
+    ],
+    "qgmyiguicqwyq": [
+      13.0,
+      0.0,
+      1.0,
+      4.813259833006656e-05,
+      0.15384615384615385
+    ],
+    "wybwiywqsxrl": [
+      12.0,
+      0.0,
+      1.0,
+      1.5115912824334174e-06,
+      0.16666666666666666
+    ],
+    "ckwwenhancedysb": [
+      15.0,
+      0.0,
+      1.0,
+      0.00034150197767575765,
+      0.5333333333333333
+    ],
+    "pzsbdhockey": [
+      11.0,
+      0.0,
+      1.0,
+      0.00016663598131570794,
+      0.5454545454545454
+    ],
+    "skieecgog": [
+      9.0,
+      0.0,
+      1.0,
+      8.334068692335598e-05,
+      0.3333333333333333
+    ],
+    "qmpeork": [
+      7.0,
+      0.0,
+      1.0,
+      0.00019017200864128534,
+      0.2857142857142857
+    ],
+    "kgpdehm": [
+      7.0,
+      0.0,
+      1.0,
+      1.7689469332261344e-05,
+      0.2857142857142857
+    ],
+    "auhedme": [
+      7.0,
+      0.0,
+      1.0,
+      8.240106153157306e-05,
+      0.42857142857142855
+    ],
+    "xplrlpruwqhpmven": [
+      16.0,
+      0.0,
+      1.0,
+      6.781645560570005e-05,
+      0.125
+    ],
+    "iexcardenslavetusul": [
+      19.0,
+      0.0,
+      1.0,
+      0.00041193321363803534,
+      0.3684210526315789
+    ],
+    "rbrpbbpe": [
+      8.0,
+      0.0,
+      1.0,
+      1.433269166451506e-05,
+      0.125
+    ],
+    "kezygadopekilaherabexyf": [
+      23.0,
+      0.0,
+      1.0,
+      0.00023210498031805792,
+      0.21739130434782608
+    ],
+    "jeoqyrjja": [
+      9.0,
+      0.0,
+      1.0,
+      1.3423362739756217e-06,
+      0.2222222222222222
+    ],
+    "xrcnfaaxlohrhue": [
+      15.0,
+      0.0,
+      1.0,
+      2.0693756538095743e-05,
+      0.2
+    ],
+    "mihtehgmiizviv": [
+      14.0,
+      0.0,
+      1.0,
+      2.878453872291564e-05,
+      0.14285714285714285
+    ],
+    "vgnuqnbwrdxzfjqlawmzmaz": [
+      23.0,
+      0.0,
+      1.0,
+      3.0221703439643683e-05,
+      0.13043478260869565
+    ],
+    "wmmqquerque": [
+      11.0,
+      0.0,
+      1.0,
+      0.00015090746932281969,
+      0.18181818181818182
+    ],
+    "eigcciwqmkqymygkgme": [
+      19.0,
+      0.0,
+      1.0,
+      2.0522776076282012e-05,
+      0.10526315789473684
+    ],
+    "tru7yukcvq9v1q1rg2l1l52e05": [
+      26.0,
+      0.38461538461538464,
+      0.6153846153846154,
+      2.1907628609141986e-05,
+      0.038461538461538464
+    ],
+    "beyyrnpdqkaa": [
+      12.0,
+      0.0,
+      1.0,
+      1.1479771090913251e-05,
+      0.25
+    ],
+    "nzvikxxtvpexoygkdkkfe": [
+      21.0,
+      0.0,
+      1.0,
+      8.063146954659056e-06,
+      0.09523809523809523
+    ],
+    "rfrmalitydevonianizuwb": [
+      22.0,
+      0.0,
+      1.0,
+      0.00037754556774617366,
+      0.36363636363636365
+    ],
+    "wsaoagcqc": [
+      9.0,
+      0.0,
+      1.0,
+      1.2226802458293471e-05,
+      0.3333333333333333
+    ],
+    "dqwacyzdzepe": [
+      12.0,
+      0.0,
+      1.0,
+      3.68700833080043e-05,
+      0.25
+    ],
+    "qneehnrynnrotplav": [
+      17.0,
+      0.0,
+      1.0,
+      0.0001238262853258294,
+      0.17647058823529413
+    ],
+    "oirkork": [
+      7.0,
+      0.0,
+      1.0,
+      0.00018118428750249203,
+      0.42857142857142855
+    ],
+    "topcyprus": [
+      9.0,
+      0.0,
+      1.0,
+      0.00013933885856408433,
+      0.3333333333333333
+    ],
+    "centre4developmentresults": [
+      25.0,
+      0.04,
+      0.96,
+      0.0007475616987517654,
+      0.44
+    ],
+    "orgelpate": [
+      9.0,
+      0.0,
+      1.0,
+      0.00047022122867050364,
+      0.4444444444444444
+    ],
+    "westlanddistributinginc": [
+      23.0,
+      0.0,
+      1.0,
+      0.001058936417203323,
+      0.34782608695652173
+    ],
+    "mybitbox": [
+      8.0,
+      0.0,
+      1.0,
+      0.0001085335416305796,
+      0.375
+    ],
+    "club414": [
+      7.0,
+      0.42857142857142855,
+      0.5714285714285714,
+      0.00016631369434557953,
+      0.5714285714285714
+    ],
+    "minikissonline": [
+      14.0,
+      0.0,
+      1.0,
+      0.0008815626705624351,
+      0.2857142857142857
+    ],
+    "helenleathers": [
+      13.0,
+      0.0,
+      1.0,
+      0.0010856387209447773,
+      0.5384615384615384
+    ],
+    "brittonair": [
+      10.0,
+      0.0,
+      1.0,
+      0.0006188760936422494,
+      0.4
+    ],
+    "kamera-express": [
+      14.0,
+      0.0,
+      0.9285714285714286,
+      0.0007084809498441583,
+      0.5
+    ],
+    "fitbellavei": [
+      11.0,
+      0.0,
+      1.0,
+      0.00045002155237372065,
+      0.45454545454545453
+    ],
+    "viswadevji": [
+      10.0,
+      0.0,
+      1.0,
+      0.00023735754461995013,
+      0.4
+    ],
+    "tdhcreative": [
+      11.0,
+      0.0,
+      1.0,
+      0.0008219906476860522,
+      0.7272727272727273
+    ],
+    "baybed": [
+      6.0,
+      0.0,
+      1.0,
+      0.00010744412088648344,
+      0.5
+    ],
+    "a-turist": [
+      8.0,
+      0.0,
+      0.875,
+      0.0007141152977550307,
+      0.5
+    ],
+    "iiche": [
+      5.0,
+      0.0,
+      1.0,
+      0.0006537205352542,
+      0.6
+    ],
+    "asisucedegto": [
+      12.0,
+      0.0,
+      1.0,
+      0.00019740303883022362,
+      0.3333333333333333
+    ],
+    "latenitebooks": [
+      13.0,
+      0.0,
+      1.0,
+      0.0006184072094299465,
+      0.38461538461538464
+    ],
+    "wrfy": [
+      4.0,
+      0.0,
+      1.0,
+      1.5319979213852203e-06,
+      0.25
+    ],
+    "camsoftdata": [
+      11.0,
+      0.0,
+      1.0,
+      0.0002956188581635926,
+      0.36363636363636365
+    ],
+    "purposed4leadership": [
+      19.0,
+      0.05263157894736842,
+      0.9473684210526315,
+      0.000513934236027362,
+      0.5263157894736842
+    ],
+    "infinitegrowth": [
+      14.0,
+      0.0,
+      1.0,
+      0.0004186609875163276,
+      0.5714285714285714
+    ],
+    "dereconstruction": [
+      16.0,
+      0.0,
+      1.0,
+      0.0012121167553999863,
+      0.875
+    ],
+    "51moba": [
+      6.0,
+      0.3333333333333333,
+      0.6666666666666666,
+      0.0001448759367656623,
+      0.5
+    ],
+    "unitarier": [
+      9.0,
+      0.0,
+      1.0,
+      0.000777963134935809,
+      0.5555555555555556
+    ],
+    "sunny-storecafe": [
+      15.0,
+      0.0,
+      0.9333333333333333,
+      0.0005439771080857059,
+      0.3333333333333333
+    ],
+    "digitalsevilla": [
+      14.0,
+      0.0,
+      1.0,
+      0.0006393367769923054,
+      0.5
+    ],
+    "bucketofyum": [
+      11.0,
+      0.0,
+      1.0,
+      0.00021100718037212434,
+      0.5454545454545454
+    ],
+    "unitileus": [
+      9.0,
+      0.0,
+      1.0,
+      0.0003917829350955803,
+      0.5555555555555556
+    ],
+    "302299": [
+      6.0,
+      1.0,
+      0.0,
+      3.0384625440806864e-05,
+      0.0
+    ],
+    "woods-o": [
+      7.0,
+      0.0,
+      0.8571428571428571,
+      0.00027853764874678484,
+      0.5714285714285714
+    ],
+    "acousticmusicworks": [
+      18.0,
+      0.0,
+      1.0,
+      0.0005817506773473477,
+      0.4444444444444444
+    ],
+    "itswide": [
+      7.0,
+      0.0,
+      1.0,
+      0.000328378647789184,
+      0.5714285714285714
+    ],
+    "ufa-room": [
+      8.0,
+      0.0,
+      0.875,
+      0.00014649304568268006,
+      0.5
+    ],
+    "curtincpa": [
+      9.0,
+      0.0,
+      1.0,
+      0.0004922819987384508,
+      0.4444444444444444
+    ],
+    "jamiebrightmore": [
+      15.0,
+      0.0,
+      1.0,
+      0.0004136394387740094,
+      0.4
+    ],
+    "soudan-sitai": [
+      12.0,
+      0.0,
+      0.9166666666666666,
+      0.00036647432943429645,
+      0.3333333333333333
+    ],
+    "trcindustries": [
+      13.0,
+      0.0,
+      1.0,
+      0.0006068754432580652,
+      0.38461538461538464
+    ],
+    "janusetcie": [
+      10.0,
+      0.0,
+      1.0,
+      0.0002443026018635631,
+      0.5
+    ],
+    "clubedocafe": [
+      11.0,
+      0.0,
+      1.0,
+      0.00027775689721351593,
+      0.36363636363636365
+    ],
+    "bayareabehaviorconsultants": [
+      26.0,
+      0.0,
+      1.0,
+      0.0005305989689722078,
+      0.38461538461538464
+    ],
+    "emoto": [
+      5.0,
+      0.0,
+      1.0,
+      0.0006123225469785461,
+      0.6
+    ],
+    "rural-texas": [
+      11.0,
+      0.0,
+      0.9090909090909091,
+      0.00026536473624942214,
+      0.45454545454545453
+    ],
+    "internetretailer": [
+      16.0,
+      0.0,
+      1.0,
+      0.0009634078357053914,
+      0.5
+    ],
+    "298452": [
+      6.0,
+      1.0,
+      0.0,
+      2.6809963624241355e-05,
+      0.0
+    ],
+    "canadianmaplesyrup": [
+      18.0,
+      0.0,
+      1.0,
+      0.0004596376763636007,
+      0.4444444444444444
+    ],
+    "tibetdiy": [
+      8.0,
+      0.0,
+      1.0,
+      0.00010873780802009763,
+      0.625
+    ],
+    "shooterwebs": [
+      11.0,
+      0.0,
+      1.0,
+      0.0007415096902159486,
+      0.6363636363636364
+    ],
+    "plymouthcreate": [
+      14.0,
+      0.0,
+      1.0,
+      0.0005581749315571417,
+      0.5714285714285714
+    ],
+    "briancardoza": [
+      12.0,
+      0.0,
+      1.0,
+      0.0006721385547090756,
+      0.4166666666666667
+    ],
+    "iroad": [
+      5.0,
+      0.0,
+      1.0,
+      0.00027078914370440093,
+      0.8
+    ],
+    "386324": [
+      6.0,
+      1.0,
+      0.0,
+      2.716742980589791e-05,
+      0.0
+    ],
+    "campushomepage": [
+      14.0,
+      0.0,
+      1.0,
+      0.0004950225727978177,
+      0.42857142857142855
+    ],
+    "mrw": [
+      3.0,
+      0.0,
+      1.0,
+      3.26826223228847e-06,
+      0.6666666666666666
+    ],
+    "sumandigital": [
+      12.0,
+      0.0,
+      1.0,
+      0.0009266544760485402,
+      0.5833333333333334
+    ],
+    "lawmh": [
+      5.0,
+      0.0,
+      1.0,
+      0.00016320884522490547,
+      0.6
+    ],
+    "flyassociated": [
+      13.0,
+      0.0,
+      1.0,
+      0.000516274014670932,
+      0.7692307692307693
+    ],
+    "theatrum-mainz": [
+      14.0,
+      0.0,
+      0.9285714285714286,
+      0.0007086511718354236,
+      0.35714285714285715
+    ],
+    "landsbergandsons": [
+      16.0,
+      0.0,
+      1.0,
+      0.0010935838876539527,
+      0.25
+    ],
+    "94822": [
+      5.0,
+      1.0,
+      0.0,
+      2.4171522759633473e-05,
+      0.0
+    ],
+    "karisei": [
+      7.0,
+      0.0,
+      1.0,
+      0.0006329806878384693,
+      0.7142857142857143
+    ],
+    "gulp3d": [
+      6.0,
+      0.16666666666666666,
+      0.8333333333333334,
+      3.028249224604785e-05,
+      0.6666666666666666
+    ],
+    "tomato-leaf": [
+      11.0,
+      0.0,
+      0.9090909090909091,
+      0.0003854052844895174,
+      0.5454545454545454
+    ],
+    "themaineventonline": [
+      18.0,
+      0.0,
+      1.0,
+      0.0013471240722220587,
+      0.2777777777777778
+    ],
+    "k-9cottages": [
+      11.0,
+      0.09090909090909091,
+      0.8181818181818182,
+      0.0002958231245531105,
+      0.6363636363636364
+    ],
+    "tapsushi": [
+      8.0,
+      0.0,
+      1.0,
+      0.00030129292453909333,
+      0.5
+    ],
+    "oban-rits": [
+      9.0,
+      0.0,
+      0.8888888888888888,
+      0.00032668031866490554,
+      0.4444444444444444
+    ],
+    "gawb": [
+      4.0,
+      0.0,
+      1.0,
+      2.7065296611138892e-05,
+      0.75
+    ],
+    "iloinstitute": [
+      12.0,
+      0.0,
+      1.0,
+      0.00046899563033339544,
+      0.75
+    ],
+    "interviewonomy": [
+      14.0,
+      0.0,
+      1.0,
+      0.0007713269090192054,
+      0.6428571428571429
+    ],
+    "thefirstworldwidewebsitewerenothinghappens": [
+      42.0,
+      0.0,
+      1.0,
+      0.0005999303860144522,
+      0.16666666666666666
+    ],
+    "lovefortheelderly": [
+      17.0,
+      0.0,
+      1.0,
+      0.0007492354989928302,
+      0.4117647058823529
+    ],
+    "adroltenia": [
+      10.0,
+      0.0,
+      1.0,
+      0.0003139319073905214,
+      0.3
+    ],
+    "oribikejapan": [
+      12.0,
+      0.0,
+      1.0,
+      0.0002702035800544493,
+      0.4166666666666667
+    ],
+    "sungodboards": [
+      12.0,
+      0.0,
+      1.0,
+      0.0002899152866429391,
+      0.4166666666666667
+    ],
+    "oldlollyshop": [
+      12.0,
+      0.0,
+      1.0,
+      0.0003454961712307949,
+      0.4166666666666667
+    ],
+    "431627": [
+      6.0,
+      1.0,
+      0.0,
+      2.798449536397002e-05,
+      0.0
+    ],
+    "ecocolmena": [
+      10.0,
+      0.0,
+      1.0,
+      0.0005015505861628314,
+      0.4
+    ],
+    "montura": [
+      7.0,
+      0.0,
+      1.0,
+      0.0007868749857013527,
+      0.7142857142857143
+    ],
+    "sensefronteres": [
+      14.0,
+      0.0,
+      1.0,
+      0.000988615280869009,
+      0.5
+    ],
+    "anne-mariedavid": [
+      15.0,
+      0.0,
+      0.9333333333333333,
+      0.0005440713848808681,
+      0.3333333333333333
+    ],
+    "unbuying": [
+      8.0,
+      0.0,
+      1.0,
+      0.0009246458565516129,
+      1.0
+    ],
+    "339505": [
+      6.0,
+      1.0,
+      0.0,
+      2.497156611857909e-05,
+      0.0
+    ],
+    "353041": [
+      6.0,
+      1.0,
+      0.0,
+      2.7524895987554457e-05,
+      0.0
+    ],
+    "66859": [
+      5.0,
+      1.0,
+      0.0,
+      2.0358550155296926e-05,
+      0.0
+    ],
+    "lr-valentinavidak": [
+      17.0,
+      0.0,
+      0.9411764705882353,
+      0.0007026627621827199,
+      0.47058823529411764
+    ],
+    "hazalgo": [
+      7.0,
+      0.0,
+      1.0,
+      8.693577537887328e-05,
+      0.2857142857142857
+    ],
+    "koifishguide": [
+      12.0,
+      0.0,
+      1.0,
+      0.0002773529036875803,
+      0.4166666666666667
+    ],
+    "miabonyunk": [
+      10.0,
+      0.0,
+      1.0,
+      0.0001411991417543378,
+      0.4
+    ],
+    "flynnamps": [
+      9.0,
+      0.0,
+      1.0,
+      0.00020207782105890763,
+      0.4444444444444444
+    ],
+    "tsukasanoyu": [
+      11.0,
+      0.0,
+      1.0,
+      0.00027580501838034364,
+      0.36363636363636365
+    ],
+    "soicauviet": [
+      10.0,
+      0.0,
+      1.0,
+      0.00032225576276338107,
+      0.3
+    ],
+    "muchosingresospasivos": [
+      21.0,
+      0.0,
+      1.0,
+      0.0006774548562678474,
+      0.19047619047619047
+    ],
+    "jeffology": [
+      9.0,
+      0.0,
+      1.0,
+      0.00031620437097390947,
+      0.5555555555555556
+    ],
+    "tampa-seo": [
+      9.0,
+      0.0,
+      0.8888888888888888,
+      0.00022355497287108897,
+      0.4444444444444444
+    ],
+    "dampfsauger-beam": [
+      16.0,
+      0.0,
+      0.9375,
+      0.00023204661849248135,
+      0.375
+    ],
+    "240559": [
+      6.0,
+      1.0,
+      0.0,
+      2.4358766950025003e-05,
+      0.0
+    ],
+    "pilos": [
+      5.0,
+      0.0,
+      1.0,
+      0.0002107348251861003,
+      0.4
+    ],
+    "hotelsparga": [
+      11.0,
+      0.0,
+      1.0,
+      0.0005502028682995632,
+      0.45454545454545453
+    ],
+    "scaffoldersforum": [
+      16.0,
+      0.0,
+      1.0,
+      0.0005614553525030921,
+      0.625
+    ],
+    "dawgzrus": [
+      8.0,
+      0.0,
+      1.0,
+      6.805475210775678e-05,
+      0.375
+    ],
+    "poebunchik": [
+      10.0,
+      0.0,
+      1.0,
+      0.0003115062440149948,
+      0.5
+    ],
+    "salzschreiber": [
+      13.0,
+      0.0,
+      1.0,
+      0.0003520624071702108,
+      0.23076923076923078
+    ],
+    "psocenter": [
+      9.0,
+      0.0,
+      1.0,
+      0.0013849844827578156,
+      0.6666666666666666
+    ],
+    "australiansocceroos": [
+      19.0,
+      0.0,
+      1.0,
+      0.0006517419549322017,
+      0.5263157894736842
+    ],
+    "hotelsitges": [
+      11.0,
+      0.0,
+      1.0,
+      0.0004021551284299958,
+      0.45454545454545453
+    ],
+    "eluting": [
+      7.0,
+      0.0,
+      1.0,
+      0.0015092834988708153,
+      0.8571428571428571
+    ],
+    "bashplease": [
+      10.0,
+      0.0,
+      1.0,
+      0.00039469373114621226,
+      0.6
+    ],
+    "wolseleymedia": [
+      13.0,
+      0.0,
+      1.0,
+      0.00048671109720614084,
+      0.38461538461538464
+    ],
+    "kamiyahairdressing": [
+      18.0,
+      0.0,
+      1.0,
+      0.0008351303668951181,
+      0.6666666666666666
+    ],
+    "getupmusic": [
+      10.0,
+      0.0,
+      1.0,
+      0.00033961840587241356,
+      0.5
+    ],
+    "jayjaboneta": [
+      11.0,
+      0.0,
+      1.0,
+      0.0003646835940861884,
+      0.36363636363636365
+    ],
+    "180218": [
+      6.0,
+      1.0,
+      0.0,
+      2.8852627519421646e-05,
+      0.0
+    ],
+    "musik-therapie": [
+      14.0,
+      0.0,
+      0.9285714285714286,
+      0.0007251967493863837,
+      0.21428571428571427
+    ],
+    "incur": [
+      5.0,
+      0.0,
+      1.0,
+      0.0003885146728632918,
+      1.0
+    ],
+    "markocen": [
+      8.0,
+      0.0,
+      1.0,
+      0.0006151822764317985,
+      0.625
+    ],
+    "rachelpassions": [
+      14.0,
+      0.0,
+      1.0,
+      0.0009426723654265791,
+      0.5
+    ],
+    "edinburghlibdems": [
+      16.0,
+      0.0,
+      1.0,
+      0.00027380450469252426,
+      0.3125
+    ],
+    "somushi": [
+      7.0,
+      0.0,
+      1.0,
+      0.0004642975033744808,
+      0.5714285714285714
+    ],
+    "we4399": [
+      6.0,
+      0.6666666666666666,
+      0.3333333333333333,
+      1.8128642069725106e-05,
+      0.3333333333333333
+    ],
+    "25pweq27r27s": [
+      12.0,
+      0.5,
+      0.5,
+      2.0630905341320964e-06,
+      0.16666666666666666
+    ],
+    "softmetaware": [
+      12.0,
+      0.0,
+      1.0,
+      0.00043980596327126905,
+      0.4166666666666667
+    ],
+    "fcuh": [
+      4.0,
+      0.0,
+      1.0,
+      1.440078046102107e-05,
+      0.25
+    ],
+    "pipnaguabo": [
+      10.0,
+      0.0,
+      1.0,
+      0.00011561477646720463,
+      0.4
+    ],
+    "radiodangdutindonesia": [
+      21.0,
+      0.0,
+      1.0,
+      0.0006369993602806714,
+      0.2857142857142857
+    ],
+    "teatroarbole": [
+      12.0,
+      0.0,
+      1.0,
+      0.00040087278942913267,
+      0.3333333333333333
+    ],
+    "neoluxor": [
+      8.0,
+      0.0,
+      1.0,
+      0.00010376732587515893,
+      0.375
+    ],
+    "lessb": [
+      5.0,
+      0.0,
+      1.0,
+      0.0009844959086803956,
+      0.8
+    ],
+    "nancycampbell": [
+      13.0,
+      0.0,
+      1.0,
+      0.00047163252372535544,
+      0.38461538461538464
+    ],
+    "ctcdistribution": [
+      15.0,
+      0.0,
+      1.0,
+      0.0008695305945798636,
+      0.8
+    ],
+    "135264": [
+      6.0,
+      1.0,
+      0.0,
+      2.8699427727283128e-05,
+      0.0
+    ],
+    "lawyersusaonline": [
+      16.0,
+      0.0,
+      1.0,
+      0.0007493658404032849,
+      0.375
+    ],
+    "fashionandwomen": [
+      15.0,
+      0.0,
+      1.0,
+      0.0009972128008278256,
+      0.4666666666666667
+    ],
+    "oddix": [
+      5.0,
+      0.0,
+      1.0,
+      9.307738482371539e-05,
+      0.6
+    ],
+    "safkaty": [
+      7.0,
+      0.0,
+      1.0,
+      8.865161305082475e-05,
+      0.5714285714285714
+    ],
+    "lifecathedralchurch": [
+      19.0,
+      0.0,
+      1.0,
+      0.0005680648292496396,
+      0.47368421052631576
+    ],
+    "mygooddaycafe": [
+      13.0,
+      0.0,
+      1.0,
+      0.00022179615967303113,
+      0.3076923076923077
+    ],
+    "campingtonnara": [
+      14.0,
+      0.0,
+      1.0,
+      0.0008454585862151236,
+      0.35714285714285715
+    ],
+    "speedpool": [
+      9.0,
+      0.0,
+      1.0,
+      0.00024129696784636927,
+      0.5555555555555556
+    ],
+    "earthpledge": [
+      11.0,
+      0.0,
+      1.0,
+      0.0005484098633249049,
+      0.5454545454545454
+    ],
+    "worldoptometry": [
+      14.0,
+      0.0,
+      1.0,
+      0.00042744444226560296,
+      0.6428571428571429
+    ],
+    "philipglass": [
+      11.0,
+      0.0,
+      1.0,
+      0.00039961314669377144,
+      0.5454545454545454
+    ],
+    "selectmedia": [
+      11.0,
+      0.0,
+      1.0,
+      0.0006946192056888098,
+      0.5454545454545454
+    ],
+    "desmachyme": [
+      10.0,
+      0.0,
+      1.0,
+      0.0003895104715121923,
+      1.0
+    ],
+    "indiemusicimpact": [
+      16.0,
+      0.0,
+      1.0,
+      0.00046721559465330966,
+      0.375
+    ],
+    "organicparade": [
+      13.0,
+      0.0,
+      1.0,
+      0.0006054270088596647,
+      0.5384615384615384
+    ],
+    "c-nergy": [
+      7.0,
+      0.0,
+      0.8571428571428571,
+      0.0003876159007494125,
+      0.42857142857142855
+    ],
+    "cclasarenas": [
+      11.0,
+      0.0,
+      1.0,
+      0.0005754411155377908,
+      0.45454545454545453
+    ],
+    "kelleherrealty": [
+      14.0,
+      0.0,
+      1.0,
+      0.000751257736249059,
+      0.42857142857142855
+    ],
+    "lickspits": [
+      9.0,
+      0.0,
+      1.0,
+      0.00037103530610310616,
+      0.8888888888888888
+    ],
+    "alholman": [
+      8.0,
+      0.0,
+      1.0,
+      0.0004116989080735882,
+      0.5
+    ],
+    "womenssoccershow": [
+      16.0,
+      0.0,
+      1.0,
+      0.0006208239195708678,
+      0.375
+    ],
+    "durhamcosa": [
+      10.0,
+      0.0,
+      1.0,
+      0.00017699682651737246,
+      0.6
+    ],
+    "greenwoodms": [
+      11.0,
+      0.0,
+      1.0,
+      0.0004263720437206333,
+      0.8181818181818182
+    ],
+    "virtueplanet": [
+      12.0,
+      0.0,
+      1.0,
+      0.0004890137365061622,
+      0.5
+    ],
+    "antiwrinklecreamblog": [
+      20.0,
+      0.0,
+      1.0,
+      0.0005485006483869128,
+      0.35
+    ],
+    "isango": [
+      6.0,
+      0.0,
+      1.0,
+      0.0006215315567059839,
+      0.6666666666666666
+    ],
+    "larouchein2004": [
+      14.0,
+      0.2857142857142857,
+      0.7142857142857143,
+      0.00036626665860495315,
+      0.2857142857142857
+    ],
+    "40639": [
+      5.0,
+      1.0,
+      0.0,
+      2.260548043999525e-05,
+      0.0
+    ],
+    "heidisdish": [
+      10.0,
+      0.0,
+      1.0,
+      0.00030292705565523756,
+      0.5
+    ],
+    "magnoliaroseco": [
+      14.0,
+      0.0,
+      1.0,
+      0.0004471731710532193,
+      0.5714285714285714
+    ],
+    "coincidences": [
+      12.0,
+      0.0,
+      1.0,
+      0.000664846244603282,
+      0.9166666666666666
+    ],
+    "rowanellis": [
+      10.0,
+      0.0,
+      1.0,
+      0.0005632135024985865,
+      0.5
+    ],
+    "bagatello": [
+      9.0,
+      0.0,
+      1.0,
+      0.000726429642951689,
+      0.5555555555555556
+    ],
+    "loopnaardepomp": [
+      14.0,
+      0.0,
+      1.0,
+      0.0002663633719315103,
+      0.2857142857142857
+    ],
+    "fanbranded": [
+      10.0,
+      0.0,
+      1.0,
+      0.0009449363179104038,
+      0.7
+    ],
+    "multireflexology": [
+      16.0,
+      0.0,
+      1.0,
+      0.0003167442178604928,
+      0.6875
+    ],
+    "mengdental": [
+      10.0,
+      0.0,
+      1.0,
+      0.0010400223222310466,
+      0.6
+    ],
+    "feedstats": [
+      9.0,
+      0.0,
+      1.0,
+      0.0005204123986663622,
+      0.4444444444444444
+    ],
+    "frankfort-elberta": [
+      17.0,
+      0.0,
+      0.9411764705882353,
+      0.0005729672225980724,
+      0.4117647058823529
+    ],
+    "unimog-museum": [
+      13.0,
+      0.0,
+      0.9230769230769231,
+      0.00028920406821398084,
+      0.46153846153846156
+    ],
+    "conceptcaravans": [
+      15.0,
+      0.0,
+      1.0,
+      0.0006269406878284132,
+      0.4666666666666667
+    ],
+    "archerie-wuilbaut": [
+      17.0,
+      0.0,
+      0.9411764705882353,
+      0.0005160994597562531,
+      0.35294117647058826
+    ],
+    "schuylkillriver": [
+      15.0,
+      0.0,
+      1.0,
+      0.0005057635804466407,
+      0.3333333333333333
+    ],
+    "easycleanerpro": [
+      14.0,
+      0.0,
+      1.0,
+      0.0005488297442366919,
+      0.5
+    ],
+    "mentorcoreedu": [
+      13.0,
+      0.0,
+      1.0,
+      0.0009841926040414144,
+      0.46153846153846156
+    ],
+    "imagendeautos": [
+      13.0,
+      0.0,
+      1.0,
+      0.0006743762001578867,
+      0.38461538461538464
+    ],
+    "food-providing": [
+      14.0,
+      0.0,
+      0.9285714285714286,
+      0.0008177804904354306,
+      0.6428571428571429
+    ],
+    "bluerosecafetulsa": [
+      17.0,
+      0.0,
+      1.0,
+      0.00029103875178528824,
+      0.29411764705882354
+    ],
+    "gardenbedettishop": [
+      17.0,
+      0.0,
+      1.0,
+      0.0005321003269351652,
+      0.35294117647058826
+    ],
+    "prahost": [
+      7.0,
+      0.0,
+      1.0,
+      0.0003171031430877888,
+      0.5714285714285714
+    ],
+    "n-clinic": [
+      8.0,
+      0.0,
+      0.875,
+      0.0007224902197252699,
+      0.75
+    ],
+    "mujestic": [
+      8.0,
+      0.0,
+      1.0,
+      0.0008255426132371158,
+      0.5
+    ],
+    "degiheugi": [
+      9.0,
+      0.0,
+      1.0,
+      6.647411933172441e-05,
+      0.3333333333333333
+    ],
+    "cedisa": [
+      6.0,
+      0.0,
+      1.0,
+      0.000528437149683142,
+      0.6666666666666666
+    ],
+    "howlearnspanish": [
+      15.0,
+      0.0,
+      1.0,
+      0.00046835140556645394,
+      0.4666666666666667
+    ],
+    "univairparts": [
+      12.0,
+      0.0,
+      1.0,
+      0.0005966008438653083,
+      0.3333333333333333
+    ],
+    "neukomm": [
+      7.0,
+      0.0,
+      1.0,
+      0.00013318168596575513,
+      0.2857142857142857
+    ],
+    "goldetectors": [
+      12.0,
+      0.0,
+      1.0,
+      0.0006618639553163188,
+      0.6666666666666666
+    ],
+    "garciastowingtx": [
+      15.0,
+      0.0,
+      1.0,
+      0.0008904286175074773,
+      0.4666666666666667
+    ],
+    "cambodgenouveau": [
+      15.0,
+      0.0,
+      1.0,
+      0.0002478222688829507,
+      0.3333333333333333
+    ],
+    "theopening": [
+      10.0,
+      0.0,
+      1.0,
+      0.0013639632827079514,
+      0.7
+    ],
+    "stonethegardener": [
+      16.0,
+      0.0,
+      1.0,
+      0.001026672054630404,
+      0.5
+    ],
+    "abolishpestcontrol": [
+      18.0,
+      0.0,
+      1.0,
+      0.0006304682112473976,
+      0.3888888888888889
+    ],
+    "srilankamirror": [
+      14.0,
+      0.0,
+      1.0,
+      0.0003614663984512795,
+      0.42857142857142855
+    ],
+    "edmontongreencentre": [
+      19.0,
+      0.0,
+      1.0,
+      0.0008809168283014591,
+      0.3157894736842105
+    ],
+    "jeremielenoir": [
+      13.0,
+      0.0,
+      1.0,
+      0.00041226528306270634,
+      0.3076923076923077
+    ],
+    "bizzbee": [
+      7.0,
+      0.0,
+      1.0,
+      8.595529670918675e-05,
+      0.5714285714285714
+    ],
+    "avalonstructural": [
+      16.0,
+      0.0,
+      1.0,
+      0.0006676884655088614,
+      0.625
+    ],
+    "bioinformatics-brazil": [
+      21.0,
+      0.0,
+      0.9523809523809523,
+      0.0005115582953913891,
+      0.2857142857142857
+    ],
+    "iredge": [
+      6.0,
+      0.0,
+      1.0,
+      0.0005160279665199217,
+      0.6666666666666666
+    ],
+    "essenburgplumbing": [
+      17.0,
+      0.0,
+      1.0,
+      0.0006828216868808685,
+      0.47058823529411764
+    ],
+    "nippn": [
+      5.0,
+      0.0,
+      1.0,
+      7.122088114528624e-05,
+      0.6
+    ],
+    "kainetech": [
+      9.0,
+      0.0,
+      1.0,
+      0.001027693386577994,
+      0.4444444444444444
+    ],
+    "ibforum": [
+      7.0,
+      0.0,
+      1.0,
+      0.0003968487415556275,
+      0.7142857142857143
+    ],
+    "thehairyfig": [
+      11.0,
+      0.0,
+      1.0,
+      0.000564047590255785,
+      0.45454545454545453
+    ],
+    "bait3dmovie": [
+      11.0,
+      0.09090909090909091,
+      0.9090909090909091,
+      0.00019502900945871402,
+      0.45454545454545453
+    ],
+    "aipumps": [
+      7.0,
+      0.0,
+      1.0,
+      6.446647253189007e-05,
+      0.5714285714285714
+    ],
+    "123date": [
+      7.0,
+      0.42857142857142855,
+      0.5714285714285714,
+      0.0004437074513110634,
+      0.5714285714285714
+    ],
+    "assisibenessere": [
+      15.0,
+      0.0,
+      1.0,
+      0.0007102970875509628,
+      0.3333333333333333
+    ],
+    "spd-fraktion-hessen": [
+      19.0,
+      0.0,
+      0.8947368421052632,
+      0.0006091464048827069,
+      0.15789473684210525
+    ],
+    "gustav-mahler-vereinigung": [
+      25.0,
+      0.0,
+      0.92,
+      0.0004258598975556099,
+      0.16
+    ],
+    "oisofarm": [
+      8.0,
+      0.0,
+      1.0,
+      0.0003319328829667978,
+      0.625
+    ],
+    "zoumeshiya": [
+      10.0,
+      0.0,
+      1.0,
+      0.00031763423570053566,
+      0.4
+    ],
+    "slabunova": [
+      9.0,
+      0.0,
+      1.0,
+      0.00023928348486397725,
+      0.4444444444444444
+    ],
+    "swoman": [
+      6.0,
+      0.0,
+      1.0,
+      0.0005685754952234347,
+      0.8333333333333334
+    ],
+    "top-home-security-systems": [
+      25.0,
+      0.0,
+      0.88,
+      0.00038268864018834294,
+      0.32
+    ],
+    "291423": [
+      6.0,
+      1.0,
+      0.0,
+      3.033355884342736e-05,
+      0.0
+    ],
+    "artctic-fox": [
+      11.0,
+      0.0,
+      0.9090909090909091,
+      0.0004780968327996987,
+      0.2727272727272727
+    ],
+    "littleapple": [
+      11.0,
+      0.0,
+      1.0,
+      0.00044879595403661256,
+      0.5454545454545454
+    ],
+    "markware": [
+      8.0,
+      0.0,
+      1.0,
+      0.0007602454573878522,
+      0.5
+    ],
+    "bridepub": [
+      8.0,
+      0.0,
+      1.0,
+      0.0004351554984699086,
+      0.625
+    ],
+    "anmatt": [
+      6.0,
+      0.0,
+      1.0,
+      0.0004299807499354518,
+      0.6666666666666666
+    ],
+    "michiganherbalremedies": [
+      22.0,
+      0.0,
+      1.0,
+      0.0005338808489637975,
+      0.36363636363636365
+    ],
+    "181731": [
+      6.0,
+      1.0,
+      0.0,
+      2.5431165494994656e-05,
+      0.0
+    ],
+    "ckrh": [
+      4.0,
+      0.0,
+      1.0,
+      2.553329868975367e-05,
+      0.25
+    ],
+    "bookmyname": [
+      10.0,
+      0.0,
+      1.0,
+      0.0003560363169299252,
+      0.4
+    ],
+    "nutsakgames": [
+      11.0,
+      0.0,
+      1.0,
+      0.00033293151864888584,
+      0.36363636363636365
+    ],
+    "mariaspadafora": [
+      14.0,
+      0.0,
+      1.0,
+      0.0006163568081715272,
+      0.35714285714285715
+    ],
+    "viapenedes": [
+      10.0,
+      0.0,
+      1.0,
+      0.0004788259503289506,
+      0.3
+    ],
+    "irfan-irsyad": [
+      12.0,
+      0.0,
+      0.9166666666666666,
+      9.618904282404003e-05,
+      0.4166666666666667
+    ],
+    "casuesweets": [
+      11.0,
+      0.0,
+      1.0,
+      0.00026817907317167055,
+      0.45454545454545453
+    ],
+    "279447": [
+      6.0,
+      1.0,
+      0.0,
+      2.5226899105476627e-05,
+      0.0
+    ],
+    "comicnewsi": [
+      10.0,
+      0.0,
+      1.0,
+      0.0004243123576263265,
+      0.5
+    ],
+    "caudleandcaudle": [
+      15.0,
+      0.0,
+      1.0,
+      0.0004792718010060716,
+      0.4
+    ],
+    "baoshanw": [
+      8.0,
+      0.0,
+      1.0,
+      0.00033074132902794254,
+      0.5
+    ],
+    "copitima": [
+      8.0,
+      0.0,
+      1.0,
+      0.00038191005960220886,
+      0.375
+    ],
+    "unegui": [
+      6.0,
+      0.0,
+      1.0,
+      0.00019747453206655488,
+      0.3333333333333333
+    ],
+    "saintmonicatx": [
+      13.0,
+      0.0,
+      1.0,
+      0.0006577563439198289,
+      0.46153846153846156
+    ],
+    "cart-rcv": [
+      8.0,
+      0.0,
+      0.875,
+      0.0005864828487045153,
+      0.5
+    ],
+    "chicagocornea": [
+      13.0,
+      0.0,
+      1.0,
+      0.000519208022811282,
+      0.46153846153846156
+    ],
+    "crafthill": [
+      9.0,
+      0.0,
+      1.0,
+      0.0005323765729095611,
+      0.5555555555555556
+    ],
+    "ekwb": [
+      4.0,
+      0.0,
+      1.0,
+      6.434391269817926e-06,
+      0.25
+    ],
+    "tl80s": [
+      5.0,
+      0.4,
+      0.6,
+      9.532431510841371e-07,
+      0.2
+    ],
+    "chaabpress": [
+      10.0,
+      0.0,
+      1.0,
+      0.0007434019913521782,
+      0.5
+    ],
+    "manhattaneyeworks": [
+      17.0,
+      0.0,
+      1.0,
+      0.000466067812083637,
+      0.5294117647058824
+    ],
+    "332677": [
+      6.0,
+      1.0,
+      0.0,
+      2.946542668797574e-05,
+      0.0
+    ],
+    "drkentgabriel": [
+      13.0,
+      0.0,
+      1.0,
+      0.0005633667022907251,
+      0.5384615384615384
+    ],
+    "mossycreekoutfitters": [
+      20.0,
+      0.0,
+      1.0,
+      0.0006210606091968172,
+      0.45
+    ],
+    "furniturevision": [
+      15.0,
+      0.0,
+      1.0,
+      0.0007228044757091438,
+      0.6
+    ],
+    "packetimpact": [
+      12.0,
+      0.0,
+      1.0,
+      0.0004706297614495396,
+      0.5
+    ],
+    "kcat": [
+      4.0,
+      0.0,
+      1.0,
+      0.0003210046311275832,
+      0.75
+    ],
+    "itispivotal": [
+      11.0,
+      0.0,
+      1.0,
+      0.000389490612279878,
+      0.6363636363636364
+    ],
+    "kedke": [
+      5.0,
+      0.0,
+      1.0,
+      4.459816171143641e-05,
+      0.6
+    ],
+    "signifytechnology": [
+      17.0,
+      0.0,
+      1.0,
+      0.0004019554012935782,
+      0.5882352941176471
+    ],
+    "vedantadfw": [
+      10.0,
+      0.0,
+      1.0,
+      0.00046817856477532327,
+      0.7
+    ],
+    "305948": [
+      6.0,
+      1.0,
+      0.0,
+      2.287783562601929e-05,
+      0.0
+    ],
+    "muucih": [
+      6.0,
+      0.0,
+      1.0,
+      2.037557235442343e-05,
+      0.3333333333333333
+    ],
+    "jeanpaulschmitt": [
+      15.0,
+      0.0,
+      1.0,
+      0.00026718043748958243,
+      0.26666666666666666
+    ],
+    "drgoodtooth": [
+      11.0,
+      0.0,
+      1.0,
+      0.00022360360772573617,
+      0.45454545454545453
+    ],
+    "papiliodress": [
+      12.0,
+      0.0,
+      1.0,
+      0.0005573408437999431,
+      0.5833333333333334
+    ],
+    "scoutlounge": [
+      11.0,
+      0.0,
+      1.0,
+      0.0005388320392830595,
+      0.5454545454545454
+    ],
+    "meshopfa": [
+      8.0,
+      0.0,
+      1.0,
+      0.0004743406008591172,
+      0.5
+    ],
+    "klerer": [
+      6.0,
+      0.0,
+      1.0,
+      0.0005573408437999431,
+      0.5
+    ],
+    "dipp": [
+      4.0,
+      0.0,
+      1.0,
+      0.00010019266405859341,
+      0.75
+    ],
+    "youritdept": [
+      10.0,
+      0.0,
+      1.0,
+      0.00041540123638360245,
+      0.4
+    ],
+    "mainewoodsnationalpark": [
+      22.0,
+      0.0,
+      1.0,
+      0.0009738195853882531,
+      0.36363636363636365
+    ],
+    "allianz-vertrieb": [
+      16.0,
+      0.0,
+      0.9375,
+      0.0006364211174562088,
+      0.25
+    ],
+    "alength": [
+      7.0,
+      0.0,
+      1.0,
+      0.0004980014576449557,
+      0.8571428571428571
+    ],
+    "anywhereride": [
+      12.0,
+      0.0,
+      1.0,
+      0.0006017687835201145,
+      0.6666666666666666
+    ],
+    "prestonpugmire": [
+      14.0,
+      0.0,
+      1.0,
+      0.0007784932548514631,
+      0.42857142857142855
+    ],
+    "noggblog": [
+      8.0,
+      0.0,
+      1.0,
+      0.00030306323324824955,
+      0.375
+    ],
+    "christianlifeok": [
+      15.0,
+      0.0,
+      1.0,
+      0.0006162402715775073,
+      0.6
+    ],
+    "gift-group": [
+      10.0,
+      0.0,
+      0.9,
+      0.00028673894428593377,
+      0.5
+    ],
+    "poppaganda": [
+      10.0,
+      0.0,
+      1.0,
+      0.0006994336510084223,
+      0.5
+    ],
+    "kraeved-gatchina": [
+      16.0,
+      0.0,
+      0.9375,
+      0.00040705914294025006,
+      0.3125
+    ],
+    "ysumathstat": [
+      11.0,
+      0.0,
+      1.0,
+      0.0005027903696658782,
+      0.36363636363636365
+    ],
+    "37222": [
+      5.0,
+      1.0,
+      0.0,
+      3.0503780834692388e-05,
+      0.0
+    ],
+    "artepaleoliticoenasturias": [
+      25.0,
+      0.0,
+      1.0,
+      0.0005867685256115949,
+      0.2
+    ],
+    "maggiessewvac": [
+      13.0,
+      0.0,
+      1.0,
+      0.000384057951637444,
+      0.46153846153846156
+    ],
+    "shavercars": [
+      10.0,
+      0.0,
+      1.0,
+      0.0007184048919349094,
+      0.6
+    ],
+    "dittatori": [
+      9.0,
+      0.0,
+      1.0,
+      0.0006578253169864194,
+      0.3333333333333333
+    ],
+    "royal-commission-elderly": [
+      24.0,
+      0.0,
+      0.9166666666666666,
+      0.0004917156237493324,
+      0.4166666666666667
+    ],
+    "evangelarchitect": [
+      16.0,
+      0.0,
+      1.0,
+      0.0007260065197162589,
+      0.5625
+    ],
+    "hot97svg": [
+      8.0,
+      0.25,
+      0.75,
+      0.0001402629208023802,
+      0.375
+    ],
+    "onlinebook": [
+      10.0,
+      0.0,
+      1.0,
+      0.001014489023541293,
+      0.4
+    ],
+    "nikkiuberti": [
+      11.0,
+      0.0,
+      1.0,
+      0.000333725887941456,
+      0.36363636363636365
+    ],
+    "agapelive": [
+      9.0,
+      0.0,
+      1.0,
+      0.0005390590019380794,
+      0.5555555555555556
+    ],
+    "rosachiclets": [
+      12.0,
+      0.0,
+      1.0,
+      0.0005327471705019723,
+      0.5
+    ],
+    "amherstdaily": [
+      12.0,
+      0.0,
+      1.0,
+      0.0005622636637873278,
+      0.4166666666666667
+    ],
+    "gtscomputers": [
+      12.0,
+      0.0,
+      1.0,
+      0.0008987312606014257,
+      0.6666666666666666
+    ],
+    "flower-recipe": [
+      13.0,
+      0.0,
+      0.9230769230769231,
+      0.0003124161579319388,
+      0.46153846153846156
+    ],
+    "tanya-jain": [
+      10.0,
+      0.0,
+      0.9,
+      0.00029981199321508763,
+      0.5
+    ],
+    "ohiostadium": [
+      11.0,
+      0.0,
+      1.0,
+      0.0004664990411281752,
+      0.6363636363636364
+    ],
+    "blinkcloudservices": [
+      18.0,
+      0.0,
+      1.0,
+      0.0005256540201259588,
+      0.3888888888888889
+    ],
+    "scape-project": [
+      13.0,
+      0.0,
+      0.9230769230769231,
+      0.00046522598696319904,
+      0.5384615384615384
+    ],
+    "watermarker": [
+      11.0,
+      0.0,
+      1.0,
+      0.0011359253921097614,
+      0.8181818181818182
+    ],
+    "omazingkidsllc": [
+      14.0,
+      0.0,
+      1.0,
+      0.0005915043974468334,
+      0.2857142857142857
+    ],
+    "89478": [
+      5.0,
+      1.0,
+      0.0,
+      2.3150190812043327e-05,
+      0.0
+    ],
+    "municipiocuauhtemoc": [
+      19.0,
+      0.0,
+      1.0,
+      0.0002116319952106501,
+      0.21052631578947367
+    ],
+    "goodlives": [
+      9.0,
+      0.0,
+      1.0,
+      0.0004852785796692612,
+      0.4444444444444444
+    ],
+    "allprinters": [
+      11.0,
+      0.0,
+      1.0,
+      0.0014071684611242025,
+      0.6363636363636364
+    ],
+    "460875": [
+      6.0,
+      1.0,
+      0.0,
+      2.134583770463407e-05,
+      0.0
+    ],
+    "jrc-law": [
+      7.0,
+      0.0,
+      0.8571428571428571,
+      0.00013432557774705611,
+      0.42857142857142855
+    ],
+    "jdsutter": [
+      8.0,
+      0.0,
+      1.0,
+      0.0007088724604240679,
+      0.625
+    ],
+    "xbladesracing": [
+      13.0,
+      0.0,
+      1.0,
+      0.000852366504115188,
+      0.46153846153846156
+    ],
+    "i-rin": [
+      5.0,
+      0.0,
+      0.8,
+      0.00041357134997750347,
+      0.4
+    ],
+    "ah3b": [
+      4.0,
+      0.25,
+      0.75,
+      5.106659737950735e-07,
+      0.5
+    ],
+    "dpopup": [
+      6.0,
+      0.0,
+      1.0,
+      6.61823102038415e-05,
+      0.5
+    ],
+    "wwwbeyondbullying": [
+      17.0,
+      0.0,
+      1.0,
+      0.00048808772887368055,
+      0.47058823529411764
+    ],
+    "balancenortheast": [
+      16.0,
+      0.0,
+      1.0,
+      0.0011225897149655128,
+      0.5625
+    ],
+    "brownbrothersfarms": [
+      18.0,
+      0.0,
+      1.0,
+      0.0006874840672216176,
+      0.3888888888888889
+    ],
+    "crosst": [
+      6.0,
+      0.0,
+      1.0,
+      0.00037523735754461994,
+      0.8333333333333334
+    ],
+    "kamessenbilder3": [
+      15.0,
+      0.06666666666666667,
+      0.9333333333333333,
+      0.0005739885545456625,
+      0.3333333333333333
+    ],
+    "citizensedmond": [
+      14.0,
+      0.0,
+      1.0,
+      0.00039581719628856144,
+      0.5
+    ],
+    "morseandbeggsmonument": [
+      21.0,
+      0.0,
+      1.0,
+      0.0006498788936829136,
+      0.38095238095238093
+    ],
+    "pixelmateindia": [
+      14.0,
+      0.0,
+      1.0,
+      0.0005430762409319341,
+      0.35714285714285715
+    ],
+    "endocrineonfifth": [
+      16.0,
+      0.0,
+      1.0,
+      0.0004836736294659053,
+      0.5625
+    ],
+    "359268": [
+      6.0,
+      1.0,
+      0.0,
+      2.5992898066169236e-05,
+      0.0
+    ],
+    "congelative": [
+      11.0,
+      0.0,
+      1.0,
+      0.0009448228365828939,
+      1.0
+    ],
+    "neozoic": [
+      7.0,
+      0.0,
+      1.0,
+      5.4171446500181385e-05,
+      1.0
+    ],
+    "whistlerslidingcentre": [
+      21.0,
+      0.0,
+      1.0,
+      0.0009933044487757518,
+      0.38095238095238093
+    ],
+    "lembrancinhas15anos": [
+      19.0,
+      0.10526315789473684,
+      0.8947368421052632,
+      0.00037527340455453486,
+      0.21052631578947367
+    ],
+    "rnamedical": [
+      10.0,
+      0.0,
+      1.0,
+      0.0008174485575524637,
+      0.7
+    ],
+    "tsirang": [
+      7.0,
+      0.0,
+      1.0,
+      0.0006647645380474748,
+      0.5714285714285714
+    ],
+    "geriatricsocialclub": [
+      19.0,
+      0.0,
+      1.0,
+      0.000576127343800616,
+      0.5263157894736842
+    ],
+    "sophiessteakhouse": [
+      17.0,
+      0.0,
+      1.0,
+      0.0005525950546834742,
+      0.29411764705882354
+    ],
+    "ic-fca": [
+      6.0,
+      0.0,
+      0.8333333333333334,
+      4.090434450098538e-05,
+      0.3333333333333333
+    ],
+    "americansoccernetwork": [
+      21.0,
+      0.0,
+      1.0,
+      0.0007134379934108393,
+      0.38095238095238093
+    ],
+    "buyclassiccars": [
+      14.0,
+      0.0,
+      1.0,
+      0.00048428156514899464,
+      0.5
+    ],
+    "paulduane": [
+      9.0,
+      0.0,
+      1.0,
+      0.00018062985015951453,
+      0.5555555555555556
+    ],
+    "alphabendi": [
+      10.0,
+      0.0,
+      1.0,
+      0.0003522318554251519,
+      0.5
+    ],
+    "tvcocina": [
+      8.0,
+      0.0,
+      1.0,
+      0.0003389460290069168,
+      0.25
+    ],
+    "geoby-russia": [
+      12.0,
+      0.0,
+      0.9166666666666666,
+      0.00017262552578168662,
+      0.5
+    ],
+    "altavia-coach": [
+      13.0,
+      0.0,
+      0.9230769230769231,
+      0.0003194169241908748,
+      0.38461538461538464
+    ],
+    "playminiongames": [
+      15.0,
+      0.0,
+      1.0,
+      0.0007674602510176238,
+      0.4
+    ],
+    "enlavall": [
+      8.0,
+      0.0,
+      1.0,
+      0.0005214920924395289,
+      0.5
+    ],
+    "loosechangelive": [
+      15.0,
+      0.0,
+      1.0,
+      0.0006962027066742189,
+      0.4
+    ],
+    "larnedu": [
+      7.0,
+      0.0,
+      1.0,
+      0.0003643703856222608,
+      0.5714285714285714
+    ],
+    "nasu-lid": [
+      8.0,
+      0.0,
+      0.875,
+      0.00013467963948888737,
+      0.375
+    ],
+    "tubuli": [
+      6.0,
+      0.0,
+      1.0,
+      0.00011847450592045704,
+      1.0
+    ],
+    "janyaa": [
+      6.0,
+      0.0,
+      1.0,
+      0.0001411480751569583,
+      0.5
+    ],
+    "stephaniefalaschetti": [
+      20.0,
+      0.0,
+      1.0,
+      0.0005598260848724125,
+      0.45
+    ],
+    "georgealarm": [
+      11.0,
+      0.0,
+      1.0,
+      0.00045197343120689294,
+      0.5454545454545454
+    ],
+    "catholicregister": [
+      16.0,
+      0.0,
+      1.0,
+      0.0008333047360388009,
+      0.5
+    ],
+    "crazyontheoutsidethemovie": [
+      25.0,
+      0.0,
+      1.0,
+      0.0006212806642927715,
+      0.28
+    ],
+    "icurrex": [
+      7.0,
+      0.0,
+      1.0,
+      0.00019487013560020002,
+      0.5714285714285714
+    ],
+    "sakura-server": [
+      13.0,
+      0.0,
+      0.9230769230769231,
+      0.0004668044090640202,
+      0.46153846153846156
+    ],
+    "pokemon-tcg": [
+      11.0,
+      0.0,
+      0.9090909090909091,
+      0.0002494092616015139,
+      0.36363636363636365
+    ],
+    "mattpomroy": [
+      10.0,
+      0.0,
+      1.0,
+      0.00020360252375209578,
+      0.4
+    ],
+    "as-admin": [
+      8.0,
+      0.0,
+      0.875,
+      0.0002253058276383864,
+      0.5
+    ],
+    "foresthillfarmiowa": [
+      18.0,
+      0.0,
+      1.0,
+      0.0007133748320930279,
+      0.3333333333333333
+    ],
+    "theplacetoshop4everything": [
+      25.0,
+      0.04,
+      0.96,
+      0.0007945252060461714,
+      0.4
+    ],
+    "karsts": [
+      6.0,
+      0.0,
+      1.0,
+      0.00034868272690727613,
+      0.8333333333333334
+    ],
+    "healingmango": [
+      12.0,
+      0.0,
+      1.0,
+      0.001335779627614201,
+      0.5833333333333334
+    ],
+    "montanaclay": [
+      11.0,
+      0.0,
+      1.0,
+      0.0006299802415391047,
+      0.6363636363636364
+    ],
+    "gwonline": [
+      8.0,
+      0.0,
+      1.0,
+      0.0010912250972035659,
+      0.5
+    ],
+    "kreativaweb": [
+      11.0,
+      0.0,
+      1.0,
+      0.0007200390230510535,
+      0.2727272727272727
+    ],
+    "thequinnfuneralhome": [
+      19.0,
+      0.0,
+      1.0,
+      0.0005845743597906851,
+      0.3684210526315789
+    ],
+    "graphez": [
+      7.0,
+      0.0,
+      1.0,
+      0.0004600896157504093,
+      0.7142857142857143
+    ],
+    "bre-xminerals": [
+      13.0,
+      0.0,
+      0.9230769230769231,
+      0.0006959727284314747,
+      0.5384615384615384
+    ],
+    "elsouth": [
+      7.0,
+      0.0,
+      1.0,
+      0.0004612743608096139,
+      0.7142857142857143
+    ],
+    "claromizuno": [
+      11.0,
+      0.0,
+      1.0,
+      0.0002678840217201445,
+      0.45454545454545453
+    ],
+    "piecejointe": [
+      11.0,
+      0.0,
+      1.0,
+      0.0004427360511475777,
+      0.45454545454545453
+    ],
+    "stylerspanel": [
+      12.0,
+      0.0,
+      1.0,
+      0.0006466461092972254,
+      0.5
+    ],
+    "siliconloons": [
+      12.0,
+      0.0,
+      1.0,
+      0.0006298349854398917,
+      0.5833333333333334
+    ],
+    "halodestiny": [
+      11.0,
+      0.0,
+      1.0,
+      0.0008999296234199314,
+      0.6363636363636364
+    ],
+    "21stcenturyplowshare": [
+      20.0,
+      0.1,
+      0.9,
+      0.000528312320222881,
+      0.45
+    ],
+    "periwinklehandbags": [
+      18.0,
+      0.0,
+      1.0,
+      0.0005781632488814372,
+      0.5555555555555556
+    ],
+    "ascanal": [
+      7.0,
+      0.0,
+      1.0,
+      0.0006705248502318832,
+      0.7142857142857143
+    ],
+    "sharepointecm": [
+      13.0,
+      0.0,
+      1.0,
+      0.0007481906454609928,
+      0.5384615384615384
+    ],
+    "careerquest": [
+      11.0,
+      0.0,
+      1.0,
+      0.0008398072161051247,
+      0.5454545454545454
+    ],
+    "tlcproperties": [
+      13.0,
+      0.0,
+      1.0,
+      0.0005966806934539382,
+      0.46153846153846156
+    ],
+    "album-share": [
+      11.0,
+      0.0,
+      0.9090909090909091,
+      0.0003906027292894761,
+      0.45454545454545453
+    ],
+    "currandesigncenter": [
+      18.0,
+      0.0,
+      1.0,
+      0.0013002960024250504,
+      0.3333333333333333
+    ],
+    "eating-america": [
+      14.0,
+      0.0,
+      0.9285714285714286,
+      0.001348839058784054,
+      0.5
+    ],
+    "kringloopapp": [
+      12.0,
+      0.0,
+      1.0,
+      0.000839596140835956,
+      0.3333333333333333
+    ],
+    "novynynauky": [
+      11.0,
+      0.0,
+      1.0,
+      6.2732477847537e-05,
+      0.2727272727272727
+    ],
+    "watchonline9": [
+      12.0,
+      0.08333333333333333,
+      0.9166666666666666,
+      0.0008740558807476477,
+      0.4166666666666667
+    ],
+    "salon35": [
+      7.0,
+      0.2857142857142857,
+      0.7142857142857143,
+      0.0003385102607092783,
+      0.7142857142857143
+    ],
+    "max-apple": [
+      9.0,
+      0.0,
+      0.8888888888888888,
+      0.0002219208417549448,
+      0.5555555555555556
+    ],
+    "captureintegration": [
+      18.0,
+      0.0,
+      1.0,
+      0.0010495717759410144,
+      0.7222222222222222
+    ],
+    "arquidiocesistegucigalpa": [
+      24.0,
+      0.0,
+      1.0,
+      0.0003899166830822565,
+      0.16666666666666666
+    ],
+    "statravel": [
+      9.0,
+      0.0,
+      1.0,
+      0.0008913018002055271,
+      0.6666666666666666
+    ],
+    "squaredancingccha": [
+      17.0,
+      0.0,
+      1.0,
+      0.0008307105528919218,
+      0.4117647058823529
+    ],
+    "beautyartgallery": [
+      16.0,
+      0.0,
+      1.0,
+      0.0006648433265120031,
+      0.4375
+    ],
+    "luvattumaa": [
+      10.0,
+      0.0,
+      1.0,
+      0.0001553190559297716,
+      0.3
+    ],
+    "vaper": [
+      5.0,
+      0.0,
+      1.0,
+      0.0005805250790102395,
+      0.8
+    ],
+    "lgbtlaughs": [
+      10.0,
+      0.0,
+      1.0,
+      0.00010154592888915036,
+      0.5
+    ],
+    "andrewherbstart": [
+      15.0,
+      0.0,
+      1.0,
+      0.0008665923011306428,
+      0.4
+    ],
+    "karbayambalaj": [
+      13.0,
+      0.0,
+      1.0,
+      0.00029336367469143894,
+      0.3076923076923077
+    ],
+    "1-800-publicrelations": [
+      21.0,
+      0.19047619047619047,
+      0.7142857142857143,
+      0.0007102664889420068,
+      0.38095238095238093
+    ],
+    "laaky": [
+      5.0,
+      0.0,
+      1.0,
+      2.621418665481377e-05,
+      0.4
+    ],
+    "jayqeu": [
+      6.0,
+      0.0,
+      1.0,
+      1.3226248721292402e-05,
+      0.5
+    ],
+    "moneygroup": [
+      10.0,
+      0.0,
+      1.0,
+      0.0005457997927921745,
+      0.5
+    ],
+    "wso-boxing": [
+      10.0,
+      0.0,
+      0.9,
+      0.0006984889189569014,
+      0.6
+    ],
+    "buymyexplorer": [
+      13.0,
+      0.0,
+      1.0,
+      0.0002274599095642129,
+      0.6153846153846154
+    ],
+    "joebidensteeth": [
+      14.0,
+      0.0,
+      1.0,
+      0.0005544130255501847,
+      0.42857142857142855
+    ],
+    "mosken": [
+      6.0,
+      0.0,
+      1.0,
+      0.00019578933435303113,
+      0.6666666666666666
+    ],
+    "goose-shaped": [
+      12.0,
+      0.0,
+      0.9166666666666666,
+      0.0002686307288551604,
+      0.5
+    ],
+    "qetotolugocyz": [
+      13.0,
+      0.0,
+      1.0,
+      0.00019351454956067127,
+      0.3076923076923077
+    ],
+    "gkedjgfmmudo": [
+      12.0,
+      0.0,
+      1.0,
+      4.162950018377439e-05,
+      0.25
+    ],
+    "ywiuwcosqiqusoocgmakuqowoqci": [
+      28.0,
+      0.0,
+      1.0,
+      5.229219956276937e-05,
+      0.14285714285714285
+    ],
+    "lonpvcicyuclkxtfrpdvfviml": [
+      25.0,
+      0.0,
+      1.0,
+      4.3819581125302476e-05,
+      0.12
+    ],
+    "goqunuwovuxeqof": [
+      15.0,
+      0.0,
+      1.0,
+      9.537669110572603e-06,
+      0.13333333333333333
+    ],
+    "fmwynyeqwmeaeaccj": [
+      17.0,
+      0.0,
+      1.0,
+      5.7575886325481884e-05,
+      0.17647058823529413
+    ],
+    "eygi7njpnscb1brmhrh1abxbtc": [
+      26.0,
+      0.11538461538461539,
+      0.8846153846153846,
+      1.350711917354636e-05,
+      0.07692307692307693
+    ],
+    "ddxqwuqapppyfhwrvwgl": [
+      20.0,
+      0.0,
+      1.0,
+      4.754868733780795e-05,
+      0.1
+    ],
+    "yifqxwzwj": [
+      9.0,
+      0.0,
+      1.0,
+      6.128563114112309e-07,
+      0.2222222222222222
+    ],
+    "btycficjam": [
+      10.0,
+      0.0,
+      1.0,
+      8.132355632686544e-05,
+      0.3
+    ],
+    "wsqmswewauskycygowwgow": [
+      22.0,
+      0.0,
+      1.0,
+      5.952322590555376e-05,
+      0.13636363636363635
+    ],
+    "etlyaxmtq": [
+      9.0,
+      0.0,
+      1.0,
+      2.594184575450402e-05,
+      0.2222222222222222
+    ],
+    "cl3burwlqrihara8kvs": [
+      19.0,
+      0.10526315789473684,
+      0.8947368421052632,
+      0.00014638691314695012,
+      0.15789473684210525
+    ],
+    "kayhaatychhhrq": [
+      14.0,
+      0.0,
+      1.0,
+      5.062402020221828e-05,
+      0.21428571428571427
+    ],
+    "vopakofiforowecugyz": [
+      19.0,
+      0.0,
+      1.0,
+      0.0002032450575704392,
+      0.21052631578947367
+    ],
+    "hkwvzybn": [
+      8.0,
+      0.0,
+      1.0,
+      1.4979868564655486e-06,
+      0.125
+    ],
+    "1f5f04t5s7x3f3n9hi71iqv6lv": [
+      26.0,
+      0.46153846153846156,
+      0.5384615384615384,
+      5.114576404617401e-08,
+      0.07692307692307693
+    ],
+    "uqlewwmks": [
+      9.0,
+      0.0,
+      1.0,
+      1.791709473772429e-05,
+      0.3333333333333333
+    ],
+    "tlrcdtyjrlew": [
+      12.0,
+      0.0,
+      1.0,
+      3.558320505404071e-05,
+      0.25
+    ],
+    "pebwiosbfahxuvjoy": [
+      17.0,
+      0.0,
+      1.0,
+      2.9264571404949672e-05,
+      0.17647058823529413
+    ],
+    "qbgtwdkhqhu4sp16g0o": [
+      19.0,
+      0.21052631578947367,
+      0.7894736842105263,
+      7.930577475405847e-07,
+      0.10526315789473684
+    ],
+    "7rad3tyjcd3lubopc07pan1": [
+      23.0,
+      0.2608695652173913,
+      0.7391304347826086,
+      9.070401820264876e-05,
+      0.13043478260869565
+    ],
+    "ufcbsutspqddcvd": [
+      15.0,
+      0.0,
+      1.0,
+      2.5517585890559978e-05,
+      0.13333333333333333
+    ],
+    "dikagewotake": [
+      12.0,
+      0.0,
+      1.0,
+      0.0002976569828056724,
+      0.5
+    ],
+    "1igqu671bcmr5vvndchr3f7j5v": [
+      26.0,
+      0.3076923076923077,
+      0.6923076923076923,
+      2.9363343493216723e-05,
+      0.07692307692307693
+    ],
+    "cinydocecyvigo": [
+      14.0,
+      0.0,
+      1.0,
+      0.00011227842543841013,
+      0.21428571428571427
+    ],
+    "vihahimucevawenaz": [
+      17.0,
+      0.0,
+      1.0,
+      0.00010060800571728005,
+      0.17647058823529413
+    ],
+    "kaypqiakz": [
+      9.0,
+      0.0,
+      1.0,
+      2.2060784353661457e-05,
+      0.3333333333333333
+    ],
+    "1j16mdw0cdq4qnonova4svm": [
+      23.0,
+      0.2608695652173913,
+      0.7391304347826086,
+      5.5813378240688223e-05,
+      0.17391304347826086
+    ],
+    "llxbky": [
+      6.0,
+      0.0,
+      1.0,
+      8.681321554516248e-07,
+      0.16666666666666666
+    ],
+    "yrxglzfelegfwfuaxshdnbuk": [
+      24.0,
+      0.0,
+      1.0,
+      7.563427313699398e-05,
+      0.125
+    ],
+    "rlfgfsnjvhpw": [
+      12.0,
+      0.0,
+      1.0,
+      3.3499687880956812e-06,
+      0.08333333333333333
+    ],
+    "skeoiecqyggqwqyygguomsiouyeeka": [
+      30.0,
+      0.0,
+      1.0,
+      5.572825891172236e-05,
+      0.13333333333333333
+    ],
+    "akgckodl": [
+      8.0,
+      0.0,
+      1.0,
+      2.5158810308970617e-05,
+      0.25
+    ],
+    "yb7jy8y21h1f5bwlurm": [
+      19.0,
+      0.3157894736842105,
+      0.6842105263157895,
+      7.882326560225132e-06,
+      0.15789473684210525
+    ],
+    "udfroqfolqtpoosm": [
+      16.0,
+      0.0,
+      1.0,
+      5.715081769586579e-05,
+      0.1875
+    ],
+    "nwrgzjhgxyn": [
+      11.0,
+      0.0,
+      1.0,
+      2.8143369222484045e-06,
+      0.18181818181818182
+    ],
+    "347tepmbcfuxytgjotg0123": [
+      23.0,
+      0.30434782608695654,
+      0.6956521739130435,
+      1.9930563434402006e-05,
+      0.13043478260869565
+    ],
+    "vmcatyz": [
+      7.0,
+      0.0,
+      1.0,
+      0.00014274135299519893,
+      0.42857142857142855
+    ],
+    "eygkestnessbiophysicalohax": [
+      26.0,
+      0.0,
+      1.0,
+      0.0004483306805938214,
+      0.4230769230769231
+    ],
+    "irytk6i0utgvw2c": [
+      15.0,
+      0.2,
+      0.8,
+      1.0244783535827322e-05,
+      0.13333333333333333
+    ],
+    "myqosumswq": [
+      10.0,
+      0.0,
+      1.0,
+      4.5117338784794735e-05,
+      0.3
+    ],
+    "yv1da2ije8gfytsn147": [
+      19.0,
+      0.3157894736842105,
+      0.6842105263157895,
+      5.743525540565766e-06,
+      0.10526315789473684
+    ],
+    "wxupbrp": [
+      7.0,
+      0.0,
+      1.0,
+      6.495671186673334e-06,
+      0.2857142857142857
+    ],
+    "qhldcg": [
+      6.0,
+      0.0,
+      1.0,
+      1.9047840822556236e-05,
+      0.16666666666666666
+    ],
+    "tjeuball": [
+      8.0,
+      0.0,
+      1.0,
+      0.0004285849296070786,
+      0.5
+    ],
+    "who2uxy636i6q4i": [
+      15.0,
+      0.4,
+      0.6,
+      9.144879899961006e-06,
+      0.2
+    ],
+    "narywekeg": [
+      9.0,
+      0.0,
+      1.0,
+      0.0001480931324005713,
+      0.4444444444444444
+    ],
+    "dttjbwynaeud": [
+      12.0,
+      0.0,
+      1.0,
+      2.2162903262706187e-05,
+      0.25
+    ],
+    "ntyubcuqoaxkgx": [
+      14.0,
+      0.0,
+      1.0,
+      1.886059663216471e-05,
+      0.14285714285714285
+    ],
+    "aaogovln": [
+      8.0,
+      0.0,
+      1.0,
+      3.4759330616318e-05,
+      0.25
+    ],
+    "wlolyxwhexmlods": [
+      15.0,
+      0.0,
+      1.0,
+      4.8929656689164884e-05,
+      0.2
+    ],
+    "cjfwxqv3nqrh17a3d1cnbtjc6": [
+      25.0,
+      0.24,
+      0.76,
+      8.259771402250753e-07,
+      0.04
+    ],
+    "hhktwktctxgti": [
+      13.0,
+      0.0,
+      1.0,
+      4.493860569396646e-06,
+      0.15384615384615385
+    ],
+    "1izaapt1kle01212h148otc6k5i": [
+      27.0,
+      0.4444444444444444,
+      0.5555555555555556,
+      2.9773904936147966e-05,
+      0.1111111111111111
+    ],
+    "xtlcdhockey": [
+      11.0,
+      0.0,
+      1.0,
+      0.00016792966844932214,
+      0.5454545454545454
+    ],
+    "qyiuengerjet": [
+      12.0,
+      0.0,
+      1.0,
+      0.0002087193968095224,
+      0.25
+    ],
+    "pfgainalcentricem": [
+      17.0,
+      0.0,
+      1.0,
+      0.0007642286519834538,
+      0.4117647058823529
+    ],
+    "wsomgsowaayemqckewysgekyo": [
+      25.0,
+      0.0,
+      1.0,
+      5.8269207896860474e-05,
+      0.12
+    ],
+    "phiyinglane": [
+      11.0,
+      0.0,
+      1.0,
+      0.0009538105577216871,
+      0.36363636363636365
+    ],
+    "uoakmuakuw": [
+      10.0,
+      0.0,
+      1.0,
+      4.095541109836489e-05,
+      0.3
+    ],
+    "skyeesqowusywcg": [
+      15.0,
+      0.0,
+      1.0,
+      3.6987929301957005e-05,
+      0.26666666666666666
+    ],
+    "xdynland": [
+      8.0,
+      0.0,
+      1.0,
+      0.0008975465155422212,
+      0.5
+    ],
+    "ejgdyn72o278cb7": [
+      15.0,
+      0.4,
+      0.6,
+      7.479323185429382e-06,
+      0.13333333333333333
+    ],
+    "qzqmrhopcvds": [
+      12.0,
+      0.0,
+      1.0,
+      8.444374542675335e-05,
+      0.25
+    ],
+    "lyrasaxemyfususeqyb": [
+      19.0,
+      0.0,
+      1.0,
+      0.0001408957519699066,
+      0.2631578947368421
+    ],
+    "pssnerfoclimswdoipevovh": [
+      23.0,
+      0.0,
+      1.0,
+      0.0001451264062670952,
+      0.13043478260869565
+    ],
+    "zzzzdi": [
+      6.0,
+      0.0,
+      1.0,
+      5.7705255038843294e-06,
+      0.3333333333333333
+    ],
+    "iqukowcsosekcgcqqmqysiummqcc": [
+      28.0,
+      0.0,
+      1.0,
+      5.7312442751308634e-05,
+      0.14285714285714285
+    ],
+    "fsnwrpedbpybyclxm": [
+      17.0,
+      0.0,
+      1.0,
+      4.6531883532207105e-05,
+      0.17647058823529413
+    ],
+    "gmamowmswgww": [
+      12.0,
+      0.0,
+      1.0,
+      6.740790854094968e-05,
+      0.3333333333333333
+    ],
+    "kukwgaoiayocqoyio": [
+      17.0,
+      0.0,
+      1.0,
+      1.3563288263997152e-05,
+      0.11764705882352941
+    ],
+    "qurbquerque": [
+      11.0,
+      0.0,
+      1.0,
+      0.00016999502861000446,
+      0.18181818181818182
+    ],
+    "vulkqx": [
+      6.0,
+      0.0,
+      1.0,
+      1.0468652462799004e-05,
+      0.3333333333333333
+    ],
+    "wbrjgcczbkiw": [
+      12.0,
+      0.0,
+      1.0,
+      5.167939654806143e-06,
+      0.08333333333333333
+    ],
+    "ckrsmskbea": [
+      10.0,
+      0.0,
+      1.0,
+      8.854947985606574e-05,
+      0.3
+    ],
+    "vppxviidgblr": [
+      12.0,
+      0.0,
+      1.0,
+      2.328636840505535e-05,
+      0.16666666666666666
+    ],
+    "omqomerer": [
+      9.0,
+      0.0,
+      1.0,
+      0.0004544635357648271,
+      0.4444444444444444
+    ],
+    "ygugetball": [
+      10.0,
+      0.0,
+      1.0,
+      0.0003877231406039095,
+      0.4
+    ],
+    "mafncgodtfzbtkaprpprlyoh": [
+      24.0,
+      0.0,
+      1.0,
+      2.9618631025568804e-05,
+      0.125
+    ],
+    "rymjnicasov": [
+      11.0,
+      0.0,
+      1.0,
+      0.00035086156839546844,
+      0.2727272727272727
+    ],
+    "blkranerraticallyqozaw": [
+      22.0,
+      0.0,
+      1.0,
+      0.000657901187359669,
+      0.5
+    ],
+    "1pijepmn5vofe8o8ehub14c": [
+      23.0,
+      0.2608695652173913,
+      0.7391304347826086,
+      1.4600216698407718e-05,
+      0.13043478260869565
+    ],
+    "ogzzdp": [
+      6.0,
+      0.0,
+      1.0,
+      1.8383975056622646e-06,
+      0.3333333333333333
+    ],
+    "tfdgdozer": [
+      9.0,
+      0.0,
+      1.0,
+      3.837290031660123e-05,
+      0.5555555555555556
+    ],
+    "galozuhapefas": [
+      13.0,
+      0.0,
+      1.0,
+      0.0001847496644831704,
+      0.23076923076923078
+    ],
+    "acbswxdctfqo": [
+      12.0,
+      0.0,
+      1.0,
+      6.168854963444486e-06,
+      0.08333333333333333
+    ],
+    "axgjorsfyj36arkxipovelo": [
+      23.0,
+      0.08695652173913043,
+      0.9130434782608695,
+      0.0001722452155040602,
+      0.17391304347826086
+    ],
+    "tlamsikathrinezad": [
+      17.0,
+      0.0,
+      1.0,
+      0.00043172382312600574,
+      0.23529411764705882
+    ],
+    "zpdrdozer": [
+      9.0,
+      0.0,
+      1.0,
+      5.4159774135066076e-05,
+      0.5555555555555556
+    ],
+    "eeibttlvnbsoo": [
+      13.0,
+      0.0,
+      1.0,
+      3.546807308903965e-05,
+      0.15384615384615385
+    ],
+    "rjzdvltdjqvy": [
+      12.0,
+      0.0,
+      1.0,
+      5.3926526832759765e-06,
+      0.16666666666666666
+    ],
+    "xudatyjymone": [
+      12.0,
+      0.0,
+      1.0,
+      0.000285258012961928,
+      0.3333333333333333
+    ],
+    "kpooyohuapdsx": [
+      13.0,
+      0.0,
+      1.0,
+      3.338826985031062e-05,
+      0.15384615384615385
+    ],
+    "dfedjmtltdun": [
+      12.0,
+      0.0,
+      1.0,
+      3.0108865814957527e-05,
+      0.25
+    ],
+    "kbbtmmjkj": [
+      9.0,
+      0.0,
+      1.0,
+      2.013482982392004e-06,
+      0.1111111111111111
+    ],
+    "nzelihxkbx": [
+      10.0,
+      0.0,
+      1.0,
+      0.00012457697680730816,
+      0.3
+    ],
+    "cobnfordlinnetavox": [
+      18.0,
+      0.0,
+      1.0,
+      0.0004841496431057643,
+      0.3333333333333333
+    ],
+    "ah5rkfotcrqvmpg": [
+      15.0,
+      0.06666666666666667,
+      0.9333333333333333,
+      2.3097837891654086e-05,
+      0.2
+    ],
+    "xjqaacivic": [
+      10.0,
+      0.0,
+      1.0,
+      0.0001658898540873296,
+      0.5
+    ],
+    "puvaciqatokezabutub": [
+      19.0,
+      0.0,
+      1.0,
+      0.00011983227662725334,
+      0.2631578947368421
+    ],
+    "pyagdmfczt": [
+      10.0,
+      0.0,
+      1.0,
+      1.1362317916940383e-05,
+      0.3
+    ],
+    "cbfetbbwwltt": [
+      12.0,
+      0.0,
+      1.0,
+      2.0998584842453418e-05,
+      0.25
+    ],
+    "gwhfrdeijvy": [
+      11.0,
+      0.0,
+      1.0,
+      6.402617609226233e-05,
+      0.18181818181818182
+    ],
+    "ceobhjfqhyiizdxd": [
+      16.0,
+      0.0,
+      1.0,
+      9.454630029120218e-06,
+      0.125
+    ],
+    "kmceiego": [
+      8.0,
+      0.0,
+      1.0,
+      7.060808197673215e-05,
+      0.375
+    ],
+    "wycyhapilyzupefemufu": [
+      20.0,
+      0.0,
+      1.0,
+      9.44732051520886e-05,
+      0.2
+    ],
+    "iqmginalcentricem": [
+      17.0,
+      0.0,
+      1.0,
+      0.0007143468063298178,
+      0.4117647058823529
+    ],
+    "dbkdtbbvcwfo": [
+      12.0,
+      0.0,
+      1.0,
+      3.492955260758302e-06,
+      0.16666666666666666
+    ],
+    "u2qdslsf1t5tqno": [
+      15.0,
+      0.2,
+      0.8,
+      5.625220572881115e-06,
+      0.13333333333333333
+    ],
+    "kobuwqvplq": [
+      10.0,
+      0.0,
+      1.0,
+      1.4554017753159592e-05,
+      0.4
+    ],
+    "7jkvup7nwlmd30c8k6wf76m": [
+      23.0,
+      0.34782608695652173,
+      0.6521739130434783,
+      9.435542753928024e-07,
+      0.08695652173913043
+    ],
+    "vugwxhgmqccfinavh": [
+      17.0,
+      0.0,
+      1.0,
+      0.00011779363128873028,
+      0.17647058823529413
+    ],
+    "cfs8edibcpaf7fip5hqb7hi": [
+      23.0,
+      0.17391304347826086,
+      0.8260869565217391,
+      6.026834521208144e-05,
+      0.13043478260869565
+    ],
+    "yhfvvoehtadnevfk": [
+      16.0,
+      0.0,
+      1.0,
+      3.870848795652371e-05,
+      0.1875
+    ],
+    "sbkddipqwinosr": [
+      14.0,
+      0.0,
+      1.0,
+      0.00013408386251945978,
+      0.21428571428571427
+    ],
+    "xlyeld1nmdhb8olz2mf1pu08pu": [
+      26.0,
+      0.23076923076923078,
+      0.7692307692307693,
+      1.8554222047887668e-05,
+      0.15384615384615385
+    ],
+    "7lctyp5850axmx1": [
+      15.0,
+      0.4,
+      0.6,
+      1.4361529232267605e-05,
+      0.13333333333333333
+    ],
+    "sndvsiv": [
+      7.0,
+      0.0,
+      1.0,
+      2.5206472466524826e-05,
+      0.2857142857142857
+    ],
+    "ijoiebggcnjoebg": [
+      15.0,
+      0.0,
+      1.0,
+      2.8173048954294353e-05,
+      0.2
+    ],
+    "lyvuvunuxu": [
+      10.0,
+      0.0,
+      1.0,
+      1.1872983890735458e-05,
+      0.2
+    ],
+    "ayypowlfus": [
+      10.0,
+      0.0,
+      1.0,
+      5.7679721740153544e-05,
+      0.3
+    ],
+    "fodysesumynivu": [
+      14.0,
+      0.0,
+      1.0,
+      0.00010449928043759853,
+      0.21428571428571427
+    ],
+    "xugevexolebuginebijyn": [
+      21.0,
+      0.0,
+      1.0,
+      0.0002715237859824921,
+      0.19047619047619047
+    ],
+    "fotytihofamanoda": [
+      16.0,
+      0.0,
+      1.0,
+      0.00028194597936045707,
+      0.25
+    ],
+    "digehybynicoxolywoqexu": [
+      22.0,
+      0.0,
+      1.0,
+      0.00010697431319059197,
+      0.13636363636363635
+    ],
+    "rpmmxpauaddgoqjboww": [
+      19.0,
+      0.0,
+      1.0,
+      3.288690047710861e-05,
+      0.15789473684210525
+    ],
+    "gdmbupy6mv5hc0e": [
+      15.0,
+      0.2,
+      0.8,
+      8.406386030165054e-06,
+      0.13333333333333333
+    ],
+    "ofidiqqefwjjoibvx": [
+      17.0,
+      0.0,
+      1.0,
+      3.1770252449704176e-05,
+      0.17647058823529413
+    ],
+    "okmdflyukmxewavyugeinkvg": [
+      24.0,
+      0.0,
+      1.0,
+      8.315499020561233e-05,
+      0.16666666666666666
+    ],
+    "mcusrogycgxxbbryqd": [
+      18.0,
+      0.0,
+      1.0,
+      4.977717204567478e-05,
+      0.16666666666666666
+    ],
+    "diqihcxtl": [
+      9.0,
+      0.0,
+      1.0,
+      2.684643976522672e-06,
+      0.2222222222222222
+    ],
+    "qgggcgukgqmouykaqkoqw": [
+      21.0,
+      0.0,
+      1.0,
+      1.5932794171879978e-05,
+      0.14285714285714285
+    ],
+    "utk2u0eh1f76opw0mli": [
+      19.0,
+      0.3157894736842105,
+      0.6842105263157895,
+      3.6888577401197073e-06,
+      0.10526315789473684
+    ],
+    "upg6kbsnipa4sbm": [
+      15.0,
+      0.13333333333333333,
+      0.8666666666666667,
+      1.9405330081135874e-05,
+      0.26666666666666666
+    ],
+    "uuqsgaqvxk": [
+      10.0,
+      0.0,
+      1.0,
+      1.2460287260599792e-05,
+      0.2
+    ],
+    "ryhaqiqociqe": [
+      12.0,
+      0.0,
+      1.0,
+      5.4416566167603016e-05,
+      0.16666666666666666
+    ],
+    "nvtphvgw": [
+      8.0,
+      0.0,
+      1.0,
+      7.625945208673096e-06,
+      0.125
+    ],
+    "vxktnxbqhc": [
+      10.0,
+      0.0,
+      1.0,
+      7.915572593823638e-07,
+      0.1
+    ],
+    "mtqvtpyfxma": [
+      11.0,
+      0.0,
+      1.0,
+      4.062653747080807e-06,
+      0.18181818181818182
+    ],
+    "jhtvlebmw330i": [
+      13.0,
+      0.23076923076923078,
+      0.7692307692307693,
+      2.9135815013980737e-05,
+      0.07692307692307693
+    ],
+    "phyfepictom": [
+      11.0,
+      0.0,
+      1.0,
+      0.0002176344898987093,
+      0.36363636363636365
+    ],
+    "ej187nsrkjm454wvwjc": [
+      19.0,
+      0.3157894736842105,
+      0.6842105263157895,
+      6.78887706339333e-06,
+      0.05263157894736842
+    ],
+    "jibhkdqwmfeh": [
+      12.0,
+      0.0,
+      1.0,
+      7.210603549986436e-06,
+      0.25
+    ],
+    "yhznsrcosqheyrsn": [
+      16.0,
+      0.0,
+      1.0,
+      5.3007149508500045e-05,
+      0.1875
+    ],
+    "esxskitxnbpbtbve": [
+      16.0,
+      0.0,
+      1.0,
+      3.955472728452697e-05,
+      0.25
+    ],
+    "xjtvay": [
+      6.0,
+      0.0,
+      1.0,
+      1.3583714902948953e-05,
+      0.3333333333333333
+    ],
+    "psqgbcbxhgr": [
+      11.0,
+      0.0,
+      1.0,
+      4.857011928539809e-06,
+      0.09090909090909091
+    ],
+    "eiomqiugcuykiwgmisyy": [
+      20.0,
+      0.0,
+      1.0,
+      3.303441443816575e-05,
+      0.1
+    ],
+    "ubofmxalyrmx50s47hw": [
+      19.0,
+      0.21052631578947367,
+      0.7894736842105263,
+      1.9573544030874695e-05,
+      0.15789473684210525
+    ],
+    "ylaroxq0ohc0c8w": [
+      15.0,
+      0.2,
+      0.8,
+      9.317693768014724e-05,
+      0.2
+    ],
+    "qgoocysoguwiuosa": [
+      16.0,
+      0.0,
+      1.0,
+      5.5735543425633723e-05,
+      0.1875
+    ],
+    "txayfssvxq": [
+      10.0,
+      0.0,
+      1.0,
+      9.88138659293467e-06,
+      0.2
+    ],
+    "vdvxtrlzec": [
+      10.0,
+      0.0,
+      1.0,
+      1.5064646226954666e-05,
+      0.1
+    ],
+    "lriqeeofwfoadiswd": [
+      17.0,
+      0.0,
+      1.0,
+      0.00012469782192110635,
+      0.17647058823529413
+    ],
+    "disagiwatide": [
+      12.0,
+      0.0,
+      1.0,
+      0.0005025565981312076,
+      0.3333333333333333
+    ],
+    "uzdppgx": [
+      7.0,
+      0.0,
+      1.0,
+      3.2682622322884697e-06,
+      0.14285714285714285
+    ],
+    "myuemyomaukiqckaewgmi": [
+      21.0,
+      0.0,
+      1.0,
+      6.697787403670122e-05,
+      0.23809523809523808
+    ],
+    "ienvvunfl": [
+      9.0,
+      0.0,
+      1.0,
+      0.00012541956316407005,
+      0.2222222222222222
+    ],
+    "iqyzdisjrrgofibfjxnr": [
+      20.0,
+      0.0,
+      1.0,
+      5.189501662588602e-05,
+      0.15
+    ],
+    "xmfxnqncpso": [
+      11.0,
+      0.0,
+      1.0,
+      1.0576470835044631e-05,
+      0.18181818181818182
+    ],
+    "qf3ps0ejylqbc8eryfcnm8o": [
+      23.0,
+      0.17391304347826086,
+      0.8260869565217391,
+      3.0319001720366558e-05,
+      0.08695652173913043
+    ],
+    "gpq6khajululgtm": [
+      15.0,
+      0.06666666666666667,
+      0.9333333333333333,
+      2.481054069607449e-05,
+      0.2
+    ],
+    "ijq45lqvibedcd1hifmbapu": [
+      23.0,
+      0.13043478260869565,
+      0.8695652173913043,
+      3.7896297788678215e-05,
+      0.13043478260869565
+    ],
+    "pefadatmsofgmmbezo": [
+      18.0,
+      0.0,
+      1.0,
+      0.00013240292035571766,
+      0.2222222222222222
+    ],
+    "aayocgwaoosmauocmwoqoegkaqgs": [
+      28.0,
+      0.0,
+      1.0,
+      3.825281348320327e-05,
+      0.10714285714285714
+    ],
+    "tupyqypakoluqa": [
+      14.0,
+      0.0,
+      1.0,
+      6.682916210398194e-05,
+      0.21428571428571427
+    ],
+    "165nmbynqhqn1n3jexidari": [
+      23.0,
+      0.21739130434782608,
+      0.782608695652174,
+      0.00010029483058668577,
+      0.17391304347826086
+    ],
+    "ctruvqxktaripkf": [
+      15.0,
+      0.0,
+      1.0,
+      0.0002194135587099817,
+      0.26666666666666666
+    ],
+    "wmaixpvejktu": [
+      12.0,
+      0.0,
+      1.0,
+      4.9003506845375245e-05,
+      0.25
+    ],
+    "121cdt01i787mi1toarlq17jd6ue": [
+      28.0,
+      0.42857142857142855,
+      0.5714285714285714,
+      2.7065327380369663e-05,
+      0.10714285714285714
+    ],
+    "icztjybobhqnbwifmndp": [
+      20.0,
+      0.0,
+      1.0,
+      2.2185599528208188e-05,
+      0.15
+    ],
+    "iudwiego": [
+      8.0,
+      0.0,
+      1.0,
+      7.99362470980555e-05,
+      0.375
+    ],
+    "dapqvkt": [
+      7.0,
+      0.0,
+      1.0,
+      1.6545597550960378e-05,
+      0.42857142857142855
+    ],
+    "xja1mdqo3n7nvkse311voufc4": [
+      25.0,
+      0.28,
+      0.72,
+      5.905997783890849e-06,
+      0.12
+    ],
+    "yxsyblhcxolfrth": [
+      15.0,
+      0.0,
+      1.0,
+      6.858636848047679e-05,
+      0.13333333333333333
+    ],
+    "iqcuqaawayycwssmcesycawm": [
+      24.0,
+      0.0,
+      1.0,
+      8.344282011811499e-05,
+      0.16666666666666666
+    ],
+    "ttonuoljkmhdjcdg": [
+      16.0,
+      0.0,
+      1.0,
+      0.00011055188809843632,
+      0.1875
+    ],
+    "lbxzrasildeafeninguvuc": [
+      22.0,
+      0.0,
+      1.0,
+      0.00046612569256066703,
+      0.4090909090909091
+    ],
+    "qequloqiju": [
+      10.0,
+      0.0,
+      1.0,
+      3.7482882476558386e-05,
+      0.2
+    ],
+    "rfcrdrwmbige": [
+      12.0,
+      0.0,
+      1.0,
+      6.381282008543237e-05,
+      0.25
+    ],
+    "i66f48a7eeee689e53b018ec8f437fee97": [
+      34.0,
+      0.5588235294117647,
+      0.4411764705882353,
+      9.875040768262231e-06,
+      0.08823529411764706
+    ],
+    "wjnypj14kvck5bzgyxk1b6lukg": [
+      26.0,
+      0.19230769230769232,
+      0.8076923076923077,
+      3.03849587741402e-06,
+      0.07692307692307693
+    ],
+    "gsbrtexwuzakzvsesxfllailr": [
+      25.0,
+      0.0,
+      1.0,
+      0.00012190264184889004,
+      0.12
+    ],
+    "srcf7revwpq6sfij5lw8yp1": [
+      23.0,
+      0.21739130434782608,
+      0.782608695652174,
+      2.468709983794089e-05,
+      0.13043478260869565
+    ],
+    "ugjkksnurxf": [
+      11.0,
+      0.0,
+      1.0,
+      1.2823390008631844e-05,
+      0.36363636363636365
+    ],
+    "w4ejqr32wbyfy4mfgruxe0q": [
+      23.0,
+      0.21739130434782608,
+      0.782608695652174,
+      8.472220250962076e-06,
+      0.13043478260869565
+    ],
+    "h2oy7voiht6o10qitwq35mffr": [
+      25.0,
+      0.28,
+      0.72,
+      8.552588395907058e-06,
+      0.08
+    ],
+    "uqfqongleu": [
+      10.0,
+      0.0,
+      1.0,
+      0.00015018688789313108,
+      0.3
+    ],
+    "jezocyrocemysycyda": [
+      18.0,
+      0.0,
+      1.0,
+      8.539611746788116e-05,
+      0.2222222222222222
+    ],
+    "ganyfybokev": [
+      11.0,
+      0.0,
+      1.0,
+      0.0001306851078716459,
+      0.36363636363636365
+    ],
+    "ep18a8adgxc474cdqnm": [
+      19.0,
+      0.3157894736842105,
+      0.6842105263157895,
+      4.902410995491527e-06,
+      0.10526315789473684
+    ],
+    "neaofmwkkmp": [
+      11.0,
+      0.0,
+      1.0,
+      3.701760903376732e-05,
+      0.2727272727272727
+    ],
+    "rdqwkikhnlcmnelc": [
+      16.0,
+      0.0,
+      1.0,
+      4.07803327644923e-05,
+      0.125
+    ],
+    "korvort": [
+      7.0,
+      0.0,
+      1.0,
+      0.0003687825396358502,
+      0.42857142857142855
+    ],
+    "jerpjfnvawqxkxgf": [
+      16.0,
+      0.0,
+      1.0,
+      3.7045183070448336e-05,
+      0.125
+    ],
+    "alk2wte8ot3bul3": [
+      15.0,
+      0.26666666666666666,
+      0.7333333333333333,
+      2.97600570574729e-05,
+      0.2
+    ],
+    "norabocofoni": [
+      12.0,
+      0.0,
+      1.0,
+      0.00029520578613145604,
+      0.3333333333333333
+    ],
+    "bpqjrulegacy": [
+      12.0,
+      0.0,
+      1.0,
+      0.00012010865703660126,
+      0.5
+    ],
+    "ndakerrari": [
+      10.0,
+      0.0,
+      1.0,
+      0.0005502681200628813,
+      0.5
+    ],
+    "iysjknaefuw": [
+      11.0,
+      0.0,
+      1.0,
+      2.1924592474935153e-05,
+      0.2727272727272727
+    ],
+    "lfsyopcomp": [
+      10.0,
+      0.0,
+      1.0,
+      0.0002287272896628134,
+      0.2
+    ],
+    "snlmtig": [
+      7.0,
+      0.0,
+      1.0,
+      2.6922310138476275e-05,
+      0.42857142857142855
+    ],
+    "dpkqsaywfpabdbxywnbjg": [
+      21.0,
+      0.0,
+      1.0,
+      1.1041146422895588e-05,
+      0.14285714285714285
+    ],
+    "wukolztl": [
+      8.0,
+      0.0,
+      1.0,
+      2.3865123175356433e-05,
+      0.375
+    ],
+    "xrcyqdwvjmhisux": [
+      15.0,
+      0.0,
+      1.0,
+      4.1293243973337016e-05,
+      0.2
+    ],
+    "qmfndzp": [
+      7.0,
+      0.0,
+      1.0,
+      3.75850156713174e-06,
+      0.14285714285714285
+    ],
+    "rycypiq": [
+      7.0,
+      0.0,
+      1.0,
+      3.9913652511822944e-05,
+      0.42857142857142855
+    ],
+    "ceaqqqmyssusgmywoscwyggm": [
+      24.0,
+      0.0,
+      1.0,
+      4.284952216480479e-05,
+      0.125
+    ],
+    "9j1tqrpw74t0h101qozotrof": [
+      24.0,
+      0.3333333333333333,
+      0.6666666666666666,
+      5.579262884608356e-05,
+      0.08333333333333333
+    ],
+    "smdsorcajanunal": [
+      15.0,
+      0.0,
+      1.0,
+      0.0001805086371371632,
+      0.3333333333333333
+    ],
+    "gmggussii": [
+      9.0,
+      0.0,
+      1.0,
+      0.00012912553908818285,
+      0.4444444444444444
+    ],
+    "npzsqsckaic": [
+      11.0,
+      0.0,
+      1.0,
+      3.7993548450353465e-05,
+      0.2727272727272727
+    ],
+    "wtola8ox7dgxc41bov7fifc": [
+      23.0,
+      0.21739130434782608,
+      0.782608695652174,
+      3.672905651524186e-05,
+      0.13043478260869565
+    ],
+    "mqrbdctlddxytex": [
+      15.0,
+      0.0,
+      1.0,
+      2.7575962584933964e-05,
+      0.13333333333333333
+    ],
+    "ejotjgmwlhj": [
+      11.0,
+      0.0,
+      1.0,
+      1.1892843123049711e-05,
+      0.2727272727272727
+    ],
+    "impmygfmoeq": [
+      11.0,
+      0.0,
+      1.0,
+      4.266897914376614e-05,
+      0.2727272727272727
+    ],
+    "aaswccscsqumsomwguuy": [
+      20.0,
+      0.0,
+      1.0,
+      3.669986131673928e-05,
+      0.1
+    ],
+    "yxgxyti2adkb1bs": [
+      15.0,
+      0.13333333333333333,
+      0.8666666666666667,
+      6.897926538339606e-06,
+      0.13333333333333333
+    ],
+    "fybgspdfieens": [
+      13.0,
+      0.0,
+      1.0,
+      0.0001661057231126157,
+      0.23076923076923078
+    ],
+    "fogytyzefykunela": [
+      16.0,
+      0.0,
+      1.0,
+      0.00011043516444728317,
+      0.25
+    ],
+    "abwlct3lede2shc": [
+      15.0,
+      0.13333333333333333,
+      0.8666666666666667,
+      7.243600428293194e-05,
+      0.26666666666666666
+    ],
+    "gdmgjsrjjqhn": [
+      12.0,
+      0.0,
+      1.0,
+      1.5728611992888261e-06,
+      0.08333333333333333
+    ],
+    "jfipmnyyhkti": [
+      12.0,
+      0.0,
+      1.0,
+      1.2092570259467338e-05,
+      0.25
+    ],
+    "fdrwsjvurq": [
+      10.0,
+      0.0,
+      1.0,
+      4.366194075947878e-06,
+      0.2
+    ],
+    "miauvbozammtmctmdrjlng": [
+      22.0,
+      0.0,
+      1.0,
+      2.6125671219355963e-05,
+      0.18181818181818182
+    ],
+    "adqtifjmojdjsdmjhwl": [
+      19.0,
+      0.0,
+      1.0,
+      1.2928860889494094e-05,
+      0.10526315789473684
+    ],
+    "lxqxerrari": [
+      10.0,
+      0.0,
+      1.0,
+      0.00027614263782968593,
+      0.3
+    ],
+    "fphjdgvtxjxdlqhom": [
+      17.0,
+      0.0,
+      1.0,
+      4.154779696130051e-05,
+      0.11764705882352941
+    ],
+    "zsrpcjsnkdkrqcopryrmvmh": [
+      23.0,
+      0.0,
+      1.0,
+      2.0698994137826975e-05,
+      0.17391304347826086
+    ],
+    "svrwkxixkdn": [
+      11.0,
+      0.0,
+      1.0,
+      9.759394165861401e-07,
+      0.18181818181818182
+    ],
+    "bnkvciqondvxcdl": [
+      15.0,
+      0.0,
+      1.0,
+      5.6786056286012175e-05,
+      0.13333333333333333
+    ],
+    "vxhpngeles": [
+      10.0,
+      0.0,
+      1.0,
+      0.00039811519317063925,
+      0.3
+    ],
+    "xdbesemitismgavenuteq": [
+      21.0,
+      0.0,
+      1.0,
+      0.00029217619304902544,
+      0.38095238095238093
+    ],
+    "zejbaduvcrjrtjqglviskkxv": [
+      24.0,
+      0.0,
+      1.0,
+      4.165178288081271e-05,
+      0.125
+    ],
+    "forhspinsoidaoahlm": [
+      18.0,
+      0.0,
+      1.0,
+      0.00027934705431525005,
+      0.2222222222222222
+    ],
+    "7lypexsd76ylw63h56q0cx5": [
+      23.0,
+      0.391304347826087,
+      0.6086956521739131,
+      1.033981771703168e-05,
+      0.08695652173913043
+    ],
+    "dukvbvpxxt": [
+      10.0,
+      0.0,
+      1.0,
+      5.030059841881473e-06,
+      0.1
+    ],
+    "7bw4i630ohqdax7": [
+      15.0,
+      0.4,
+      0.6,
+      2.105568938108918e-06,
+      0.13333333333333333
+    ],
+    "lxnfinglane": [
+      11.0,
+      0.0,
+      1.0,
+      0.0009708100605826876,
+      0.36363636363636365
+    ],
+    "cnkjq4cb7d3tapu6w2atu4c": [
+      23.0,
+      0.2608695652173913,
+      0.7391304347826086,
+      2.695346025497426e-05,
+      0.17391304347826086
+    ],
+    "queldg": [
+      6.0,
+      0.0,
+      1.0,
+      0.00025819271635078915,
+      0.5
+    ],
+    "cecaocwqimgswokiieasie": [
+      22.0,
+      0.0,
+      1.0,
+      0.00010598362120142955,
+      0.13636363636363635
+    ],
+    "kikirulegacy": [
+      12.0,
+      0.0,
+      1.0,
+      0.00015887839776712321,
+      0.5
+    ],
+    "l6e782338a4a63ff7a46a02416961b42cd": [
+      34.0,
+      0.6764705882352942,
+      0.3235294117647059,
+      8.291969999497505e-06,
+      0.029411764705882353
+    ],
+    "1b801br1dujzhvi6qc4ylqe221": [
+      26.0,
+      0.38461538461538464,
+      0.6153846153846154,
+      4.5960312641556605e-06,
+      0.038461538461538464
+    ],
+    "drcmay": [
+      6.0,
+      0.0,
+      1.0,
+      4.7491935562941825e-05,
+      0.5
+    ],
+    "otkffpvnaplfos": [
+      14.0,
+      0.0,
+      1.0,
+      3.857230322065454e-05,
+      0.21428571428571427
+    ],
+    "fosyqisefifiniwa": [
+      16.0,
+      0.0,
+      1.0,
+      0.00017851423398236352,
+      0.1875
+    ],
+    "tizuhayuvup": [
+      11.0,
+      0.0,
+      1.0,
+      2.973210780762428e-05,
+      0.2727272727272727
+    ],
+    "tcpstausbwcx": [
+      12.0,
+      0.0,
+      1.0,
+      0.00026558716965134177,
+      0.25
+    ],
+    "mywmeaicyycccawoqqyiokwiqqku": [
+      28.0,
+      0.0,
+      1.0,
+      2.5682577974401465e-05,
+      0.10714285714285714
+    ],
+    "ehg4mdgxyxg4ebsxqreluns": [
+      23.0,
+      0.08695652173913043,
+      0.9130434782608695,
+      4.234151397961818e-05,
+      0.13043478260869565
+    ],
+    "sufdyifxrtqlgxyug": [
+      17.0,
+      0.0,
+      1.0,
+      3.8265903636377495e-06,
+      0.11764705882352941
+    ],
+    "farfxpgl": [
+      8.0,
+      0.0,
+      1.0,
+      6.778239692173275e-05,
+      0.375
+    ],
+    "id1fy27438ed3jg0c0er1na": [
+      23.0,
+      0.43478260869565216,
+      0.5652173913043478,
+      4.814874419591644e-06,
+      0.08695652173913043
+    ],
+    "ztpjirish": [
+      9.0,
+      0.0,
+      1.0,
+      0.00029224684157472345,
+      0.5555555555555556
+    ],
+    "aacciaeqigekqcgoocy": [
+      19.0,
+      0.0,
+      1.0,
+      9.044194787660041e-05,
+      0.15789473684210525
+    ],
+    "pxexbqyfjohb": [
+      12.0,
+      0.0,
+      1.0,
+      2.4103443963127467e-05,
+      0.16666666666666666
+    ],
+    "wmqudiajiitvmxn": [
+      15.0,
+      0.0,
+      1.0,
+      0.00012741509635397693,
+      0.2
+    ],
+    "bqnxvwjgjrtipeg": [
+      15.0,
+      0.0,
+      1.0,
+      6.259979198767916e-05,
+      0.26666666666666666
+    ],
+    "avajbmujfaitp": [
+      13.0,
+      0.0,
+      1.0,
+      6.226410945945022e-05,
+      0.23076923076923078
+    ],
+    "cncfaqkpktauundnsqucgcp": [
+      23.0,
+      0.0,
+      1.0,
+      7.24853921280169e-05,
+      0.13043478260869565
+    ],
+    "imivvmwspmfei": [
+      13.0,
+      0.0,
+      1.0,
+      3.210696249787935e-05,
+      0.23076923076923078
+    ],
+    "mgttyxvqf": [
+      9.0,
+      0.0,
+      1.0,
+      1.266454472154639e-05,
+      0.1111111111111111
+    ],
+    "kdkkbwyqfuhodlbug": [
+      17.0,
+      0.0,
+      1.0,
+      1.8547394834903735e-05,
+      0.17647058823529413
+    ],
+    "uvqvgaydvvduckwdv": [
+      17.0,
+      0.0,
+      1.0,
+      5.0195074117563754e-05,
+      0.23529411764705882
+    ],
+    "tfysdhockey": [
+      11.0,
+      0.0,
+      1.0,
+      0.00016926874811394032,
+      0.5454545454545454
+    ],
+    "lxawujocyqaftod": [
+      15.0,
+      0.0,
+      1.0,
+      3.7506451675348934e-05,
+      0.2
+    ],
+    "iv78o0mvg8qj7t3dwrohoxg": [
+      23.0,
+      0.2608695652173913,
+      0.7391304347826086,
+      8.374969589286822e-06,
+      0.13043478260869565
+    ],
+    "sxm6od7x32e4up1xq8mveha": [
+      23.0,
+      0.30434782608695654,
+      0.6956521739130435,
+      1.263538285637715e-05,
+      0.08695652173913043
+    ],
+    "ffijdcmwwbjtgqeubam": [
+      19.0,
+      0.0,
+      1.0,
+      2.9894986889462185e-05,
+      0.15789473684210525
+    ],
+    "ryqenopygesuqipuvacog": [
+      21.0,
+      0.0,
+      1.0,
+      8.523283874204931e-05,
+      0.14285714285714285
+    ],
+    "wxy4i0ir5jwfu6o4ovo": [
+      19.0,
+      0.2631578947368421,
+      0.7368421052631579,
+      4.385778363181219e-06,
+      0.10526315789473684
+    ],
+    "547l70cxqfmxcj7budo": [
+      19.0,
+      0.3157894736842105,
+      0.6842105263157895,
+      1.2280038240436824e-05,
+      0.15789473684210525
+    ],
+    "jkijjwxarbz": [
+      11.0,
+      0.0,
+      1.0,
+      3.2569140995374684e-05,
+      0.18181818181818182
+    ],
+    "dhdranerraticallyqozaw": [
+      22.0,
+      0.0,
+      1.0,
+      0.0006654284038134084,
+      0.5
+    ],
+    "jxrxrancisco": [
+      12.0,
+      0.0,
+      1.0,
+      0.00047798335147218867,
+      0.4166666666666667
+    ],
+    "ocaockasycs": [
+      11.0,
+      0.0,
+      1.0,
+      0.00016457062115502567,
+      0.2727272727272727
+    ],
+    "kemypujapiceleweciqyzyf": [
+      23.0,
+      0.0,
+      1.0,
+      0.00019072644598426282,
+      0.17391304347826086
+    ],
+    "1gxponblz7du18cunyt1ahxuc1": [
+      26.0,
+      0.23076923076923078,
+      0.7692307692307693,
+      2.5124782577384282e-05,
+      0.11538461538461539
+    ],
+    "lsbjbcwheeqn": [
+      12.0,
+      0.0,
+      1.0,
+      3.785056197769084e-05,
+      0.3333333333333333
+    ],
+    "rplyfordlinnetavox": [
+      18.0,
+      0.0,
+      1.0,
+      0.0004740767567726564,
+      0.3333333333333333
+    ],
+    "zzbktetf": [
+      8.0,
+      0.0,
+      1.0,
+      3.7653104467823417e-05,
+      0.25
+    ],
+    "tosxalxnkgnp": [
+      12.0,
+      0.0,
+      1.0,
+      3.7237762809136755e-05,
+      0.16666666666666666
+    ],
+    "xisqsaenql": [
+      10.0,
+      0.0,
+      1.0,
+      1.8766974536968948e-05,
+      0.2
+    ],
+    "jecyparul": [
+      9.0,
+      0.0,
+      1.0,
+      0.00025670448979858636,
+      0.3333333333333333
+    ],
+    "qetyxuvacur": [
+      11.0,
+      0.0,
+      1.0,
+      8.032208361158956e-05,
+      0.2727272727272727
+    ],
+    "fobefisi": [
+      8.0,
+      0.0,
+      1.0,
+      0.00020004488413465676,
+      0.375
+    ],
+    "wswksumqaiwasykeyiuwwqea": [
+      24.0,
+      0.0,
+      1.0,
+      3.882918368019995e-05,
+      0.125
+    ],
+    "kuwwykoiymeosaouc": [
+      17.0,
+      0.0,
+      1.0,
+      5.116192169461576e-05,
+      0.17647058823529413
+    ],
+    "dvtdrulegacy": [
+      12.0,
+      0.0,
+      1.0,
+      0.00013346766891108038,
+      0.5
+    ],
+    "ztporze": [
+      7.0,
+      0.0,
+      1.0,
+      0.0002408300732417566,
+      0.2857142857142857
+    ],
+    "titnwj": [
+      6.0,
+      0.0,
+      1.0,
+      0.00010397159226467696,
+      0.5
+    ],
+    "eiyeegokoikmqs": [
+      14.0,
+      0.0,
+      1.0,
+      3.829994803463051e-05,
+      0.21428571428571427
+    ],
+    "whjbdetgt": [
+      9.0,
+      0.0,
+      1.0,
+      3.796436753756517e-05,
+      0.2222222222222222
+    ],
+    "qetatolicutybowuvyc": [
+      19.0,
+      0.0,
+      1.0,
+      0.00021371071199809827,
+      0.15789473684210525
+    ],
+    "vvkaerrari": [
+      10.0,
+      0.0,
+      1.0,
+      0.00028941994064835783,
+      0.3
+    ],
+    "qgqmeuicieeggymsmsuyiaoqkysksi": [
+      30.0,
+      0.0,
+      1.0,
+      4.647790241497733e-05,
+      0.13333333333333333
+    ],
+    "nvokamentalistfanchonut": [
+      23.0,
+      0.0,
+      1.0,
+      0.0007214883417195386,
+      0.391304347826087
+    ],
+    "zogfpbpoomfs": [
+      12.0,
+      0.0,
+      1.0,
+      4.502031224977368e-05,
+      0.16666666666666666
+    ],
+    "ibvddxlb": [
+      8.0,
+      0.0,
+      1.0,
+      9.191987528311322e-07,
+      0.125
+    ],
+    "lysysunomav": [
+      11.0,
+      0.0,
+      1.0,
+      0.00018461142359329455,
+      0.36363636363636365
+    ],
+    "u41265dz3lcy1u86hia1ygz4jf": [
+      26.0,
+      0.4230769230769231,
+      0.5769230769230769,
+      9.404815017392603e-06,
+      0.11538461538461539
+    ],
+    "yyhmhkiizmklwjeite": [
+      18.0,
+      0.0,
+      1.0,
+      8.183422230066051e-05,
+      0.1111111111111111
+    ],
+    "qrgwvkplt": [
+      9.0,
+      0.0,
+      1.0,
+      3.7643663211179697e-06,
+      0.1111111111111111
+    ],
+    "nyymbqnhphnxube": [
+      15.0,
+      0.0,
+      1.0,
+      1.8666805442109144e-05,
+      0.13333333333333333
+    ],
+    "nfqqererwyatanb": [
+      15.0,
+      0.0,
+      1.0,
+      0.00022103195395000913,
+      0.26666666666666666
+    ],
+    "htimstring": [
+      10.0,
+      0.0,
+      1.0,
+      0.0011551774993218357,
+      0.6
+    ],
+    "eurgyfrfzyzhem": [
+      14.0,
+      0.0,
+      1.0,
+      0.00010123101820531006,
+      0.21428571428571427
+    ],
+    "wsasaoweayoeqmkgeouqaywyekagy": [
+      29.0,
+      0.0,
+      1.0,
+      6.975318930949003e-05,
+      0.13793103448275862
+    ],
+    "gmqekymkaouakiki": [
+      16.0,
+      0.0,
+      1.0,
+      4.296890122361403e-05,
+      0.25
+    ],
+    "bojyzafaperogutadoso": [
+      20.0,
+      0.0,
+      1.0,
+      0.0002142073538079068,
+      0.2
+    ],
+    "acyepartbulkyf": [
+      14.0,
+      0.0,
+      1.0,
+      0.0003354224337877307,
+      0.35714285714285715
+    ],
+    "qetufeveje": [
+      10.0,
+      0.0,
+      1.0,
+      0.0001243982312164799,
+      0.3
+    ],
+    "tslnxnzghksy": [
+      12.0,
+      0.0,
+      1.0,
+      5.5764824338422015e-06,
+      0.08333333333333333
+    ],
+    "qekuxuvyqykigam": [
+      15.0,
+      0.0,
+      1.0,
+      6.437535368118203e-05,
+      0.2
+    ],
+    "nczncqdbskv": [
+      11.0,
+      0.0,
+      1.0,
+      2.7008555947383886e-06,
+      0.09090909090909091
+    ],
+    "gb65a67fbc688b32282518fb721aeec179": [
+      34.0,
+      0.6176470588235294,
+      0.38235294117647056,
+      1.2019819108201542e-05,
+      0.058823529411764705
+    ],
+    "latqowtqh": [
+      9.0,
+      0.0,
+      1.0,
+      8.374923398810634e-05,
+      0.3333333333333333
+    ],
+    "ptiwland": [
+      8.0,
+      0.0,
+      1.0,
+      0.0009008147777745095,
+      0.5
+    ],
+    "hnbnancorml": [
+      11.0,
+      0.0,
+      1.0,
+      0.00039974932428678343,
+      0.36363636363636365
+    ],
+    "mgouetball": [
+      10.0,
+      0.0,
+      1.0,
+      0.00035629164991682273,
+      0.4
+    ],
+    "387j50gpibkjix3p5t3": [
+      19.0,
+      0.42105263157894735,
+      0.5789473684210527,
+      3.460554128305439e-06,
+      0.10526315789473684
+    ],
+    "egyafswsvbdnoklvmfy": [
+      19.0,
+      0.0,
+      1.0,
+      1.4635086025468222e-05,
+      0.10526315789473684
+    ],
+    "iijqey": [
+      6.0,
+      0.0,
+      1.0,
+      6.127991685540881e-07,
+      0.3333333333333333
+    ],
+    "mqptbnnwbttv": [
+      12.0,
+      0.0,
+      1.0,
+      3.513381899710105e-06,
+      0.08333333333333333
+    ],
+    "drbyrulegacy": [
+      12.0,
+      0.0,
+      1.0,
+      0.00012807502622780442,
+      0.5
+    ],
+    "ywumggwuoycekqmm": [
+      16.0,
+      0.0,
+      1.0,
+      1.022791707515276e-05,
+      0.125
+    ],
+    "qgmwiciooymekqeecwo": [
+      19.0,
+      0.0,
+      1.0,
+      6.261366210461478e-05,
+      0.10526315789473684
+    ],
+    "nnbdgfjmeiain": [
+      13.0,
+      0.0,
+      1.0,
+      0.00012205845257290972,
+      0.15384615384615385
+    ],
+    "ixmnoxuhytibm6y432c": [
+      19.0,
+      0.21052631578947367,
+      0.7894736842105263,
+      1.4755266254596475e-05,
+      0.15789473684210525
+    ],
+    "ofzwpoxudgxx": [
+      12.0,
+      0.0,
+      1.0,
+      7.414869939504465e-06,
+      0.25
+    ],
+    "fmvjckldrtdvfldk": [
+      16.0,
+      0.0,
+      1.0,
+      1.917185970190647e-05,
+      0.125
+    ],
+    "nfxvcar": [
+      7.0,
+      0.0,
+      1.0,
+      0.0002735126955646413,
+      0.42857142857142855
+    ],
+    "xlekey": [
+      6.0,
+      0.0,
+      1.0,
+      9.437107195732958e-05,
+      0.5
+    ],
+    "tvvma1008": [
+      9.0,
+      0.4444444444444444,
+      0.5555555555555556,
+      2.3286368405055347e-05,
+      0.2222222222222222
+    ],
+    "igjkksbhntuf": [
+      12.0,
+      0.0,
+      1.0,
+      3.470485957911319e-05,
+      0.16666666666666666
+    ],
+    "qgysuugaewwcmoccsy": [
+      18.0,
+      0.0,
+      1.0,
+      3.072932497311854e-05,
+      0.16666666666666666
+    ],
+    "qocjxulahlfdgkdm": [
+      16.0,
+      0.0,
+      1.0,
+      2.974994058766157e-05,
+      0.1875
+    ],
+    "kesugh10618df2p7mxpl94xxc": [
+      25.0,
+      0.36,
+      0.64,
+      3.535586942049022e-05,
+      0.16
+    ],
+    "ywmmskacqaeoaqqcoumesi": [
+      22.0,
+      0.0,
+      1.0,
+      0.000143149885774235,
+      0.13636363636363635
+    ],
+    "komfgcdhtjxgthhirilyjult": [
+      24.0,
+      0.0,
+      1.0,
+      9.272765600529816e-05,
+      0.08333333333333333
+    ],
+    "mamehefo": [
+      8.0,
+      0.0,
+      1.0,
+      0.00032022160996776405,
+      0.375
+    ],
+    "qegafupycomubajiwov": [
+      19.0,
+      0.0,
+      1.0,
+      0.00012973319456624488,
+      0.10526315789473684
+    ],
+    "hquzzpibxqrgba": [
+      14.0,
+      0.0,
+      1.0,
+      1.2392177630760448e-05,
+      0.14285714285714285
+    ],
+    "gfivqx5hsrydihi0mbat3p7": [
+      23.0,
+      0.17391304347826086,
+      0.8260869565217391,
+      2.8626504016740975e-05,
+      0.13043478260869565
+    ],
+    "u21xcnetm4ync0i4oj5fsf1": [
+      23.0,
+      0.30434782608695654,
+      0.6956521739130435,
+      5.246731452667859e-05,
+      0.13043478260869565
+    ],
+    "jfihxwgskjwg": [
+      12.0,
+      0.0,
+      1.0,
+      3.0231525648668345e-06,
+      0.16666666666666666
+    ],
+    "osinotijcofqgo": [
+      14.0,
+      0.0,
+      1.0,
+      0.00019372965659205765,
+      0.21428571428571427
+    ],
+    "itstg25bg61lk2kx3bg": [
+      19.0,
+      0.3157894736842105,
+      0.6842105263157895,
+      3.1841566601339884e-05,
+      0.15789473684210525
+    ],
+    "hekqafok": [
+      8.0,
+      0.0,
+      1.0,
+      3.094635801198145e-05,
+      0.25
+    ],
+    "oleyfjuovtuboxjtyug": [
+      19.0,
+      0.0,
+      1.0,
+      7.374016661600861e-05,
+      0.15789473684210525
+    ],
+    "makewita": [
+      8.0,
+      0.0,
+      1.0,
+      0.000417656677767864,
+      0.5
+    ],
+    "vyhyzcqakfenolwtgsmcqxcl": [
+      24.0,
+      0.0,
+      1.0,
+      3.6981505884105044e-05,
+      0.16666666666666666
+    ],
+    "kejygoxupunulodedekyqyw": [
+      23.0,
+      0.0,
+      1.0,
+      8.449820598776769e-05,
+      0.17391304347826086
+    ],
+    "cffxdxbgfovl": [
+      12.0,
+      0.0,
+      1.0,
+      6.556961103528741e-06,
+      0.16666666666666666
+    ],
+    "dciisdyvrhjjrtev": [
+      16.0,
+      0.0,
+      1.0,
+      4.94616471761514e-05,
+      0.125
+    ],
+    "130kqcn1muxq8xpw46km1o5dlax": [
+      27.0,
+      0.3333333333333333,
+      0.6666666666666666,
+      7.549717756586365e-06,
+      0.1111111111111111
+    ],
+    "xeunlcwoymapqn": [
+      14.0,
+      0.0,
+      1.0,
+      4.292998619703917e-05,
+      0.21428571428571427
+    ],
+    "hrjwwalk": [
+      8.0,
+      0.0,
+      1.0,
+      9.774146738437705e-05,
+      0.5
+    ],
+    "gkhiqtmmnstu": [
+      12.0,
+      0.0,
+      1.0,
+      0.00013598013550215215,
+      0.25
+    ],
+    "wbwrcx76gl1jmni": [
+      15.0,
+      0.2,
+      0.8,
+      4.368188945077859e-06,
+      0.13333333333333333
+    ],
+    "sigolos": [
+      7.0,
+      0.0,
+      1.0,
+      0.00044464707670284633,
+      0.5714285714285714
+    ],
+    "shtdcyru": [
+      8.0,
+      0.0,
+      1.0,
+      1.8247797463610622e-05,
+      0.25
+    ],
+    "kqjedasgxjbuqkrdvpbljz": [
+      22.0,
+      0.0,
+      1.0,
+      3.0415285399234572e-05,
+      0.13636363636363635
+    ],
+    "gptvabnavfqzzmarclme": [
+      20.0,
+      0.0,
+      1.0,
+      0.00016008811982949113,
+      0.2
+    ],
+    "jhrhcqut": [
+      8.0,
+      0.0,
+      1.0,
+      7.659989606926103e-06,
+      0.25
+    ],
+    "yollxcdo": [
+      8.0,
+      0.0,
+      1.0,
+      0.0001098612731624468,
+      0.25
+    ],
+    "rtydball": [
+      8.0,
+      0.0,
+      1.0,
+      0.0004541182282968323,
+      0.5
+    ],
+    "wctsrajdfdstvfmr": [
+      16.0,
+      0.0,
+      1.0,
+      4.213723806629062e-05,
+      0.1875
+    ],
+    "i8onorirsjevix32ydwde4a": [
+      23.0,
+      0.17391304347826086,
+      0.8260869565217391,
+      0.00011982656440345732,
+      0.17391304347826086
+    ],
+    "ceaqoswqcuskmgcu": [
+      16.0,
+      0.0,
+      1.0,
+      3.377690655244557e-05,
+      0.25
+    ],
+    "bhyzficlight": [
+      12.0,
+      0.0,
+      1.0,
+      0.00026495393384383593,
+      0.4166666666666667
+    ],
+    "duvcljplxvlncf": [
+      14.0,
+      0.0,
+      1.0,
+      2.9108043839652517e-06,
+      0.07142857142857142
+    ],
+    "xjpccar": [
+      7.0,
+      0.0,
+      1.0,
+      0.00029916855408810585,
+      0.42857142857142855
+    ],
+    "mamygatikawudolo": [
+      16.0,
+      0.0,
+      1.0,
+      0.0002832737108923243,
+      0.25
+    ],
+    "1009ornlbm937dayatc3qe6ad": [
+      25.0,
+      0.36,
+      0.64,
+      6.96815083547156e-05,
+      0.12
+    ],
+    "1hmrybmbofg4gf5": [
+      15.0,
+      0.2,
+      0.8,
+      1.8384005825853416e-05,
+      0.13333333333333333
+    ],
+    "xqtutet": [
+      7.0,
+      0.0,
+      1.0,
+      0.00012991344373346667,
+      0.5714285714285714
+    ],
+    "pnzfkandfield": [
+      13.0,
+      0.0,
+      1.0,
+      0.00044925607832815314,
+      0.38461538461538464
+    ],
+    "fedmefgjghil": [
+      12.0,
+      0.0,
+      1.0,
+      8.68744954620179e-05,
+      0.25
+    ],
+    "ucptvqpbyfe": [
+      11.0,
+      0.0,
+      1.0,
+      6.808901872823201e-06,
+      0.18181818181818182
+    ],
+    "uqddererwyatanb": [
+      15.0,
+      0.0,
+      1.0,
+      0.00032492498221871764,
+      0.26666666666666666
+    ],
+    "keivjvwqrqv": [
+      11.0,
+      0.0,
+      1.0,
+      1.1211966269100721e-05,
+      0.09090909090909091
+    ],
+    "eufqwis": [
+      7.0,
+      0.0,
+      1.0,
+      4.03630585687626e-05,
+      0.42857142857142855
+    ],
+    "hexebnhwmzbn": [
+      12.0,
+      0.0,
+      1.0,
+      1.0621852254937526e-05,
+      0.25
+    ],
+    "1rolkt78etobu0s": [
+      15.0,
+      0.26666666666666666,
+      0.7333333333333333,
+      7.864256765674901e-05,
+      0.13333333333333333
+    ],
+    "skueiaacwogqueskwqw": [
+      19.0,
+      0.0,
+      1.0,
+      6.523307227608127e-05,
+      0.21052631578947367
+    ],
+    "u8u8wx36ov58165": [
+      15.0,
+      0.6,
+      0.4,
+      5.782356257125754e-06,
+      0.06666666666666667
+    ],
+    "wdepm8yf14grabu": [
+      15.0,
+      0.2,
+      0.8,
+      0.00012482249987163269,
+      0.26666666666666666
+    ],
+    "y6utk4edqfsrwnyv1ho2s8u": [
+      23.0,
+      0.21739130434782608,
+      0.782608695652174,
+      2.003798868605431e-06,
+      0.08695652173913043
+    ],
+    "sokavskdsdwiqmhtm": [
+      17.0,
+      0.0,
+      1.0,
+      2.8828803107311216e-05,
+      0.23529411764705882
+    ],
+    "fjfjinalcentricem": [
+      17.0,
+      0.0,
+      1.0,
+      0.0006880917597304337,
+      0.4117647058823529
+    ],
+    "najesacyresirupynymuwy": [
+      22.0,
+      0.0,
+      1.0,
+      0.00021685941243181588,
+      0.2727272727272727
+    ],
+    "cpnfdumr": [
+      8.0,
+      0.0,
+      1.0,
+      1.3039004530900876e-05,
+      0.375
+    ],
+    "kjpvmculuuveecpn": [
+      16.0,
+      0.0,
+      1.0,
+      3.802272936314175e-05,
+      0.1875
+    ],
+    "gmsioioigemsqoq": [
+      15.0,
+      0.0,
+      1.0,
+      8.898158183389233e-05,
+      0.2
+    ],
+    "mkxgxlorjhfhckd": [
+      15.0,
+      0.0,
+      1.0,
+      4.558283046090794e-05,
+      0.13333333333333333
+    ],
+    "wfql7hkjcds470u": [
+      15.0,
+      0.26666666666666666,
+      0.7333333333333333,
+      4.085366251899049e-06,
+      0.06666666666666667
+    ]
+  }
+}
