@@ -1,0 +1,23 @@
+.git
+.gitignore
+.pytest_cache
+__pycache__
+**/__pycache__
+*.pyc
+.agents
+AGENTS.md
+P3_Experimental_Report.html
+P3_Experimental_Report.ipynb
+# bulky raw data not needed at runtime (preprocess outputs ARE copied)
+data/dga-training-data-encoded.json.gz
+data/DGA_domains_dataset
+# results are outputs, not inputs - except the model artifacts the images bake in
+results/*
+!results/rq2
+results/rq2/*
+!results/rq2/models
+!results/rq3
+results/rq3/*
+!results/rq3/models
+docs
+figures

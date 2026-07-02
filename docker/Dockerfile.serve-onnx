@@ -1,0 +1,34 @@
+# =============================================================================
+# serve-onnx: the MINIMAL DGA serving image (B6 Step 1).
+# No sklearn / pandas / joblib - onnxruntime + the feature kernel only.
+# Self-contained: code, ONNX models (DT-12 primary, RF-pruned fallback) and
+# preprocess artifacts (dictionary txt/marisa, trigram table, test/train csv)
+# are baked in so the identical image can be pulled/rebuilt and run on ARM.
+#
+# Base pinned by MULTI-ARCH INDEX digest (python:3.11-slim-bookworm,
+# 2026-06-24 build) - the same FROM line resolves to linux/amd64 and
+# linux/arm64 images with identical provenance.
+#
+# Resource profiles are applied at RUN time, never baked in:
+#   A: docker run --cpus=2 --memory=512m --memory-swap=512m ...
+#   B: docker run --cpus=1 --memory=512m --memory-swap=512m ...
+#   C: docker run --cpus=1 --memory=256m --memory-swap=256m ...
+# (see scripts/rq3/run_profiles.sh)
+# =============================================================================
+FROM python@sha256:721dc13fd1be0a771e54b72097634291d628d0007dee9da777e2ce676a9c998f
+
+WORKDIR /app
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    FEATURE_KERNEL=fast
+
+COPY requirements-serve.txt .
+RUN pip install --no-cache-dir -r requirements-serve.txt
+
+COPY src/ src/
+COPY scripts/rq3/ scripts/rq3/
+COPY results/rq3/models/ models/
+COPY data/english_dictionary.txt data/english_dictionary.marisa \
+     data/ngram_table.pkl data/test.csv data/train.csv data/
+
+CMD ["python", "scripts/rq3/measure_serve.py", "--help"]

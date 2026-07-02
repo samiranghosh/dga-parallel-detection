@@ -1,0 +1,23 @@
+# =============================================================================
+# full: gates + harnesses image (B6 Step 1).
+# The complete pinned environment (requirements.txt: sklearn 1.8.0 etc.) with
+# code, tests, models and preprocess artifacts baked in. Used for:
+#   - the five gate suites under cgroup profiles (test_parallel, test_onnx,
+#     test_feature_kernel, test_features, test_boundary)
+#   - RQ1 adaptive-vs-static bounded datum under Profile A
+#   - Linux-fork spawn-economics re-checks (B6 Step 3)
+#   - tl2cgen compiled-.so bench (B6 Step 4; Windows-blocked since B3)
+# Base pinned by the same multi-arch index digest as serve-onnx.
+# =============================================================================
+FROM python@sha256:721dc13fd1be0a771e54b72097634291d628d0007dee9da777e2ce676a9c998f
+
+WORKDIR /app
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . .
+
+CMD ["python", "-m", "pytest", "tests/", "-q"]

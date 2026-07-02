@@ -42,7 +42,15 @@ class OnnxPredictor(Predictor):
         # We suppress warnings/logging to keep output clean, but allow basic optimizations
         sess_options = rt.SessionOptions()
         sess_options.graph_optimization_level = rt.GraphOptimizationLevel.ORT_ENABLE_ALL
-        
+
+        # B6: ORT's default intra-op pool sizes itself to HOST cores, which a
+        # cgroup cpu quota doesn't change - idle spin-waits then eat the quota.
+        # Opt-in override only; unset keeps the B4/B5 canonical behaviour.
+        n_threads = os.environ.get("ORT_INTRA_OP_THREADS")
+        if n_threads:
+            sess_options.intra_op_num_threads = int(n_threads)
+            sess_options.inter_op_num_threads = 1
+
         self.session = rt.InferenceSession(model_path, sess_options)
         self.input_name = self.session.get_inputs()[0].name
         # The RandomForest in ONNX usually returns [labels, probabilities]

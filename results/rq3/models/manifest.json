@@ -1,0 +1,17 @@
+{
+  "note": "ONNX artifacts for B6 images; converted with the pinned skl2onnx 1.20.0 / zipmap=False path (B3 parity fix)",
+  "models": {
+    "dt12": {
+      "source_pickle": "results/rq2/models/dt12.pkl",
+      "onnx": "results/rq3/models/dt12.onnx",
+      "bytes": 112909,
+      "sha256": "2c1d02cde83fee5e9e4d5f959c27a76bc2d0babe1812c421321b2205e3ffc762"
+    },
+    "rf_pruned": {
+      "source_pickle": "results/rq2/models/rf_pruned.pkl",
+      "onnx": "results/rq3/models/rf_pruned.onnx",
+      "bytes": 3225837,
+      "sha256": "13acba1aef4e4df693b1593b4c9b957bb0c0e96cceaf00619a1b6fec096ba749"
+    }
+  }
+}

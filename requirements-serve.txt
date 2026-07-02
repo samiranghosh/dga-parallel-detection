@@ -1,0 +1,11 @@
+# =============================================================================
+# serve-onnx image dependencies (B6) - the MINIMAL serving stack.
+# No sklearn, no pandas, no joblib: the whole point of the ONNX-only image is
+# dropping the ~133 MiB sklearn floor (results/rq2/FINDINGS.md).
+# Version pins mirror requirements.txt exactly - see rationale there.
+# =============================================================================
+onnxruntime==1.25.1             # NEVER bump without re-running test_onnx (kernel
+                                # regression >=1.26.0, binary-RF probas corrupted)
+numpy==2.4.6
+pyahocorasick==2.3.1            # FEATURE_KERNEL=fast (AC automaton)
+marisa-trie==1.4.1              # FEATURE_KERNEL=fast_marisa (0.7 MiB mmap trie)
