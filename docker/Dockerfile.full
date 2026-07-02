@@ -18,9 +18,16 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 COPY requirements.txt .
 # pip 24.0 (bundled) trips over inconsistent PEP-658 metadata hashes on some
 # older PyPI wheels ("THESE PACKAGES DO NOT MATCH THE HASHES ... unknown
-# package"); current pip verifies correctly.
-RUN pip install --no-cache-dir --upgrade pip \
- && pip install --no-cache-dir --retries 10 --resume-retries 5 -r requirements.txt
+# package"); current pip verifies correctly. The retry loop + cache mount
+# makes the ~400 MB download survive flaky links (WSL2 NAT drops long
+# transfers): completed wheels persist in the cache across attempts.
+RUN --mount=type=cache,target=/root/.cache/pip \
+    pip install --upgrade pip && \
+    ( for i in 1 2 3 4 5 6 7 8; do \
+        pip install --retries 10 --resume-retries 5 -r requirements.txt \
+          && exit 0; \
+        echo "pip attempt $i failed; retrying"; sleep 5; \
+      done; exit 1 )
 
 # gcc for tl2cgen native compilation (B6 Step 4); after the pip layer to
 # keep the expensive dependency cache intact.

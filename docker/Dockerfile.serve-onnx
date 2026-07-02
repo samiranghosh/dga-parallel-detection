@@ -23,8 +23,13 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     FEATURE_KERNEL=fast
 
 COPY requirements-serve.txt .
-RUN pip install --no-cache-dir --upgrade pip \
- && pip install --no-cache-dir -r requirements-serve.txt
+RUN --mount=type=cache,target=/root/.cache/pip \
+    pip install --upgrade pip && \
+    ( for i in 1 2 3 4 5 6 7 8; do \
+        pip install --retries 10 --resume-retries 5 -r requirements-serve.txt \
+          && exit 0; \
+        echo "pip attempt $i failed; retrying"; sleep 5; \
+      done; exit 1 )
 
 COPY src/ src/
 COPY scripts/rq3/ scripts/rq3/
