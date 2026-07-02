@@ -25,14 +25,17 @@ machine state).
 \* RF-100-ONNX steady-state from Batch 3; **disqualified on cold-start** (init
 1,932 s ENABLE_ALL / >1,800 s DISABLE_ALL — both >30× the 60 s rubric; cost is
 TreeEnsemble kernel construction, so a pre-optimized `.ort` cannot cure it).
-ONNX totals include ~50–60 µs feature extraction; ONNX parity asserted per
-model (labels `array_equal`; max |Δp| ≤ 1.5e-6).
+ONNX totals include ~47–57 µs feature extraction. Parity: labels `array_equal`,
+max |Δp| ≤ 1.5e-6 (RF-pruned/DT-12/LR re-asserted in-batch; RF-100 from B3;
+2,000-row samples). RSS columns are model+runtime process; end-to-end serving
+adds dict 23 + trigram 4 MiB → **DT-12·ONNX ≈ 83 MiB end-to-end**, still ~2.9×
+Profile-C headroom.
 
 ## Gate verdicts (1–4)
 | gate | verdict | key numbers |
 |---|---|---|
 | **1 — McNemar** (DT-12 vs RF-100, full 199,986 holdout) | **BEATS (significant, DT favour)** | discordant b=4,316 / c=4,893; exact two-sided p = **1.9e-09** |
-| **2 — Operating point** | **PASS** | argmax: DT FPR 0.0581 / FNR 0.0726 vs RF 0.0732 / 0.0632. At **matched FPR** (=RF's 0.0732): DT FNR **0.0505** < RF 0.0632. DT has 598 distinct leaf-scores — coarse but sufficient; no hidden asymmetry. |
+| **2 — Operating point** | **PASS** (re-measured; two-sided bracket) | argmax: DT FPR 0.0581 / FNR 0.0726 vs RF 0.0732 / 0.0632. At DT's **conservative matched point** (achieved FPR 0.0729 ≤ RF's 0.0732): DT FNR **0.0595** vs RF **0.0636 at the same achieved FPR** → DT better. (DT's 598 leaf-scores can't hit the target exactly; the permissive bracket FPR 0.0850 / FNR 0.0505 is reported but not used for the verdict.) |
 | **3 — Per-family** | **PASS** (run on chrmor — ExtraHop carries no family labels; folded into gate 4 per brief) | **0 of 25 families** where DT recall drops >5 pp vs RF-100 |
 | **4 — Cross-dataset shift** (train ExtraHop → test chrmor, no fine-tuning) | **PASS — inverted** | all models degrade under shift, but **RF-100 degrades most** (79.38%) and **DT-12 least** (82.99%; RF-pruned 82.82, LR 81.37). DT FNR 0.266 < RF 0.325. The "single tree is brittle under shift" risk did not materialise — the forest was the brittle one. |
 
@@ -48,7 +51,7 @@ depth-12 decision tree is statistically *better* on the ExtraHop holdout
 (McNemar p=1.9e-09), no worse at a matched operating point, no worse on any of
 25 DGA families, and *more* robust — not less — under cross-dataset shift,
 while costing 227 KB instead of 491 MB, 102 µs instead of 4.4 ms (sklearn
-path), and 56 MiB total process instead of 632 MiB. Structural pruning tells
+path), and ≈83 MiB end-to-end instead of ≈659 MiB. Structural pruning tells
 the same story from the forest side (depth-10 RF: 93.32% at 6.7 MB), so the
 conclusion is not tree-luck but feature-space saturation. Every RQ3 edge
 target — <1 ms single-request, ≤256 MB (even ≤64 MiB) — is met with large

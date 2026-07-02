@@ -33,11 +33,15 @@ Discordant pairs: b=4,316 (DT wrong/RF right), c=4,893 (DT right/RF wrong);
 exact two-sided binomial **p = 1.9e-09**. Per the rubric this licenses
 "beats", not merely "not meaningfully worse".
 
-**Gate 2 — operating point: PASS.** Argmax: DT FPR 0.0581 / FNR 0.0726 vs
-RF-100 0.0732 / 0.0632. At **matched FPR** (tuned to RF's 0.0732): DT FNR
-**0.0505 < RF 0.0632**; RF-pruned 0.0558; LR 0.1223. DT has 598 distinct
-leaf-scores — coarse vs RF's 36,578 but enough for threshold tuning; no
-asymmetry hides behind argmax. Confusion matrices in `gate2_operating_point.json`.
+**Gate 2 — operating point: PASS** *(re-measured after verification caught a
+threshold overshoot in v1)*. Argmax: DT FPR 0.0581 / FNR 0.0726 vs RF-100
+0.0732 / 0.0632. DT's 598 distinct leaf-scores cannot hit RF's FPR exactly, so
+the comparison uses a **two-sided bracket**: at DT's *conservative* point
+(achieved FPR **0.0729** ≤ RF's 0.0732) DT FNR = **0.0595** vs RF FNR
+**0.0636 at the same achieved FPR** → DT better at a genuinely matched point.
+(DT's permissive bracket: FPR 0.0850 / FNR 0.0505 — laxer FPR, not
+like-for-like.) RF-pruned matched-FNR 0.0559; LR 0.1223. No asymmetry hides
+behind argmax. Full brackets + confusions in `gate2_operating_point.json`.
 
 **Gate 3 — per-family: PASS (run on chrmor; ExtraHop has no family labels).**
 **0 of 25 families** where DT-12 recall drops >5 pp vs RF-100.
@@ -72,8 +76,10 @@ DOI 10.1016/j.eswa.2020.114551.
   corrupt decision boundaries on the [0,1] ratio features, and ai.onnx.ml
   TreeEnsemble has no int8 mode. Investigated, documented, not pursued.
 
-## Runtime arms (Step 6; ONNX = ort 1.25.1, zipmap=False, parity asserted per model)
-Parity: labels `array_equal` for every model; max |Δp| ≤ 1.5e-6.
+## Runtime arms (Step 6; ONNX = ort 1.25.1, zipmap=False)
+Parity: labels `array_equal`, max |Δp| ≤ 1.5e-6 — re-asserted in-batch for
+RF-pruned/DT-12/LR on 2,000 holdout rows; RF-100 parity carried from B3 (same
+2,000-row protocol, 2.24e-7).
 Canonical single-request (total = extract+predict; feat ≈ 47–92 µs of it):
 | variant | total p50 | predict p50 | RSS total (MiB) |
 |---|---|---|---|
@@ -114,25 +120,29 @@ Targets: ≥3× RSS↓ · ≥2× speedup · <1 ms single-request · <1 pp accura
 | DT-12 · sklearn | 4.1× | 43× | ✓ | +0.29 pp | **all met** |
 | DT-12 · ONNX | **11.3×** | **69×** | ✓ | +0.29 pp | **all met** |
 | LR · ONNX | 11.5× | 72× | ✓ | −3.18 pp | fails accuracy |
-| RF-100 · ONNX | 0.64× (worse) | (245× steady) | ✓* | 0 | fails RSS + cold-start |
+| RF-100 · ONNX | 0.64× (worse) | (244× steady) | ✓* | 0 | fails RSS + cold-start |
 
-Every RQ3 profile fits with margin: DT-12·ONNX = **56 MiB total** (Profile C
-244 MiB → 4.4× headroom); even DT-12·sklearn (155 MiB + dict 23 + trigram 4 ≈
-182 MiB) fits Profile C.
+RSS cells are model+runtime process (dict/trigram excluded on BOTH sides, so
+the ratios are like-for-like; baseline 631.7 + dict 23 + trigram 4 ≈ 658.7
+reproduces Batch-1's 656.8 total). End-to-end serving adds the dictionary +
+trigram: **DT-12·ONNX ≈ 83 MiB end-to-end** (Profile C 244 MiB → **~2.9×
+headroom**); DT-12·sklearn ≈ 182 MiB — every RQ3 profile fits with margin.
+Latency ratios use the Step-6 canonical run (RF-100 total 4,398 µs; the 0b run
+of the same config measured 4,310 µs — ~2% run-to-run variance).
 
 ## The RQ2 story
 The RF-100 baseline is **over-provisioned for this 5-feature space**. A single
 depth-12 tree is statistically better on the holdout (McNemar p=1.9e-09),
 better at a matched operating point, within 5 pp on all 25 families, and *more*
 robust under cross-dataset shift — while meeting every edge target with
-orders-of-magnitude margins (227 KB, 64–102 µs, 56 MiB). Structural pruning
+orders-of-magnitude margins (227 KB, 64–102 µs, ≈83 MiB end-to-end). Structural pruning
 tells the same story from the forest side (93.32% @ 6.7 MB), so this is
 feature-space saturation, not tree-luck. The pruned-RF+ONNX arm passes all
 C4 targets too and stands as the documented fallback.
 
 ## Caveats (honest)
 - **Dictionary-composing DGA families evade ALL models** (chrmor recalls:
-  matsnu 0.6–3%, suppobox 1–4%, nymaim 1–2%, gozi 15–17%) — a limitation of
+  matsnu 0.6–3.0%, suppobox 0.9–4.4%, nymaim 1.4–2.4%, gozi 15.5–16.8%) — a limitation of
   the linguistic feature family itself, not of any model choice (DT-12 even
   detects symmi at 34% where RF-100 scores 0.0%). Feeds Batch-7 T3 and the
   viva narrative; no gate is affected (gaps are model-parallel).

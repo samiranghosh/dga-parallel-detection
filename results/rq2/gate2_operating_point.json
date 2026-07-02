@@ -1,95 +1,130 @@
 {
   "rf100_reference_fpr": 0.07324,
+  "method": "two-sided bracket: conservative = smallest threshold with achieved FPR <= target; permissive = next lower distinct score (FPR overshoots). Corrects the v1 quantile overshoot flagged in verification - DT's 598 distinct scores cannot hit the target exactly.",
   "argmax": {
     "rf100": {
+      "fpr": 0.07324,
+      "fnr": 0.06318,
       "tn": 92663,
       "fp": 7323,
       "fn": 6318,
-      "tp": 93682,
-      "fpr": 0.07324,
-      "fnr": 0.06318,
-      "accuracy_pct": 93.179,
-      "f1": 0.9321
+      "tp": 93682
     },
     "rf_pruned": {
+      "fpr": 0.047457,
+      "fnr": 0.08624,
       "tn": 95241,
       "fp": 4745,
       "fn": 8624,
-      "tp": 91376,
-      "fpr": 0.047457,
-      "fnr": 0.08624,
-      "accuracy_pct": 93.315,
-      "f1": 0.9318
+      "tp": 91376
     },
     "dt12": {
+      "fpr": 0.058068,
+      "fnr": 0.07258,
       "tn": 94180,
       "fp": 5806,
       "fn": 7258,
-      "tp": 92742,
-      "fpr": 0.058068,
-      "fnr": 0.07258,
-      "accuracy_pct": 93.4675,
-      "f1": 0.9342
+      "tp": 92742
     },
     "logreg": {
+      "fpr": 0.099674,
+      "fnr": 0.1003,
       "tn": 90020,
       "fp": 9966,
       "fn": 10030,
-      "tp": 89970,
-      "fpr": 0.099674,
-      "fnr": 0.1003,
-      "accuracy_pct": 90.0013,
-      "f1": 0.9
+      "tp": 89970
     }
   },
-  "matched_fpr": {
+  "bracket": {
     "rf100": {
-      "tn": 92663,
-      "fp": 7323,
-      "fn": 6318,
-      "tp": 93682,
-      "fpr": 0.07324,
-      "fnr": 0.06318,
-      "accuracy_pct": 93.179,
-      "f1": 0.9321,
-      "threshold": 0.500001,
-      "distinct_scores": 36578
+      "conservative": {
+        "fpr": 0.07323,
+        "fnr": 0.06318,
+        "tn": 92664,
+        "fp": 7322,
+        "fn": 6318,
+        "tp": 93682,
+        "threshold": 0.500079
+      },
+      "permissive": {
+        "fpr": 0.07324,
+        "fnr": 0.06318,
+        "tn": 92663,
+        "fp": 7323,
+        "fn": 6318,
+        "tp": 93682,
+        "threshold": 0.500008
+      }
     },
     "rf_pruned": {
-      "tn": 92660,
-      "fp": 7326,
-      "fn": 5576,
-      "tp": 94424,
-      "fpr": 0.07327,
-      "fnr": 0.05576,
-      "accuracy_pct": 93.5485,
-      "f1": 0.936,
-      "threshold": 0.425932,
-      "distinct_scores": 33029
+      "conservative": {
+        "fpr": 0.07323,
+        "fnr": 0.05587,
+        "tn": 92664,
+        "fp": 7322,
+        "fn": 5587,
+        "tp": 94413,
+        "threshold": 0.425945
+      },
+      "permissive": {
+        "fpr": 0.07327,
+        "fnr": 0.05576,
+        "tn": 92660,
+        "fp": 7326,
+        "fn": 5576,
+        "tp": 94424,
+        "threshold": 0.425932
+      }
     },
     "dt12": {
-      "tn": 91491,
-      "fp": 8495,
-      "fn": 5048,
-      "tp": 94952,
-      "fpr": 0.084962,
-      "fnr": 0.05048,
-      "accuracy_pct": 93.228,
-      "f1": 0.9334,
-      "threshold": 0.444444,
-      "distinct_scores": 598
+      "conservative": {
+        "fpr": 0.07288,
+        "fnr": 0.05951,
+        "tn": 92699,
+        "fp": 7287,
+        "fn": 5951,
+        "tp": 94049,
+        "threshold": 0.445148
+      },
+      "permissive": {
+        "fpr": 0.084962,
+        "fnr": 0.05048,
+        "tn": 91491,
+        "fp": 8495,
+        "fn": 5048,
+        "tp": 94952,
+        "threshold": 0.444444
+      }
     },
     "logreg": {
-      "tn": 92663,
-      "fp": 7323,
-      "fn": 12227,
-      "tp": 87773,
-      "fpr": 0.07324,
-      "fnr": 0.12227,
-      "accuracy_pct": 90.2243,
-      "f1": 0.8998,
-      "threshold": 0.581536,
-      "distinct_scores": 176645
+      "conservative": {
+        "fpr": 0.07323,
+        "fnr": 0.1223,
+        "tn": 92664,
+        "fp": 7322,
+        "fn": 12230,
+        "tp": 87770,
+        "threshold": 0.581618
+      },
+      "permissive": {
+        "fpr": 0.07324,
+        "fnr": 0.12227,
+        "tn": 92663,
+        "fp": 7323,
+        "fn": 12227,
+        "tp": 87773,
+        "threshold": 0.581551
+      }
     }
-  }
+  },
+  "rf100_at_dt12_conservative_fpr": {
+    "fpr": 0.07287,
+    "fnr": 0.06359,
+    "tn": 92700,
+    "fp": 7286,
+    "fn": 6359,
+    "tp": 93641,
+    "threshold": 0.502829
+  },
+  "verdict": "PASS - at DT-12's conservative operating point (FPR 0.0729 <= RF ref 0.0732), DT FNR 0.0595 vs RF FNR 0.0636 at the same achieved FPR -> DT better"
 }
