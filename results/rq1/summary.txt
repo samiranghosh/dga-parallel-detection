@@ -1,0 +1,27 @@
+mu (K=8 saturation) = 62689 dom/s | subset=10000 reps=3
+
+== (d) 2x-peak target: no throughput collapse at rho=2.0 ==
+  adaptive   : thr@rho1.05=    5639  thr@rho2.0=    5709  ratio=1.01  [HELD]
+  static     : thr@rho1.05=    8430  thr@rho2.0=    8386  ratio=0.99  [HELD]
+  sequential : thr@rho1.05=   14785  thr@rho2.0=   14829  ratio=1.00  [HELD]
+
+== stability (worker-count direction reversals; lower=stabler) ==
+  adaptive/uniform : reversals=0  spawned=8 retired=0 replaced=0
+  adaptive/bursty  : reversals=0  spawned=8 retired=0 replaced=0
+  adaptive/ramp    : reversals=0  spawned=8 retired=0 replaced=0
+
+== net benefit adaptive vs static (uniform): throughput delta + worker savings ==
+  rho=0.10: thr adaptive=    5431 static=    5432 (delta=     -1) | workers 5.5 vs 8.0 (saved 2.5)
+  rho=0.30: thr adaptive=    5659 static=    8128 (delta=  -2469) | workers 4.5 vs 8.0 (saved 3.5)
+  rho=0.50: thr adaptive=    5625 static=    8353 (delta=  -2729) | workers 4.5 vs 8.0 (saved 3.5)
+  rho=0.70: thr adaptive=    5695 static=    8327 (delta=  -2633) | workers 4.5 vs 8.0 (saved 3.5)
+  rho=0.90: thr adaptive=    5711 static=    8316 (delta=  -2605) | workers 4.5 vs 8.0 (saved 3.5)
+  rho=1.05: thr adaptive=    5639 static=    8430 (delta=  -2791) | workers 4.5 vs 8.0 (saved 3.5)
+  rho=1.50: thr adaptive=    5635 static=    8152 (delta=  -2518) | workers 4.5 vs 8.0 (saved 3.5)
+  rho=2.00: thr adaptive=    5709 static=    8386 (delta=  -2677) | workers 4.5 vs 8.0 (saved 3.5)
+
+== (e) <=2-core edge benefit (k=2) ==
+  rho=0.50 uniform thr: adaptive=6543  static=7823  sequential=12224  | adaptive mean_workers=1.68
+  rho=0.90 uniform thr: adaptive=6460  static=7741  sequential=16160  | adaptive mean_workers=1.50
+  rho=1.05 uniform thr: adaptive=6363  static=7821  sequential=15925  | adaptive mean_workers=1.50
+  rho=2.00 uniform thr: adaptive=6525  static=7900  sequential=15738  | adaptive mean_workers=1.50
