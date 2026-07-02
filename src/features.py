@@ -48,7 +48,13 @@ def get_kernel_mode() -> str:
 
 
 def set_kernel_mode(mode: str):
-    """Switch feature-kernel implementation at runtime (tests / A-B)."""
+    """Switch feature-kernel implementation at runtime (tests / A-B).
+
+    Process-local: spawned Pool workers re-import this module and read
+    FEATURE_KERNEL from the environment, so for parallel A/B runs set
+    os.environ["FEATURE_KERNEL"] before creating the pool (children
+    inherit it); this setter alone does not reach them.
+    """
     global _kernel_mode
     if mode not in ("legacy", "fast"):
         raise ValueError(f"kernel mode must be 'legacy' or 'fast', got {mode!r}")

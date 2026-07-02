@@ -1,0 +1,45 @@
+{
+  "protocol": "Pool.map k=8, full train+test corpus (999927 domains), skip_levenshtein=True, 3 reps, wall time incl. pool startup (Windows spawn); kernel mode propagated to workers via FEATURE_KERNEL env",
+  "arms": {
+    "legacy": {
+      "wall_sec": [
+        12.85,
+        12.45,
+        12.75
+      ],
+      "domains_per_sec": [
+        77793,
+        80341,
+        78451
+      ],
+      "mean_domains_per_sec": 78862
+    },
+    "fast_blob_attach": {
+      "wall_sec": [
+        7.02,
+        6.59,
+        6.72
+      ],
+      "domains_per_sec": [
+        142423,
+        151682,
+        148713
+      ],
+      "mean_domains_per_sec": 147606
+    },
+    "fast_worker_build": {
+      "wall_sec": [
+        6.59,
+        6.53,
+        6.56
+      ],
+      "domains_per_sec": [
+        151718,
+        153093,
+        152395
+      ],
+      "mean_domains_per_sec": 152402
+    }
+  },
+  "equal_outputs_across_kernels": true
+}

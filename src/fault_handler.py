@@ -129,12 +129,6 @@ def robust_parallel_extract(chunks: list, k: int,
     pending = list(range(n_chunks))
     total_retried = 0
 
-    # B5 Step 4: one serialized automaton copy shipped to workers
-    # (no-op None in legacy kernel mode)
-    from src import features
-    automaton_blob = (features.export_automaton_blob(dictionary)
-                      if features.get_kernel_mode() == "fast" else None)
-
     for attempt in range(1 + max_retries):
         if not pending:
             break
@@ -153,7 +147,7 @@ def robust_parallel_extract(chunks: list, k: int,
             pool = multiprocessing.Pool(
                 processes=pool_workers,
                 initializer=_init_worker,
-                initargs=(dictionary, ngram_table, False, automaton_blob),
+                initargs=(dictionary, ngram_table),
             )
 
             if chunk_timeout is not None:

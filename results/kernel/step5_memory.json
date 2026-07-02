@@ -1,0 +1,63 @@
+{
+  "note": "fresh subprocess per stack; automaton attached from a pre-serialized blob (the Step-4 path). Dict set stays loaded in fast stacks: the feature API keys the automaton cache on the dictionary object.",
+  "stacks": {
+    "sklearn_legacy": {
+      "stages_rss_mib": {
+        "interpreter": 21.8,
+        "model_sklearn": 153.9,
+        "dict_set": 177.0,
+        "trigram": 181.4
+      },
+      "total_rss_mib": 181.4,
+      "load_sec": {
+        "dict_set": 0.106,
+        "automaton_attach": null,
+        "whole_stack": 2.314
+      }
+    },
+    "sklearn_fast": {
+      "stages_rss_mib": {
+        "interpreter": 21.8,
+        "model_sklearn": 153.7,
+        "dict_set": 176.7,
+        "automaton_attach": 212.4,
+        "trigram": 216.2
+      },
+      "total_rss_mib": 216.2,
+      "load_sec": {
+        "dict_set": 0.1,
+        "automaton_attach": 0.057,
+        "whole_stack": 2.291
+      }
+    },
+    "onnx_legacy": {
+      "stages_rss_mib": {
+        "interpreter": 21.8,
+        "model_onnx_session": 57.6,
+        "dict_set": 80.6,
+        "trigram": 84.4
+      },
+      "total_rss_mib": 84.4,
+      "load_sec": {
+        "dict_set": 0.076,
+        "automaton_attach": null,
+        "whole_stack": 0.419
+      }
+    },
+    "onnx_fast": {
+      "stages_rss_mib": {
+        "interpreter": 21.7,
+        "model_onnx_session": 57.6,
+        "dict_set": 80.6,
+        "automaton_attach": 115.3,
+        "trigram": 118.9
+      },
+      "total_rss_mib": 118.9,
+      "load_sec": {
+        "dict_set": 0.086,
+        "automaton_attach": 0.056,
+        "whole_stack": 0.475
+      }
+    }
+  }
+}

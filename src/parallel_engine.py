@@ -50,11 +50,12 @@ def _init_worker(dictionary, ngram_table, skip_levenshtein=False,
                  automaton_blob=None):
     """Pool initializer: store shared resources in worker globals.
 
-    B5 Step 4: when the fast feature kernel is active, the parent ships one
-    serialized AC automaton (automaton_blob) so workers attach (~0.06 s)
-    instead of each rebuilding from the set (~0.50 s); without a blob the
-    automaton is still pre-built here so the cost lands in pool startup,
-    not in the first chunk.
+    B5 Step 4: when the fast feature kernel is active, the automaton is
+    pre-built here so the cost lands in pool startup, not in the first
+    chunk (measured faster than shipping a serialized copy through spawn
+    initargs - see parallel_extract_features). automaton_blob remains for
+    callers that hold a pre-serialized copy (e.g. the shm path attaches
+    one via SharedMemoryResources; deserialize 0.06 s vs build 0.50 s).
     """
     global _dictionary, _ngram_table, _skip_levenshtein
     _dictionary = dictionary
@@ -176,13 +177,14 @@ def parallel_extract_features(domain_list: list, k: int,
         initargs = (shm_names, skip_levenshtein)
     else:
         initializer = _init_worker
-        # B5 Step 4: serialize the AC automaton once in the parent; every
-        # worker attaches to that one copy instead of rebuilding (no-op
-        # in legacy kernel mode).
-        from src import features
-        blob = (features.export_automaton_blob(dictionary)
-                if features.get_kernel_mode() == "fast" else None)
-        initargs = (dictionary, ngram_table, skip_levenshtein, blob)
+        # B5 Step 4/5 (MEASURED): for this initargs path, shipping the
+        # serialized automaton costs more than it saves - the 26.5 MiB
+        # blob is transferred per worker through spawn pipes while worker
+        # builds run in parallel during startup (152.4k dom/s worker-build
+        # vs 147.6k blob-attach, results/kernel/step5_batch.json). Workers
+        # warm-build at init (blob=None); single-copy attach remains on
+        # the shm path, where the block costs the parent nothing per worker.
+        initargs = (dictionary, ngram_table, skip_levenshtein, None)
 
     with multiprocessing.Pool(
         processes=n_pool,
