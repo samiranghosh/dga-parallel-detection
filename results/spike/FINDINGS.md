@@ -5,7 +5,9 @@ model = RF-100 (`n_estimators=100, random_state=42`) on the 5-feature matrix,
 retrained from `data/train.csv` and verified **bit-exact**: test accuracy
 **93.1790%** == the tagged baseline. Model: 491 MB pickle, 6,138,656 tree nodes.
 Machine: 8c/16t Ryzen 7 7840HS, Windows 11, Python 3.11. Latency protocol:
-single (1,5) float32 row, 200 warmup, 1000 timed reps, p50/p95/p99.
+probes = single (1,5) float32 row, 200 warmup, 1000 timed reps, p50/p95/p99;
+Step-1 harness = real-domain extract+predict, 100 warmup, 1000 reps.
+Probe scripts committed under `scripts/spike/` for re-derivation.
 Artifacts: `step1_njobs.json`, `probe1_traversal_floor.json`,
 `probe2_onnx_treelite.json`, `probe3_3feature.json`, `probe4_distillation.json`.
 
@@ -13,9 +15,9 @@ Artifacts: `step1_njobs.json`, `probe1_traversal_floor.json`,
 **The RF-100 is over-provisioned for this 5-feature space.** A single depth-12
 decision tree **exceeds** the baseline accuracy (holdout **93.47% vs 93.18%**,
 +0.29 pp; CV 93.31 ± 0.15 vs 93.10 ± 0.03) at **35.5 µs** single-request,
-**227 KB** pickle, **0.6 MiB** load RSS — versus the RF's 5.5 ms (sklearn
-n_jobs=1), 491 MB pickle, 473 MiB RSS, and a pathological **>30-minute** ONNX
-session init. Every RQ2/RQ3 target (<1 ms, ≤256 MB) is met by the distilled
+**227 KB** pickle, **0.6 MiB** load RSS — versus the RF's 5.3 ms (sklearn
+n_jobs=1, predict-only), 491 MB pickle, 473 MiB RSS, and a pathological
+**~15–32 min** ONNX session init (two observed runs). Every RQ2/RQ3 target (<1 ms, ≤256 MB) is met by the distilled
 tree with orders of magnitude to spare. *(Decision RF-primary vs distill-primary
 is SamG's; Batch 4 should add McNemar + paired t-tests before locking.)*
 
@@ -55,18 +57,22 @@ contains 100 Python-level calls; ONNX (18 µs) shows the fused-native ceiling is
 ## (e) Probe 2 — ONNX vs treelite + ONNX-only RSS
 | runtime | p50 / p95 / p99 (µs) | parity vs sklearn |
 |---|---|---|
-| ONNX (ort 1.25.1) | **18** / — / — *(p50 from main-run log)* | labels equal; ≤2.2e-7 |
-| treelite GTIL 4.7.0 | 72.8 / 122.6 / 224.9 | labels equal; ≤3.3e-16 |
+| ONNX (ort 1.25.1) | **18** / — / — *(p50 from main-run log)* | labels equal; max |Δp| 2.24e-7 |
+| treelite GTIL 4.7.0 | 72.8 / 122.6 / 224.9 | labels equal; max |Δp| 3.33e-16 |
 | tl2cgen compiled lib | **BLOCKED on Windows** (libloader DLL path + would need MSVC) → **deferred to Batch 6** (Linux/Docker), per plan | — |
 
 ONNX-only staged RSS (fresh process, sklearn provably not imported):
 interpreter **20.1** → +numpy **31.9** → +onnxruntime **48.8** → +session
 **990.4** → first inference **990.7 MiB**.
 - **Runtime floor = 48.8 MiB** (vs sklearn import floor ≈133 MiB) — an
-  ONNX-only image leaves ~207 MiB of a 256 MB budget for the model.
-- **Unpruned RF-100 session = 990 MiB — WORSE than sklearn's 473 MiB** and
-  **session init took 1,932 s (32.2 min)**; a DISABLE_ALL attempt exceeded 30 min
-  too, so the cost is TreeEnsemble kernel construction, not graph optimization.
+  ONNX-only image leaves ~195 MiB of a 256 MB (=244 MiB) budget for the model
+  (before inference working memory).
+- **Unpruned RF-100 session RSS = 990.7 MiB total-process (941.6 MiB model
+  increment) — WORSE than the sklearn baseline (656.8 total / 473 model)**, and
+  **session init took 1,932 s = 32.2 min** in this run (the main run's
+  ENABLE_ALL init was ~15–25 min). A DISABLE_ALL attempt was killed at a 30-min
+  budget (timeout observed in the runner log, not artifact-recorded) — evidence
+  the cost is TreeEnsemble kernel construction, not the graph optimizer.
 - **Consequence: compression is a prerequisite for the ONNX path's LOAD TIME
   and RSS** — the uncompressed model is undeployable on edge regardless of its
   18 µs steady-state latency (cold-start alone disqualifies it).
@@ -90,11 +96,11 @@ strengthens — not weakens — the AC/DAWG case if the distill route is chosen.
 | model | CV acc (±SD) | CV F1 | holdout acc / F1 | p50 (µs) | pickle | load RSS Δ |
 |---|---|---|---|---|---|---|
 | LogisticRegression (scaled) | 89.87 ± 0.03% | 0.899 | 90.00% / 0.900 | 121 | 1.2 KB | ~0 MiB |
-| DT depth=6 | 90.84 ± 0.07% | 0.905 | — | — | — | — |
+| DT depth=6 | 90.84 ± 0.07% | 0.904 | — | — | — | — |
 | DT depth=8 | 91.67 ± 0.16% | 0.914 | — | — | — | — |
 | DT depth=10 | 92.70 ± 0.13% | 0.926 | — | — | — | — |
 | **DT depth=12** | **93.31 ± 0.15%** | **0.933** | **93.47% / 0.934** | **35.5** | **226.6 KB** | **0.6 MiB** |
-| *(RF-100 baseline)* | *93.10 ± 0.03%* | — | *93.18%* | *5,480 (sklearn) / 18 (ONNX)* | *491 MB* | *473 MiB* |
+| *(RF-100 baseline)* | *93.10 ± 0.03%* | — | *93.18%* | *5,330 (sklearn predict-only) / 18 (ONNX)* | *491 MB* | *473 MiB* |
 
 Accuracy still rising at depth 12 (trend 90.8→91.7→92.7→93.3) — depth 14/16
 worth probing in Batch 4 alongside overfitting checks. DT-12's CV mean sits
