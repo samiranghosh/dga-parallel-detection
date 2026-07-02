@@ -19,5 +19,6 @@ results/rq2/*
 !results/rq3
 results/rq3/*
 !results/rq3/models
+!results/rq3/parity_expected.json
 docs
 figures

@@ -23,11 +23,15 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     FEATURE_KERNEL=fast
 
 COPY requirements-serve.txt .
-RUN pip install --no-cache-dir -r requirements-serve.txt
+RUN pip install --no-cache-dir --upgrade pip \
+ && pip install --no-cache-dir -r requirements-serve.txt
 
 COPY src/ src/
 COPY scripts/rq3/ scripts/rq3/
+COPY tests/golden_features_v2.json tests/
 COPY results/rq3/models/ models/
+# x86 reference snapshot for the T6/T1 cross-arch parity check
+COPY results/rq3/parity_expected.json parity/
 COPY data/english_dictionary.txt data/english_dictionary.marisa \
      data/ngram_table.pkl data/test.csv data/train.csv data/
 
