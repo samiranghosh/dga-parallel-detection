@@ -12,6 +12,29 @@ from src.chunker import Chunk
 logger = logging.getLogger(__name__)
 
 
+class _Sampler(threading.Thread):
+    """Background sampler: records (t_elapsed_s, system_cpu_%, n_workers) at a
+    fixed cadence, for the RQ1 worker-count + CPU time-series."""
+
+    def __init__(self, workers_fn, interval: float = 0.2):
+        super().__init__(daemon=True)
+        self.workers_fn = workers_fn
+        self.interval = interval
+        self.samples = []            # list of (t_elapsed_s, cpu_pct, n_workers)
+        self._stop = threading.Event()
+
+    def run(self):
+        import psutil
+        t0 = time.time()
+        psutil.cpu_percent(None)     # prime (first call returns 0.0)
+        while not self._stop.wait(self.interval):
+            self.samples.append((time.time() - t0, psutil.cpu_percent(None),
+                                 self.workers_fn()))
+
+    def stop(self):
+        self._stop.set()
+
+
 def run_streaming_benchmark(
     domain_list: List[str], 
     dictionary: set, 
@@ -45,6 +68,9 @@ def run_streaming_benchmark(
     
     # Initialize controller
     controller = AdaptiveController(in_queue, out_queue, min_workers, max_workers, shm_names, skip_levenshtein)
+
+    sampler = _Sampler(lambda: len(controller.workers))
+    sampler.start()
     
     # Tracking
     total_domains = 0
@@ -137,6 +163,7 @@ def run_streaming_benchmark(
                     break
                 
     finally:
+        sampler.stop()
         controller.shutdown()
         shm.cleanup()
         
@@ -151,7 +178,12 @@ def run_streaming_benchmark(
         "mean_active_workers": np.mean(active_worker_history) if active_worker_history else min_workers,
         "workers_spawned": controller.workers_spawned,
         "workers_retired": controller.workers_retired,
-        "total_monitor_cpu_ms": controller.total_monitor_cpu_ms
+        "workers_replaced": getattr(controller, "workers_replaced", 0),
+        "total_monitor_cpu_ms": controller.total_monitor_cpu_ms,
+        "cpu_timeseries": sampler.samples,
+        "mean_cpu_percent": (float(np.mean([s[1] for s in sampler.samples]))
+                             if sampler.samples else 0.0),
+        "worker_timeseries": [(s[0], s[2]) for s in sampler.samples],
     }
     
     return stats
@@ -270,3 +302,59 @@ def compare_adaptive_vs_static(
         results["ramp_0.6"]["adaptive"].append(ad)
 
     return results
+
+
+def run_sequential_streaming(domain_list: List[str], dictionary: set, ngram_table: dict,
+                             load_profile_generator: Callable,
+                             skip_levenshtein: bool = True) -> Dict[str, Any]:
+    """Single-process (sequential) baseline under the SAME offered-load stream.
+
+    No workers, no queue: the main thread extracts each arriving batch inline.
+    Above its own saturation throughput it falls behind (wall-clock grows,
+    achieved throughput plateaus) — the honest 'no parallelism' comparator for
+    RQ1. Returns the same stat keys as run_streaming_benchmark (workers pinned
+    to 1) so the sweep can treat all three engines uniformly.
+
+    NOTE: mean_latency here is per-batch PROCESSING time, not full queueing
+    delay; throughput (the cost-benefit metric) is directly comparable.
+    """
+    from src.features import extract_features
+
+    total_domains = 0
+    latencies = []
+    start_time_ref = time.time()
+    sampler = _Sampler(lambda: 1)   # sequential == exactly one worker
+    sampler.start()
+    prev_domain = None
+    try:
+        for scheduled_time, batch in load_profile_generator:
+            now = time.time()
+            if scheduled_time > now:           # ahead of schedule -> idle to arrival
+                time.sleep(scheduled_time - now)
+            arrival = time.time()
+            for d in batch:
+                extract_features(d, prev_domain if prev_domain is not None else d,
+                                 dictionary, ngram_table, skip_levenshtein=skip_levenshtein)
+                prev_domain = d
+            latencies.append(time.time() - arrival)
+            total_domains += len(batch)
+    finally:
+        sampler.stop()
+
+    duration = time.time() - start_time_ref
+    return {
+        "throughput_domains_per_sec": total_domains / duration if duration > 0 else 0,
+        "mean_latency_ms": float(np.mean(latencies)) * 1000 if latencies else 0,
+        "p50_latency_ms": float(np.percentile(latencies, 50)) * 1000 if latencies else 0,
+        "p95_latency_ms": float(np.percentile(latencies, 95)) * 1000 if latencies else 0,
+        "p99_latency_ms": float(np.percentile(latencies, 99)) * 1000 if latencies else 0,
+        "mean_active_workers": 1.0,
+        "workers_spawned": 1,
+        "workers_retired": 0,
+        "workers_replaced": 0,
+        "total_monitor_cpu_ms": 0.0,
+        "cpu_timeseries": sampler.samples,
+        "mean_cpu_percent": (float(np.mean([s[1] for s in sampler.samples]))
+                             if sampler.samples else 0.0),
+        "worker_timeseries": [(s[0], s[2]) for s in sampler.samples],
+    }

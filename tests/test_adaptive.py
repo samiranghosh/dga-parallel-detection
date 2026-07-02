@@ -99,3 +99,30 @@ def test_proportional_delta_scaling():
     assert c._proportional_delta(qsize=0, num_workers=1) == 0        # already min
     # CPU saturated -> no scale-up despite heavy backlog.
     assert c._proportional_delta(qsize=500, num_workers=1, cpu_ok_for_scale=False) == 0
+
+
+def test_load_sweep_smoke(test_domains, dictionary, ngram_table):
+    """RQ1 Step 5: the load harness runs all three engines under all three
+    profiles and records the throughput + CPU/worker time-series. Tiny inputs
+    (1 rho, 1 rep, K=2) — structural smoke test, not a benchmark."""
+    from src.load_harness import run_load_sweep
+
+    res = run_load_sweep(test_domains, dictionary, ngram_table, reps=1,
+                         subset=len(test_domains), rhos=[0.5], max_workers=2)
+
+    assert res["engines"] == ["adaptive", "static", "sequential"]
+    for profile in ("uniform", "bursty", "ramp"):
+        assert profile in res["profiles"]
+        for engine in res["engines"]:
+            assert engine in res["profiles"][profile]
+
+    # Uniform swept over the one requested rho.
+    assert len(res["profiles"]["uniform"]["adaptive"]) == 1
+    stats = res["profiles"]["uniform"]["adaptive"][0][0]
+    assert stats["throughput_domains_per_sec"] >= 0
+    assert "cpu_timeseries" in stats and "worker_timeseries" in stats
+
+    # Sequential arm present and pinned to a single worker.
+    seq = res["profiles"]["ramp"]["sequential"][0][0]
+    assert seq["mean_active_workers"] == 1.0
+    assert seq["workers_spawned"] == 1
