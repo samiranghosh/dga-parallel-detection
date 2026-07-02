@@ -25,7 +25,7 @@ from multiprocessing import shared_memory
 from typing import Tuple, Optional, Dict, Any
 
 
-def initialize_shared_resources(data_path: str) -> Tuple[set, dict]:
+def initialize_shared_resources(data_path: str, use_compact: bool = False) -> Tuple[Any, dict]:
     """Load dictionary and n-gram table from disk.
 
     On Windows, multiprocessing uses 'spawn' so there is no fork()
@@ -36,16 +36,24 @@ def initialize_shared_resources(data_path: str) -> Tuple[set, dict]:
     Args:
         data_path: Path to data/ directory containing
                    english_dictionary.txt and ngram_table.pkl.
+        use_compact: If True, load the memory-efficient .marisa trie instead of a set.
 
     Returns:
-        Tuple of (dictionary: set, ngram_table: dict)
+        Tuple of (dictionary: set or CompactDictionary, ngram_table: dict)
     """
     dict_path = os.path.join(data_path, 'english_dictionary.txt')
+    marisa_path = os.path.join(data_path, 'english_dictionary.marisa')
     ngram_path = os.path.join(data_path, 'ngram_table.pkl')
 
-    if not os.path.exists(dict_path):
+    if not use_compact and not os.path.exists(dict_path):
         raise FileNotFoundError(
             f"English dictionary not found at {dict_path}. "
+            "Run `python main.py --mode preprocess` first."
+        )
+        
+    if use_compact and not os.path.exists(marisa_path):
+        raise FileNotFoundError(
+            f"Compact dictionary not found at {marisa_path}. "
             "Run `python main.py --mode preprocess` first."
         )
 
@@ -56,8 +64,12 @@ def initialize_shared_resources(data_path: str) -> Tuple[set, dict]:
         )
 
     # Load English dictionary
-    with open(dict_path, 'r', encoding='utf-8') as f:
-        dictionary = set(line.strip() for line in f if line.strip())
+    if use_compact:
+        from src.compact_dict import CompactDictionary
+        dictionary = CompactDictionary(marisa_path)
+    else:
+        with open(dict_path, 'r', encoding='utf-8') as f:
+            dictionary = set(line.strip() for line in f if line.strip())
 
     # Load trigram probability table
     with open(ngram_path, 'rb') as f:
@@ -88,63 +100,90 @@ class SharedMemoryResources:
         self._dict_shm: Optional[shared_memory.SharedMemory] = None
         self._ngram_shm: Optional[shared_memory.SharedMemory] = None
 
-    def create(self, dictionary: set, ngram_table: dict) -> Dict[str, str]:
+    def create(self, dictionary: Any, ngram_table: dict) -> Dict[str, str]:
         """Serialize resources and place them in shared memory.
 
         Args:
-            dictionary: English dictionary set.
+            dictionary: English dictionary (set or CompactDictionary).
             ngram_table: Trigram frequency table dict.
 
         Returns:
             Dict with shared memory names: {'dict_name': ..., 'ngram_name': ...}
         """
-        # Serialize to bytes
-        dict_bytes = pickle.dumps(dictionary, protocol=pickle.HIGHEST_PROTOCOL)
+        from src.compact_dict import CompactDictionary
+        
+        is_compact = isinstance(dictionary, CompactDictionary)
+        
+        if is_compact:
+            # For marisa-trie, we don't use OS shared memory because the file
+            # is already mmap-backed. We just pass the path.
+            dict_bytes = b''
+            dict_name = dictionary.trie_path
+            dict_size = 0
+        else:
+            # Serialize to bytes
+            dict_bytes = pickle.dumps(dictionary, protocol=pickle.HIGHEST_PROTOCOL)
+            self._dict_shm = shared_memory.SharedMemory(
+                create=True, size=len(dict_bytes)
+            )
+            self._dict_shm.buf[:len(dict_bytes)] = dict_bytes
+            dict_name = self._dict_shm.name
+            dict_size = self._dict_shm.size
+
         ngram_bytes = pickle.dumps(ngram_table, protocol=pickle.HIGHEST_PROTOCOL)
 
         # Create shared memory blocks
-        self._dict_shm = shared_memory.SharedMemory(
-            create=True, size=len(dict_bytes)
-        )
         self._ngram_shm = shared_memory.SharedMemory(
             create=True, size=len(ngram_bytes)
         )
 
         # Copy data into shared memory
-        self._dict_shm.buf[:len(dict_bytes)] = dict_bytes
         self._ngram_shm.buf[:len(ngram_bytes)] = ngram_bytes
 
-        return self.get_names()
-
-    def get_names(self) -> Dict[str, str]:
-        """Return shared memory block names for worker attachment."""
         return {
-            'dict_name': self._dict_shm.name,
-            'dict_size': self._dict_shm.size,
+            'is_compact': 'true' if is_compact else 'false',
+            'dict_name': dict_name,
+            'dict_size': dict_size,
             'ngram_name': self._ngram_shm.name,
             'ngram_size': self._ngram_shm.size,
         }
 
+    def get_names(self) -> Dict[str, str]:
+        """Return shared memory block names for worker attachment.
+        Note: This is mostly internal now as `create` returns the correct dict directly.
+        """
+        return {
+            'is_compact': 'false',
+            'dict_name': self._dict_shm.name if self._dict_shm else '',
+            'dict_size': self._dict_shm.size if self._dict_shm else 0,
+            'ngram_name': self._ngram_shm.name if self._ngram_shm else '',
+            'ngram_size': self._ngram_shm.size if self._ngram_shm else 0,
+        }
+
     @staticmethod
-    def attach(shm_names: Dict[str, str]) -> Tuple[set, dict]:
+    def attach(shm_names: Dict[str, str]) -> Tuple[Any, dict]:
         """Attach to existing shared memory and deserialize resources.
 
         Called in worker processes via pool initializer.
 
         Args:
-            shm_names: Dict from get_names().
+            shm_names: Dict from create().
 
         Returns:
-            Tuple of (dictionary: set, ngram_table: dict)
+            Tuple of (dictionary, ngram_table: dict)
         """
-        dict_shm = shared_memory.SharedMemory(name=shm_names['dict_name'])
+        is_compact = shm_names.get('is_compact') == 'true'
+        
+        if is_compact:
+            from src.compact_dict import CompactDictionary
+            dictionary = CompactDictionary(shm_names['dict_name'])
+        else:
+            dict_shm = shared_memory.SharedMemory(name=shm_names['dict_name'])
+            dictionary = pickle.loads(bytes(dict_shm.buf[:shm_names['dict_size']]))
+            dict_shm.close()
+
         ngram_shm = shared_memory.SharedMemory(name=shm_names['ngram_name'])
-
-        dictionary = pickle.loads(bytes(dict_shm.buf[:shm_names['dict_size']]))
         ngram_table = pickle.loads(bytes(ngram_shm.buf[:shm_names['ngram_size']]))
-
-        # Close (not unlink) — parent owns the lifecycle
-        dict_shm.close()
         ngram_shm.close()
 
         return dictionary, ngram_table

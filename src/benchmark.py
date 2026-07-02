@@ -806,6 +806,24 @@ def run_benchmark_suite(args) -> Dict[str, Any]:
             k_values=[1, 2, 4, 8], reps=min(reps, 3),
         )
         all_results['E8'] = e8_results
+        
+    if experiment in ('all', 'E9_adaptive'):
+        print("\n[BENCH] Running E9_adaptive: Adaptive vs Static Load Sweep (RQ1)...")
+        from src.benchmark_adaptive import compare_adaptive_vs_static
+        # Add timestamp and host info per RQ1 workflow
+        import platform
+        import psutil
+        
+        e9_results = compare_adaptive_vs_static(
+            domain_list, dictionary, ngram_table, reps=min(reps, 5)
+        )
+        e9_results["environment"] = {
+            "os": platform.system(),
+            "cpu_cores": psutil.cpu_count(logical=False),
+            "logical_cores": psutil.cpu_count(logical=True),
+            "total_ram_gb": round(psutil.virtual_memory().total / (1024**3), 2)
+        }
+        all_results['E9_adaptive'] = e9_results
 
     metrics_path = os.path.join(output_dir, 'metrics.json')
     with open(metrics_path, 'w') as f:

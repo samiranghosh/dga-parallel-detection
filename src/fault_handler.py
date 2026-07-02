@@ -22,30 +22,39 @@ from typing import List, Optional
 
 logger = logging.getLogger(__name__)
 
-# Expected feature count
-N_FEATURES = 6
+# Valid feature counts: 5 (production, no Levenshtein) or 6 (legacy, with Levenshtein)
+VALID_FEATURE_COUNTS = (5, 6)
 
 
 def validate_features(result: np.ndarray, expected_rows: int) -> bool:
     """Validate a worker's feature extraction output.
 
+    Accepts both 5-feature (production) and 6-feature (legacy) matrices.
+
     Checks:
-    - Shape is (expected_rows, 6)
+    - Shape is (expected_rows, 5 or 6)
     - No NaN values
     - No Inf values
     - Length feature (col 0) >= 0
     - Ratio features (cols 1, 2, 4) in [0, 1]
     - Pronounceability (col 3) >= 0
-    - Levenshtein distance (col 5) >= 0
+    - Levenshtein distance (col 5) >= 0 (only when 6 features present)
 
     Returns:
         True if valid, False otherwise.
     """
-    # Shape check
-    if result.shape != (expected_rows, N_FEATURES):
+    # Shape check — accept 5 or 6 feature columns
+    if len(result.shape) != 2 or result.shape[0] != expected_rows:
         logger.warning(
-            f"Shape mismatch: expected ({expected_rows}, {N_FEATURES}), "
+            f"Shape mismatch: expected ({expected_rows}, 5 or 6), "
             f"got {result.shape}"
+        )
+        return False
+
+    n_features = result.shape[1]
+    if n_features not in VALID_FEATURE_COUNTS:
+        logger.warning(
+            f"Unexpected feature count: expected 5 or 6, got {n_features}"
         )
         return False
 
@@ -86,8 +95,8 @@ def validate_features(result: np.ndarray, expected_rows: int) -> bool:
         logger.warning("LMS percentage outside [0, 1]")
         return False
 
-    # Col 5: Levenshtein distance — must be >= 0
-    if np.any(result[:, 5] < -1e-9):
+    # Col 5: Levenshtein distance — must be >= 0 (only present in 6-feature mode)
+    if n_features == 6 and np.any(result[:, 5] < -1e-9):
         logger.warning("Negative Levenshtein distance detected")
         return False
 

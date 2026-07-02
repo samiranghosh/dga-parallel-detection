@@ -8,7 +8,7 @@ Run: pytest tests/test_fault_handler.py -v
 
 import pytest
 import numpy as np
-from src.fault_handler import validate_features, N_FEATURES
+from src.fault_handler import validate_features, VALID_FEATURE_COUNTS
 
 
 class TestValidateFeatures:
@@ -28,9 +28,17 @@ class TestValidateFeatures:
         assert validate_features(result, expected_rows=2) is False
 
     def test_wrong_shape_cols(self):
-        """Wrong number of columns should fail."""
-        result = np.array([[6.0, 0.0, 0.667, 0.005, 1.0]])  # only 5 cols
+        """Wrong number of columns (not 5 or 6) should fail."""
+        result = np.array([[6.0, 0.0, 0.667]])  # only 3 cols — invalid
         assert validate_features(result, expected_rows=1) is False
+
+    def test_valid_5_features(self):
+        """5-feature production output (no Levenshtein) should pass."""
+        result = np.array([
+            [6.0, 0.0, 0.667, 0.005, 1.0],
+            [10.0, 0.3, 0.5, 0.002, 0.4],
+        ])
+        assert validate_features(result, expected_rows=2) is True
 
     def test_nan_detection(self):
         """NaN in features should fail."""
@@ -100,4 +108,5 @@ class TestRobustParallelExtract:
             self.DOMAINS, 2, self.DICT, self.NGRAMS,
             robust=True, chunk_timeout=60.0,
         )
-        assert result.shape == (len(self.DOMAINS), N_FEATURES)
+        assert result.shape[1] in VALID_FEATURE_COUNTS
+        assert result.shape[0] == len(self.DOMAINS)
