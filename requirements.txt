@@ -28,6 +28,15 @@ joblib==1.5.3                   # Bundled with sklearn, pinned for reproducibili
 
 # --- NLP / Linguistic Features ---
 nltk==3.8.1                     # English dictionary corpus for meaningful word ratio
+pyahocorasick==2.3.1            # B5 kernel: C Aho-Corasick automaton replacing the two
+                                # O(m^2) dictionary scans (FEATURE_KERNEL=fast). Bench
+                                # winner on latency: 9.7 us/domain (mwr+lms) vs marisa
+                                # prefix-sweep 15.3 us vs legacy set-scan 47.0 us
+                                # (results/kernel/bench_backends.json). Trade-off: 35.3 MiB
+                                # RSS / 0.23 s build vs marisa mmap 0.7 MiB / 5 ms - the
+                                # memory-optimal marisa path stays available via
+                                # src/compact_dict.py. cp311 aarch64 wheel verified
+                                # (manylinux2014) for Batch-6 ARM.
 python-Levenshtein==0.27.3      # C-extension for the (dropped) Levenshtein feature;
                                 # still imported by tests/ablation. Falls back to
                                 # pure-Python DP if unavailable.

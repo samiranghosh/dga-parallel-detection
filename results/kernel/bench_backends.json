@@ -1,0 +1,55 @@
+{
+  "protocol": {
+    "n_domains": 10000,
+    "reps": 3,
+    "seed": 42,
+    "workload": "mwr + lms per domain (the two O(m^2) features)"
+  },
+  "cross_check_mismatches": 0,
+  "legacy_set_scan": {
+    "per_domain_us_mean": 47.04,
+    "per_domain_us_reps": [
+      46.75,
+      50.66,
+      43.7
+    ]
+  },
+  "ahocorasick": {
+    "per_domain_us_mean": 9.72,
+    "per_domain_us_reps": [
+      10.13,
+      9.0,
+      10.04
+    ]
+  },
+  "marisa_prefix_sweep": {
+    "per_domain_us_mean": 15.3,
+    "per_domain_us_reps": [
+      15.83,
+      15.02,
+      15.05
+    ]
+  },
+  "ac_build_inprocess_sec": 0.443,
+  "memory": {
+    "set": {
+      "rss_delta_mib": 22.6,
+      "build_or_load_sec": 0.077,
+      "pickle_size_mib": 2.8
+    },
+    "marisa": {
+      "rss_delta_mib": 0.7,
+      "build_or_load_sec": 0.005,
+      "pickle_size_mib": 0.0
+    },
+    "ahocorasick": {
+      "rss_delta_mib": 35.3,
+      "build_or_load_sec": 0.225,
+      "pickle_size_mib": 26.5
+    }
+  },
+  "wheel_availability_aarch64_cp311": {
+    "pyahocorasick-2.3.1": "manylinux2014_aarch64 (glibc >= 2.17)",
+    "marisa-trie-1.4.1": "manylinux_2_28_aarch64 + musllinux_1_2 (glibc >= 2.28)"
+  }
+}
