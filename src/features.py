@@ -18,7 +18,116 @@ Feature subsets:
   FEATURE_NAMES_5: Without Levenshtein (optimal configuration per E7 ablation)
 """
 
+import os
+
 import numpy as np
+
+
+# ── Feature kernel switch (Batch 5) ──
+#
+# FEATURE_KERNEL selects the implementation of the two dictionary features
+# (meaningful_word_ratio, lms_percentage):
+#   'legacy' - original O(m^2) substring scans against the set
+#   'fast'   - Aho-Corasick kernel (pyahocorasick, C automaton): one pass per
+#              domain enumerates every dictionary-word occurrence, then an
+#              O(m + matches) DP reproduces the legacy values exactly.
+# Default 'fast' - flipped after the Step-3 A2 gate passed: golden v2
+# (1,049 domains incl. A4 edge cases) bit-identical under both kernels, and
+# the full train+test corpus (999,927 domains) swept with max|delta| = 0.0
+# on both features (results/kernel/a2_full_corpus.json). 'legacy' stays
+# selectable for A/B and rollback via the environment variable or
+# set_kernel_mode().
+
+_kernel_mode = os.environ.get("FEATURE_KERNEL", "fast").strip().lower()
+if _kernel_mode not in ("legacy", "fast"):
+    raise ValueError(f"FEATURE_KERNEL must be 'legacy' or 'fast', got {_kernel_mode!r}")
+
+
+def get_kernel_mode() -> str:
+    return _kernel_mode
+
+
+def set_kernel_mode(mode: str):
+    """Switch feature-kernel implementation at runtime (tests / A-B)."""
+    global _kernel_mode
+    if mode not in ("legacy", "fast"):
+        raise ValueError(f"kernel mode must be 'legacy' or 'fast', got {mode!r}")
+    _kernel_mode = mode
+
+
+# Automata are built once per dictionary object and memoised. Keyed by
+# (id, len): the id alone could be reused after a dictionary is garbage
+# collected (sets are not weakref-able); len makes a stale hit implausible.
+# Production processes hold exactly one dictionary for their lifetime.
+_AUTOMATON_CACHE = {}
+_AUTOMATON_CACHE_MAX = 8  # small test dictionaries; production uses one entry
+
+
+def _get_automaton(dictionary):
+    if len(dictionary) == 0:
+        # pyahocorasick cannot finalise a zero-word automaton; legacy
+        # semantics for an empty dictionary are simply "no matches".
+        return None
+    key = (id(dictionary), len(dictionary))
+    automaton = _AUTOMATON_CACHE.get(key)
+    if automaton is None:
+        import ahocorasick
+        automaton = ahocorasick.Automaton()
+        for word in dictionary:
+            automaton.add_word(word, len(word))
+        automaton.make_automaton()
+        if len(_AUTOMATON_CACHE) >= _AUTOMATON_CACHE_MAX:
+            _AUTOMATON_CACHE.pop(next(iter(_AUTOMATON_CACHE)))
+        _AUTOMATON_CACHE[key] = automaton
+    return automaton
+
+
+# Semantic rules extracted from the legacy implementations (the parity
+# contract; each is replicated, not reinterpreted):
+#   R1 Candidate matches = every substring domain[i:j] that is a dictionary
+#      member: every occurrence of every dictionary word, case-sensitive,
+#      no normalisation, no minimum length (the nltk dictionary contains all
+#      26 single letters, so mwr degenerates to alpha-coverage under it).
+#      Aho-Corasick's all-occurrence iteration yields exactly this set.
+#   R2 lms_percentage = len(longest match) / len(domain); 0.0 when the domain
+#      is empty or has no match.
+#   R3 meaningful_word_ratio = (max characters coverable by NON-overlapping
+#      matches) / len(domain); abutting matches allowed, overlaps not.
+#      The legacy scan is a weighted-interval DP over match end positions:
+#      covered[j] = max(covered[j-1], max over matches (i,j) of
+#      covered[i] + (j-i)); its start-indexed carry-forward form is
+#      equivalent (covered[i] is final before it propagates to i+1).
+#   R4 Denominator = raw len(domain), non-alpha characters included.
+#   R5 Both values are exact int/int quotients; identical integer numerators
+#      and denominators make the IEEE-754 result bit-identical to legacy.
+def _dict_features_fast(domain: str, automaton) -> tuple:
+    """(meaningful_word_ratio, lms_percentage) in ONE automaton pass."""
+    n = len(domain)
+    if n == 0 or automaton is None:
+        return 0.0, 0.0
+    max_len = 0
+    by_end = [None] * (n + 1)  # match lengths bucketed by end position
+    for end_idx, length in automaton.iter(domain):
+        if length > max_len:
+            max_len = length
+        j = end_idx + 1
+        if by_end[j] is None:
+            by_end[j] = [length]
+        else:
+            by_end[j].append(length)
+    if max_len == 0:
+        return 0.0, 0.0
+    covered = [0] * (n + 1)
+    for j in range(1, n + 1):
+        best = covered[j - 1]
+        lengths = by_end[j]
+        if lengths is not None:
+            for length in lengths:
+                c = covered[j - length] + length
+                if c > best:
+                    best = c
+        covered[j] = best
+    return covered[n] / n, max_len / n
 
 
 # ── Feature Set Configurations ──
@@ -61,6 +170,9 @@ def calc_meaningful_word_ratio(domain: str, dictionary: set) -> float:
     Uses greedy longest-match scanning across all substrings.
     Example: 'googlebot' with dictionary {'google', 'bot'} -> 1.0
     """
+    if _kernel_mode == "fast":
+        return _dict_features_fast(domain, _get_automaton(dictionary))[0]
+
     if not domain:
         return 0.0
 
@@ -102,6 +214,9 @@ def calc_lms_percentage(domain: str, dictionary: set) -> float:
 
     Scans all substrings of domain against the dictionary.
     """
+    if _kernel_mode == "fast":
+        return _dict_features_fast(domain, _get_automaton(dictionary))[1]
+
     if not domain:
         return 0.0
 
@@ -165,12 +280,18 @@ def extract_features(domain: str, prev_domain: str,
     Returns:
         np.ndarray of shape (5,) or (6,) with dtype float64.
     """
+    if _kernel_mode == "fast":
+        # one automaton pass yields both dictionary features
+        mwr, lms = _dict_features_fast(domain, _get_automaton(dictionary))
+    else:
+        mwr = calc_meaningful_word_ratio(domain, dictionary)
+        lms = calc_lms_percentage(domain, dictionary)
     feats = [
         calc_length(domain),
         calc_numerical_ratio(domain),
-        calc_meaningful_word_ratio(domain, dictionary),
+        mwr,
         calc_pronounceability(domain, ngram_table),
-        calc_lms_percentage(domain, dictionary),
+        lms,
     ]
     if not skip_levenshtein:
         feats.append(calc_levenshtein(domain, prev_domain))

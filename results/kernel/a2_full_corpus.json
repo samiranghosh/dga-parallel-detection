@@ -1,0 +1,17 @@
+{
+  "n_domains": 999927,
+  "corpus": "train.csv + test.csv (full)",
+  "max_abs_delta": {
+    "meaningful_word_ratio": 0.0,
+    "lms_percentage": 0.0
+  },
+  "n_not_bit_identical": {
+    "meaningful_word_ratio": 0,
+    "lms_percentage": 0
+  },
+  "sweep_seconds": {
+    "legacy": 49.7,
+    "fast": 14.7
+  },
+  "verdict": "PASS - bit-identical on the full corpus"
+}
