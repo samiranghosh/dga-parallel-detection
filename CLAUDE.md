@@ -66,9 +66,15 @@ bash reproduce.sh [--quick]                                  # full pipeline + r
 - Claim RQ1 as a **resource-efficiency + stability** contribution, never a streaming-throughput one.
 
 ## Known issues
-- `test_onnx` **fails** (deferred, root-caused): skl2onnx 1.20.0 + onnxruntime 1.27.0 emit malformed probabilities for binary RF (negative, non-normalized). Fix is Batch-3 Step 2 (zipmap=False → post-normalize → pin-shift, in that order).
+- `test_onnx` **FIXED** (B3 Step 2): root cause was an **onnxruntime ≥1.26.0 TreeEnsemble kernel regression** (binary-RF probas emitted as (−p₁,+p₁), corrupting in-graph labels). Shipped: zipmap=False + **ort pinned 1.25.1**. Never bump onnxruntime without re-running `test_onnx` + a real-model parity check; the pin is load-bearing (re-verify wheel+parity on aarch64 in Batch 6).
 - **Windows spawn cost** (~0.3–0.5 s/worker + dict unpickle) inflates parallel startup in RQ1 numbers; re-check on Linux `fork` / ARM in Batch 6.
 - A1-adaptive equality + A5 end-to-end (kill/overload) tests were gaps in Batch 2 — closed in Batch-3 Step 0; keep them green.
+
+## Batch-3 spike result (MEASURED — `results/spike/FINDINGS.md`)
+- Serving overhead, not tree compute: sklearn n_jobs=1 predict ≈5.3 ms vs traversal floor 408 µs vs **ONNX 18 µs** (parity exact). `n_jobs=1` locked at serving (30.3→5.5 ms, free).
+- **ONNX on the unpruned RF is undeployable:** session init 15–32 min, session RSS 990 MiB. Runtime floor **48.8 MiB** → a 256 MB image is feasible only with a compressed model.
+- **DT-12 ≥ baseline:** 93.47% holdout vs 93.18%, 35.5 µs, 227 KB pickle, 0.6 MiB RSS. LR floor 89.9%. 3-feature drop costs −2.3 pp → dictionary stays.
+- **DECISIONS (SamG, 02 Jul):** (1) **distill-primary, conditional** — DT-12 promotes only through 4 Batch-4 gates (McNemar · FPR/FNR parity · per-family incl. PCFG · cross-dataset chrmor); pruned-RF+ONNX = documented fallback; C4 curve on {RF-100, RF-pruned, DT-12, LR} regardless. (2) **AC/DAWG survives → Batch 5 re-promoted** (under DT-12, feature extraction is the single-request bottleneck again). Profile C (1c/256 MB) flips feasible (~183 MiB sklearn-path / ~50 MiB ONNX-only), pending B6 measurement.
 
 ## Rejected — do not relitigate
 - Shannon entropy as a novelty claim (foundational; off-the-shelf).
@@ -79,7 +85,7 @@ bash reproduce.sh [--quick]                                  # full pipeline + r
 
 ## Planning
 - Live plan: `docs/IMPLEMENTATION_PLAN.md` (gated batches; read on demand — **not** imported, plans change too often to live in memory) + the thread tracker (T1–T7).
-- Highest-value levers, **re-ranked post-measurement**: (1) **model compression + native inference** (ONNX/treelite + pruning + float32) — the shared lever for RQ2 memory *and* RQ3 single-request latency; (2) **T1** real ARM validation (publishability). **T2 (AC/DAWG) demoted** to the batch-throughput lever. Distillation / 3-feature drop are candidate levers pending spike probes 3–4.
+- Highest-value levers, **post-spike (decisions locked 02 Jul)**: (1) **DT-12 distill-primary** through the 4 Batch-4 promotion gates (pruned-RF+ONNX fallback); (2) **T1** real ARM validation (publishability); (3) **AC/DAWG re-promoted** — single-request latency *and* batch throughput (bottleneck migrates back to features under DT-12). 3-feature drop **rejected** (−2.3 pp, probe 3).
 
 ## Statistical rigor
 - Accuracy: stratified CV + paired t-tests. Latency/throughput: mean ± SD with CIs over repetitions.
