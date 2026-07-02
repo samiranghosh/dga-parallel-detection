@@ -68,3 +68,46 @@ class TestParallelCorrectness:
         assert np.allclose(r1, r2, rtol=1e-10, atol=1e-10), (
             "Non-deterministic parallel results detected!"
         )
+
+
+def _synthetic_domains(n: int, seed: int = 42) -> list:
+    """Deterministic mixed corpus: word-compounds + DGA-style gibberish."""
+    import random
+    rng = random.Random(seed)
+    words = ["google", "facebook", "amazon", "microsoft", "apple", "netflix",
+             "example", "mail", "test", "link", "book", "face", "net", "micro"]
+    alphabet = "abcdefghijklmnopqrstuvwxyz0123456789-"
+    domains = []
+    for i in range(n):
+        if i % 3 == 0:
+            domains.append(rng.choice(words) + rng.choice(words))
+        else:
+            domains.append("".join(rng.choice(alphabet)
+                                    for _ in range(rng.randint(4, 24))))
+    return sorted(domains)
+
+
+class TestAdaptiveEquality:
+    """A1-adaptive (Batch-3 Step 0a): the queue-fed adaptive engine's ordered
+    reassembly (results[idx] -> vstack) must reproduce sequential output on a
+    corpus large enough to force out-of-order chunk completion."""
+
+    def test_adaptive_equals_sequential_1k(self):
+        from src.features import extract_all_sequential
+        from src.parallel_engine import parallel_extract_features
+
+        domains = _synthetic_domains(1200)
+
+        sequential = extract_all_sequential(domains, DICTIONARY, NGRAM_TABLE)
+        # 16 chunks over at most 4 adaptive workers (min=2, max=4 via the
+        # production entry point) -> chunks complete out of order, so this
+        # exercises the ordered results[idx] assembly, not just the math.
+        adaptive = parallel_extract_features(domains, 16, DICTIONARY,
+                                             NGRAM_TABLE, pool_size=4)
+
+        assert sequential.shape == adaptive.shape, (
+            f"Shape mismatch: seq={sequential.shape}, adaptive={adaptive.shape}"
+        )
+        assert np.allclose(sequential, adaptive, rtol=1e-10, atol=1e-10), (
+            "Adaptive engine output diverged from sequential baseline (A1)"
+        )

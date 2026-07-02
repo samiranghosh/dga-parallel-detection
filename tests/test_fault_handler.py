@@ -112,6 +112,121 @@ class TestRobustParallelExtract:
         assert result.shape[0] == len(self.DOMAINS)
 
 
+class TestAdaptiveEndToEndFaults:
+    """A5 end-to-end (Batch-3 Step 0b): fault injection against the RUNNING
+    adaptive engine — the production `parallel_extract_features` path for the
+    worker-kill case, the controller + bounded queue for the overload case.
+    Complements the deterministic unit coverage in TestAdaptiveWorkerRecovery.
+    """
+
+    DICT = {"google", "face", "book", "amazon", "micro", "soft", "apple",
+            "net", "test", "example", "link", "mail"}
+    NGRAM = {"goo": 0.01, "oog": 0.008, "ogl": 0.005, "gle": 0.012,
+             "fac": 0.009, "ace": 0.011, "ama": 0.006, "maz": 0.002}
+
+    @staticmethod
+    def _domains(n):
+        from tests.test_parallel import _synthetic_domains
+        return _synthetic_domains(n, seed=7)
+
+    def test_worker_kill_mid_run_recovers(self):
+        """SIGTERM a live worker mid-run: the production path must still return
+        every chunk exactly once, bit-identical to sequential (no loss/hang)."""
+        import time
+        import threading
+        import psutil
+        from src.features import extract_all_sequential
+        from src.parallel_engine import parallel_extract_features
+
+        domains = self._domains(40000)  # sized so processing outlasts the kill
+        me = psutil.Process()
+        before = {c.pid for c in me.children(recursive=False)}
+        box = {}
+
+        def run():
+            box["X"] = parallel_extract_features(
+                domains, 96, self.DICT, self.NGRAM,
+                pool_size=4, skip_levenshtein=True)
+
+        t = threading.Thread(target=run, daemon=True)
+        t.start()
+
+        # Wait for >=2 fresh worker processes, give them a beat to pull work,
+        # then hard-terminate one. If the run happens to finish first the kill
+        # is a no-op and the test still verifies clean completion.
+        victim = None
+        deadline = time.time() + 30
+        while time.time() < deadline and victim is None and t.is_alive():
+            fresh = [c for c in me.children(recursive=False)
+                     if c.pid not in before and c.is_running()]
+            if len(fresh) >= 2:
+                time.sleep(0.3)
+                victim = fresh[0]
+                try:
+                    victim.terminate()
+                except psutil.NoSuchProcess:
+                    pass  # worker already exited — nothing left to kill
+            time.sleep(0.05)
+
+        t.join(timeout=120)
+        assert not t.is_alive(), "engine hung after worker kill (A5 FAIL)"
+        X = box.get("X")
+        assert X is not None and X.shape == (len(domains), 5)
+        seq = extract_all_sequential(domains, self.DICT, self.NGRAM,
+                                     skip_levenshtein=True)
+        assert np.allclose(X, seq, rtol=1e-10, atol=1e-10), (
+            "post-kill output diverged from sequential (A5 FAIL)")
+
+    def test_bounded_queue_overload_no_deadlock(self):
+        """Feed faster than workers drain into a BOUNDED in_queue: the producer
+        must backpressure (block), never deadlock, and every chunk must arrive."""
+        import time
+        import threading
+        import multiprocessing
+        import queue as pyq
+        from src.parallel_engine import AdaptiveController
+        from src.shared_resources import SharedMemoryResources
+        from src.chunker import create_overlapping_chunks
+
+        domains = self._domains(12000)
+        chunks = create_overlapping_chunks(domains, 120)
+        shm = SharedMemoryResources()
+        names = shm.create(self.DICT, self.NGRAM)
+        in_q = multiprocessing.Queue(maxsize=4)  # bounded: forces backpressure
+        out_q = multiprocessing.Queue()
+        ctrl = AdaptiveController(in_q, out_q, min_workers=2, max_workers=4,
+                                  shm_names=names, skip_levenshtein=True)
+
+        def produce():
+            for idx, ch in enumerate(chunks):
+                in_q.put((idx, ch))  # blocks while the queue is full
+
+        prod = threading.Thread(target=produce, daemon=True)
+        prod.start()
+
+        got = set()
+        rows = 0
+        budget = time.time() + 120
+        try:
+            while len(got) < len(chunks) and time.time() < budget:
+                try:
+                    idx, res = out_q.get(timeout=5.0)
+                except pyq.Empty:
+                    break
+                assert not isinstance(res, Exception), f"worker error: {res}"
+                if idx not in got:
+                    got.add(idx)
+                    rows += res.shape[0]
+            prod.join(timeout=10)
+        finally:
+            ctrl.shutdown()
+            shm.cleanup()
+
+        assert not prod.is_alive(), "producer deadlocked on bounded queue (A5 FAIL)"
+        assert len(got) == len(chunks), f"lost {len(chunks) - len(got)} chunk(s) (A5 FAIL)"
+        assert rows == len(domains), "row-count mismatch after overload (A5 FAIL)"
+
+
 class TestAdaptiveWorkerRecovery:
     """RQ1 A5: the adaptive controller reaps and replaces dead workers.
 
