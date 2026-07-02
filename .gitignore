@@ -57,3 +57,4 @@ venv_wsl2/
 Python-3.11.9.tgz
 Python-3.11.9/
 data/DGA-Detection-Training-Dataset/
+data/DGA_domains_dataset/

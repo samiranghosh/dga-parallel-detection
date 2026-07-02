@@ -41,6 +41,35 @@ logger = logging.getLogger(__name__)
 DEFAULT_WARMUP = 100
 DEFAULT_REPS = 1000
 
+# ── CANONICAL single-request protocol (B4 Step 0b) ──────────────────────────
+# Locked once; every headline latency number in results/rq2+ cites THIS.
+# Rationale: Batch 1 recorded 17.4 ms and the spike 30.3 ms for the same model
+# because sample, warm-up, and machine state were not pinned. Ratios held;
+# absolutes didn't. The canonical run pins everything pinnable:
+#   domains  : first CANONICAL_SAMPLE domains of data/test.csv, file order
+#   warm-up  : 200 requests (discarded)   reps: 1000 timed requests
+#   timer    : time.perf_counter_ns       serving n_jobs: 1 (locked, B3 Step 1)
+#   measure  : per-request extract_features + predict on the (1, n) row;
+#              total / feature / predict p50/p95/p99 reported separately
+# Machine state (idle box, AC power) is procedural and documented in FINDINGS.
+CANONICAL_SAMPLE = 2000
+CANONICAL_WARMUP = 200
+CANONICAL_REPS = 1000
+
+
+def measure_canonical(model, dictionary, ngram_table,
+                      data_path: str = "data/") -> Dict[str, Any]:
+    """Run the CANONICAL protocol against one model. See constants above."""
+    import pandas as pd
+    domains = (pd.read_csv(os.path.join(data_path, "test.csv"))["domain"]
+               .astype(str).tolist()[:CANONICAL_SAMPLE])
+    out = measure_single_request_latency(
+        domains, dictionary, ngram_table, model,
+        skip_levenshtein=True, reps=CANONICAL_REPS, warmup=CANONICAL_WARMUP,
+        serving_n_jobs=1)
+    out["config"]["protocol"] = "CANONICAL-B4"
+    return out
+
 
 def _summarize_ns(samples_ns: Sequence[int]) -> Dict[str, float]:
     """Reduce a list of nanosecond timings to percentile + moment stats (microseconds)."""

@@ -1,0 +1,38 @@
+{
+  "seed": 42,
+  "train_matrix_sha256_16": "5a77ae5b0940e671",
+  "baseline_acc_pct": 93.179,
+  "models": {
+    "rf100": {
+      "accuracy_pct": 93.179,
+      "f1": 0.9321,
+      "pickle_bytes": null,
+      "path": "NOT COMMITTED (491 MB; reproduce: RF n_estimators=100 rs=42 on train matrix)",
+      "total_nodes": 6138656,
+      "config": "RandomForestClassifier(n_estimators=100, random_state=42)"
+    },
+    "rf_pruned": {
+      "accuracy_pct": 93.315,
+      "f1": 0.9318,
+      "pickle_bytes": 6710739,
+      "path": "results/rq2/models/rf_pruned.pkl",
+      "total_nodes": 83504,
+      "config": "RF(n_estimators=100, max_depth=10, ccp_alpha=0.0, rs=42)"
+    },
+    "dt12": {
+      "accuracy_pct": 93.4675,
+      "f1": 0.9342,
+      "pickle_bytes": 232074,
+      "path": "results/rq2/models/dt12.pkl",
+      "total_nodes": 2887,
+      "config": "DecisionTreeClassifier(max_depth=12, random_state=42)"
+    },
+    "logreg": {
+      "accuracy_pct": 90.0013,
+      "f1": 0.9,
+      "pickle_bytes": 1204,
+      "path": "results/rq2/models/logreg.pkl",
+      "config": "StandardScaler + LogisticRegression(max_iter=1000, rs=42)"
+    }
+  }
+}

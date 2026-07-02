@@ -1,0 +1,182 @@
+[
+  {
+    "max_depth": -1,
+    "ccp_alpha": 0.0,
+    "accuracy": 0.9317902253157722,
+    "f1": 0.9321360165170021,
+    "total_nodes": 6138656,
+    "size_bytes": 491123869,
+    "train_time_sec": 12.646141600000192
+  },
+  {
+    "max_depth": -1,
+    "ccp_alpha": 0.001,
+    "accuracy": 0.9191943436040523,
+    "f1": 0.9163517780423417,
+    "total_nodes": 6046,
+    "size_bytes": 513032,
+    "train_time_sec": 23.855439799999658
+  },
+  {
+    "max_depth": -1,
+    "ccp_alpha": 0.005,
+    "accuracy": 0.8996029722080545,
+    "f1": 0.8937255856790489,
+    "total_nodes": 1962,
+    "size_bytes": 186267,
+    "train_time_sec": 22.824944800000594
+  },
+  {
+    "max_depth": -1,
+    "ccp_alpha": 0.01,
+    "accuracy": 0.8712659886192033,
+    "f1": 0.8585804764703621,
+    "total_nodes": 1220,
+    "size_bytes": 126898,
+    "train_time_sec": 23.37990080000054
+  },
+  {
+    "max_depth": 20,
+    "ccp_alpha": 0.0,
+    "accuracy": 0.9404108287580131,
+    "f1": 0.940463522229383,
+    "total_nodes": 2482742,
+    "size_bytes": 198650850,
+    "train_time_sec": 11.387533399998574
+  },
+  {
+    "max_depth": 20,
+    "ccp_alpha": 0.001,
+    "accuracy": 0.918344284099887,
+    "f1": 0.9153052227581557,
+    "total_nodes": 6054,
+    "size_bytes": 513773,
+    "train_time_sec": 12.548865900000237
+  },
+  {
+    "max_depth": 20,
+    "ccp_alpha": 0.005,
+    "accuracy": 0.9017131199183943,
+    "f1": 0.8959482493938784,
+    "total_nodes": 1944,
+    "size_bytes": 184928,
+    "train_time_sec": 12.747898699999496
+  },
+  {
+    "max_depth": 20,
+    "ccp_alpha": 0.01,
+    "accuracy": 0.8712859900193014,
+    "f1": 0.8583316363876521,
+    "total_nodes": 1236,
+    "size_bytes": 128279,
+    "train_time_sec": 13.354153099999166
+  },
+  {
+    "max_depth": 15,
+    "ccp_alpha": 0.0,
+    "accuracy": 0.9430810156710969,
+    "f1": 0.943038006355243,
+    "total_nodes": 653074,
+    "size_bytes": 52277329,
+    "train_time_sec": 10.578202599999713
+  },
+  {
+    "max_depth": 15,
+    "ccp_alpha": 0.001,
+    "accuracy": 0.9203494244597121,
+    "f1": 0.9176800119896021,
+    "total_nodes": 5990,
+    "size_bytes": 508653,
+    "train_time_sec": 10.579851000000417
+  },
+  {
+    "max_depth": 15,
+    "ccp_alpha": 0.005,
+    "accuracy": 0.9015131059174142,
+    "f1": 0.8957618866167069,
+    "total_nodes": 1946,
+    "size_bytes": 185088,
+    "train_time_sec": 10.951353099999324
+  },
+  {
+    "max_depth": 15,
+    "ccp_alpha": 0.01,
+    "accuracy": 0.8723110617743242,
+    "f1": 0.8595302271852137,
+    "total_nodes": 1222,
+    "size_bytes": 127159,
+    "train_time_sec": 10.472332400000596
+  },
+  {
+    "max_depth": 10,
+    "ccp_alpha": 0.0,
+    "accuracy": 0.9331503205224365,
+    "f1": 0.9318328990776102,
+    "total_nodes": 83504,
+    "size_bytes": 6710739,
+    "train_time_sec": 9.195152100000996
+  },
+  {
+    "max_depth": 10,
+    "ccp_alpha": 0.001,
+    "accuracy": 0.9194443611052774,
+    "f1": 0.9166183594882199,
+    "total_nodes": 5698,
+    "size_bytes": 485293,
+    "train_time_sec": 8.302765599999475
+  },
+  {
+    "max_depth": 10,
+    "ccp_alpha": 0.005,
+    "accuracy": 0.9012330863160422,
+    "f1": 0.8954644085736967,
+    "total_nodes": 1952,
+    "size_bytes": 185568,
+    "train_time_sec": 8.456055599999672
+  },
+  {
+    "max_depth": 10,
+    "ccp_alpha": 0.01,
+    "accuracy": 0.8710859760183213,
+    "f1": 0.8583858369358037,
+    "total_nodes": 1230,
+    "size_bytes": 127799,
+    "train_time_sec": 8.331097899999804
+  },
+  {
+    "max_depth": 5,
+    "ccp_alpha": 0.0,
+    "accuracy": 0.8998579900593041,
+    "f1": 0.8938443842529035,
+    "total_nodes": 5190,
+    "size_bytes": 444644,
+    "train_time_sec": 5.402161199999682
+  },
+  {
+    "max_depth": 5,
+    "ccp_alpha": 0.001,
+    "accuracy": 0.8984028882021742,
+    "f1": 0.8921057382881783,
+    "total_nodes": 2792,
+    "size_bytes": 252777,
+    "train_time_sec": 5.3654028000000835
+  },
+  {
+    "max_depth": 5,
+    "ccp_alpha": 0.005,
+    "accuracy": 0.8881571710019701,
+    "f1": 0.8794394286484302,
+    "total_nodes": 1602,
+    "size_bytes": 157568,
+    "train_time_sec": 5.516714999999749
+  },
+  {
+    "max_depth": 5,
+    "ccp_alpha": 0.01,
+    "accuracy": 0.8704859340153811,
+    "f1": 0.8577938584691743,
+    "total_nodes": 1160,
+    "size_bytes": 122199,
+    "train_time_sec": 5.33731970000008
+  }
+]

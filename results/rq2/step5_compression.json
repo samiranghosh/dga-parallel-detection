@@ -1,0 +1,20 @@
+{
+  "rf100": {
+    "float64_value_threshold_bytes": 147327744,
+    "float32_savable_bytes": 73663872,
+    "accuracy_float64_input_pct": 93.179,
+    "accuracy_float32_input_pct": 93.179,
+    "note": "sklearn Tree arrays are fixed float64; true cast needs a custom serving structure (or ONNX, which is float32 end-to-end - measured in step 6). Savable-if-cast is exact arithmetic on value+threshold."
+  },
+  "rf_pruned": {
+    "float64_value_threshold_bytes": 2004096,
+    "float32_savable_bytes": 1002048,
+    "accuracy_float64_input_pct": 93.315,
+    "accuracy_float32_input_pct": 93.315,
+    "note": "sklearn Tree arrays are fixed float64; true cast needs a custom serving structure (or ONNX, which is float32 end-to-end - measured in step 6). Savable-if-cast is exact arithmetic on value+threshold."
+  },
+  "int8_investigation": {
+    "verdict": "NOT APPLICABLE as weight quantization",
+    "reason": "trees store split thresholds + leaf class distributions, not weights; int8-quantizing thresholds changes decision boundaries directly (unlike NN weight rounding). Feature value ranges here span [0,1] ratios and integer lengths - 8-bit threshold grids would collapse distinct splits on the ratio features. ONNX ai.onnx.ml TreeEnsemble has no int8 mode either. Reported as investigate-only per plan; not pursued."
+  }
+}

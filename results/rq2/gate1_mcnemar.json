@@ -1,0 +1,11 @@
+{
+  "n_holdout": 199986,
+  "dt_wrong_rf_right_b": 4316,
+  "dt_right_rf_wrong_c": 4893,
+  "discordant_pairs": 9209,
+  "exact_binomial_p_two_sided": 1.922951591278546e-09,
+  "direction": "DT better",
+  "acc_dt12_pct": 93.4675,
+  "acc_rf100_pct": 93.179,
+  "verdict": "BEATS (significant, DT favour)"
+}

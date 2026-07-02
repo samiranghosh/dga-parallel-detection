@@ -1,0 +1,18 @@
+{
+  "variant": "rf100-onnx",
+  "verdict": "DISQUALIFIED ON COLD-START",
+  "rubric": "B4 Step 6: if session init still > 60 s after graph-opt disable / pre-optimized .ort, record and move on - do not sink time",
+  "evidence": {
+    "enable_all_init_sec": 1932.3,
+    "enable_all_source": "results/spike/probe2_onnx_treelite.json (onnx_only_rss_stage_seconds.load_model_session_at_sec)",
+    "disable_all_attempt": "exceeded a 1800 s budget (B3, runner-log evidence; process killed at timeout)",
+    "threshold_sec": 60,
+    "margin": "both observed inits exceed the rubric threshold by >30x"
+  },
+  "ort_preoptimized_note": "Not separately tested. B3's DISABLE_ALL timeout demonstrates the cost is TreeEnsemble KERNEL CONSTRUCTION (6,138,656 nodes), not graph optimization; a pre-optimized .ort only skips the optimizer pass and therefore cannot cure the >30x overshoot. Recorded per the do-not-sink-time rule.",
+  "steady_state_reference": {
+    "single_request_p50_us": 18.0,
+    "session_rss_mib": 990.7,
+    "source": "results/spike/probe2_onnx_treelite.json"
+  }
+}
