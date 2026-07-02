@@ -1,0 +1,53 @@
+{
+  "versions": {
+    "onnxruntime": "1.25.1",
+    "skl2onnx": "1.20.0",
+    "treelite": "4.7.0",
+    "tl2cgen": "1.0.0 (import-blocked)",
+    "sklearn": "1.8.0"
+  },
+  "onnx_file_mb": 250.7,
+  "onnx_parity": {
+    "labels_equal": true,
+    "label_mismatches": 0,
+    "max_abs_proba_diff": 2.2411346434214607e-07,
+    "n_rows": 2000,
+    "provenance": "main probe-2 run log"
+  },
+  "onnx_single_request": {
+    "p50_us": 18.0,
+    "provenance": "main probe-2 run log (ENABLE_ALL session; p50 only)"
+  },
+  "gtil_parity": {
+    "labels_equal": true,
+    "label_mismatches": 0,
+    "max_abs_proba_diff": 3.3306690738754696e-16
+  },
+  "gtil_single_request": {
+    "p50_us": 72.8,
+    "p95_us": 122.64999999999986,
+    "p99_us": 224.88399999999993,
+    "mean_us": 82.41810000000001,
+    "sd_us": 37.74344167904909,
+    "n": 1000
+  },
+  "treelite_import_sec": 0.6,
+  "tl2cgen_status": "BLOCKED on Windows: import fails in libloader (os.add_dll_directory on non-existent conda-style path); native compile would additionally require MSVC. GTIL benched instead; compiled-lib deferred to Batch 6 (Linux/Docker) per plan.",
+  "onnx_only_rss_mb": {
+    "interpreter": 20.1,
+    "import_numpy": 31.9,
+    "import_onnxruntime": 48.8,
+    "load_model_session": 990.4,
+    "first_inference": 990.7
+  },
+  "onnx_only_rss_stage_seconds": {
+    "interpreter_at_sec": 0.0,
+    "import_numpy_at_sec": 0.1,
+    "import_onnxruntime_at_sec": 0.3,
+    "load_model_session_at_sec": 1932.3,
+    "first_inference_at_sec": 1932.3
+  },
+  "onnx_only_rss_status": "ok",
+  "onnx_session_init_finding": "Session init on the UNPRUNED 6.1M-node RF-100 is pathological: ORT_ENABLE_ALL took ~15-25 min (main run), ORT_DISABLE_ALL exceeded a 30-min budget (so the cost is TreeEnsemble kernel construction, not the graph optimizer). Cold-start of the uncompressed model is infeasible on edge; structural pruning is a prerequisite for the ONNX path's LOAD TIME, not only its RSS.",
+  "protocol": "single (1,5) float32 row, 200 warmup, 1000 timed reps"
+}

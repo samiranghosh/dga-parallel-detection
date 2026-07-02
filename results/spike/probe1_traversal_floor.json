@@ -1,0 +1,17 @@
+{
+  "bypass_parity": "2000/2000",
+  "traversal_floor": {
+    "n": 1000,
+    "p50_us": 408.3,
+    "p95_us": 733.8799999999992,
+    "p99_us": 975.3239999999998,
+    "mean_us": 460.26719999999995,
+    "sd_us": 159.76669352690666
+  },
+  "sklearn_njobs1_contrast": {
+    "p50_us": 5788.65,
+    "p95_us": 8174.224999999999,
+    "p99_us": 9071.270999999999
+  },
+  "note": "floor = 100x tree_.predict (Cython) + numpy aggregation, single (1,5) float32 row"
+}

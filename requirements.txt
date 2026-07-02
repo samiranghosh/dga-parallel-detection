@@ -46,6 +46,10 @@ onnxruntime==1.25.1             # Serving backend that drops the heavy sklearn i
                                 # parity (labels array_equal, probas within 1.2e-7).
 skl2onnx==1.20.0                # sklearn -> ONNX conversion (zipmap=False; not implicated
                                 # in the parity bug - 1.19.1 reproduced it identically).
+treelite==4.7.0                 # Tree-model exchange + GTIL reference runtime (B3 probe 2)
+tl2cgen==1.0.0                  # Native tree compiler - IMPORT-BLOCKED on this Windows
+                                # layout (libloader expects a conda-style Library/bin) and
+                                # needs MSVC; compiled-lib benchmark deferred to Batch 6.
 
 # --- Serving API (RQ3) ---
 fastapi==0.135.1                # Required by api.py (was previously unpinned/missing)
