@@ -63,7 +63,8 @@ def measure_single_request_latency(domains: List[str],
                                    model,
                                    skip_levenshtein: bool = True,
                                    reps: int = DEFAULT_REPS,
-                                   warmup: int = DEFAULT_WARMUP) -> Dict[str, Any]:
+                                   warmup: int = DEFAULT_WARMUP,
+                                   serving_n_jobs: Optional[int] = 1) -> Dict[str, Any]:
     """Time per-domain (feature extraction + single predict), one request at a time.
 
     Args:
@@ -73,6 +74,11 @@ def measure_single_request_latency(domains: List[str],
         skip_levenshtein: True => 5-feature production config.
         reps: Number of timed single requests (>= 1000 recommended).
         warmup: Warm-up requests discarded before timing.
+        serving_n_jobs: Serving configuration for the model's predict path
+            (Batch-3 Step 1). Single-request predict must not pay joblib's
+            per-call fan-out, so the DEFAULT locks n_jobs=1 on the measured
+            model. Pass None to leave the model untouched (e.g. to measure the
+            n_jobs=-1 contrast). Batch/training paths are unaffected.
 
     Returns:
         Dict with 'total', 'feature', 'predict' timing summaries (microseconds)
@@ -80,6 +86,9 @@ def measure_single_request_latency(domains: List[str],
     """
     if not domains:
         raise ValueError("domains must be non-empty")
+
+    if serving_n_jobs is not None and hasattr(model, "n_jobs"):
+        model.n_jobs = serving_n_jobs
 
     n = len(domains)
     # Deterministic prev-domain pairing mirrors sequential extraction semantics.
@@ -118,6 +127,7 @@ def measure_single_request_latency(domains: List[str],
             "warmup": warmup,
             "n_features": 5 if skip_levenshtein else 6,
             "domain_pool_size": n,
+            "serving_n_jobs": serving_n_jobs,
         },
         "total": _summarize_ns(total_ns),
         "feature": _summarize_ns(feat_ns),

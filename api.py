@@ -162,7 +162,13 @@ def load_model():
             pickle.dump({'model': _model, 'info': _model_info}, f)
         print(f"[API] Model cached to {model_cache}")
 
-    print(f"[API] Ready. Model accuracy: {_model_info.get('accuracy', 'N/A')}")
+    # RQ3 serving lever (Batch-3 Step 1): joblib's per-call fan-out dominates
+    # single-request predict (~17 ms with n_jobs=-1 vs ~4.6 ms with n_jobs=1
+    # on the RF-100 baseline). Serving requests are 1-row inputs, so lock
+    # n_jobs=1 on the LOADED model only — training/batch paths are untouched.
+    _model.n_jobs = 1
+
+    print(f"[API] Ready. Model accuracy: {_model_info.get('accuracy', 'N/A')} (serving n_jobs=1)")
 
 
 def _extract_5_features(domain: str) -> np.ndarray:
