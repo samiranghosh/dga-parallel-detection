@@ -64,3 +64,22 @@ LR} × {sklearn, ONNX} completes the deliverable (Steps 7–8).
   is accuracy-neutral at 4 d.p.; int8 = not applicable to tree thresholds —
   documented). Step 6 ✅ (parity + latency + RSS above; RF-100-ONNX cold-start DQ).
 - Step 7 (31-subset sweep + SHAP, DT-12) — running. Step 8 (C4 curve + FINDINGS) — next.
+
+---
+
+## Batch-5 addendum (02 Jul — feature kernel; full report `results/kernel/FINDINGS.md`)
+The two O(m²) dictionary features were reimplemented on a C Aho-Corasick
+kernel (`pyahocorasick`, bench winner 9.7 vs marisa 15.3 vs legacy 47.0
+µs/domain) with **provably identical output**: bit-identical on a
+1,049-domain edge-case oracle (`tests/golden_features_v2.json`) and
+max|Δ| = 0.0 on the full 999,927-domain corpus — model inputs are unchanged
+bits, so the B4 gate verdicts carry over untouched. Effect (canonical
+protocol, same-session before/after): **DT-12·ONNX 71.5 → 45.8 µs p50**,
+DT-12·sklearn 136.6 → 74.2 µs; the O(m²) feature tail is linearised
+(feature p99: sklearn arm 371 → 91 µs, ONNX arm 299 → 110 µs). Batch `Pool.map` k=8: 78.9k (baseline
+reproduced) → **152.4k dom/s (1.93×)**. Cost: +34.5 MiB automaton RSS —
+DT-12·ONNX end-to-end 84.4 → **118.9 MiB** (Profile-C headroom 2.9× →
+2.05×; all RQ3 profiles still fit; marisa-mmap fallback measured at
+0.7 MiB / 1.6× kernel latency for tighter profiles). Gates green
+throughout (suite 54 passed); `FEATURE_KERNEL=legacy` retained for
+A/B + rollback.
