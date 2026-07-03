@@ -1,0 +1,134 @@
+{
+  "start_method": "fork",
+  "cgroup": {
+    "effective_cpus": 16.0,
+    "memory_limit_mib": null,
+    "host_visible_cpus": 16,
+    "cpu_model": "AMD Ryzen 7 7840HS w/ Radeon 780M Graphics",
+    "kernel": "Linux version 5.15.167.4-microsoft-standard-WSL2",
+    "machine": "x86_64",
+    "raw": {
+      "cgroup_v2_cpu.max": null,
+      "cgroup_v2_memory.max": null,
+      "cgroup_v2_memory.swap.max": null,
+      "cgroup_v1_cpu.cfs_quota_us": "-1",
+      "cgroup_v1_cpu.cfs_period_us": "100000",
+      "cgroup_v1_memory.limit_in_bytes": "9223372036854771712",
+      "cgroup_v1_memsw.limit_in_bytes": "9223372036854771712"
+    }
+  },
+  "windows_baselines": {
+    "spawn_cost_per_worker_sec": "0.3-0.5 (B2/B5, Windows spawn)",
+    "ac_build_from_set_sec": 0.5,
+    "ac_pickle_loads_sec": 0.06,
+    "source": "results/kernel/attach_paths.json (Windows)"
+  },
+  "pool_startup": {
+    "k1": {
+      "mean_sec": 0.5112,
+      "reps_sec": [
+        0.4964,
+        0.5151,
+        0.5222
+      ],
+      "per_worker_sec": 0.5112
+    },
+    "k2": {
+      "mean_sec": 0.4221,
+      "reps_sec": [
+        0.4742,
+        0.411,
+        0.3812
+      ],
+      "per_worker_sec": 0.211
+    },
+    "k4": {
+      "mean_sec": 0.435,
+      "reps_sec": [
+        0.4832,
+        0.4247,
+        0.397
+      ],
+      "per_worker_sec": 0.1087
+    },
+    "k8": {
+      "mean_sec": 0.5177,
+      "reps_sec": [
+        0.5262,
+        0.5044,
+        0.5224
+      ],
+      "per_worker_sec": 0.0647
+    }
+  },
+  "attach_paths": {
+    "build_from_set": {
+      "mean_sec": 0.455,
+      "reps_sec": [
+        0.4686,
+        0.4922,
+        0.4676,
+        0.429,
+        0.4176
+      ]
+    },
+    "pickle_loads": {
+      "mean_sec": 0.0538,
+      "reps_sec": [
+        0.0624,
+        0.0493,
+        0.0508,
+        0.0516,
+        0.0547
+      ],
+      "blob_mib": 26.5
+    },
+    "native_saveload": {
+      "mean_sec": 0.5303,
+      "reps_sec": [
+        0.5577,
+        0.5115,
+        0.5391,
+        0.5242,
+        0.519
+      ],
+      "file_mib": 33.0
+    }
+  },
+  "env_propagation": {
+    "start_method": "fork",
+    "parent_setter_mode": "legacy",
+    "env_FEATURE_KERNEL": null,
+    "worker_modes_seen": [
+      "legacy",
+      "legacy"
+    ],
+    "setter_propagates_under_fork": true
+  },
+  "build_1core": {
+    "ac_build_from_set": {
+      "mean_sec": 0.4282,
+      "reps_sec": [
+        0.4332,
+        0.4238,
+        0.4277
+      ]
+    },
+    "marisa_build_from_set": {
+      "mean_sec": 0.1429,
+      "reps_sec": [
+        0.1414,
+        0.1493,
+        0.138
+      ]
+    },
+    "marisa_mmap": {
+      "mean_sec": 0.0001,
+      "reps_sec": [
+        0.0001,
+        0.0001,
+        0.0
+      ]
+    }
+  }
+}
