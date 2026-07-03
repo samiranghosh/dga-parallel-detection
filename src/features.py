@@ -101,10 +101,12 @@ def build_kernel(words=None, mode=None, marisa_path=None) -> DictKernel:
         marisa_path: under 'fast_marisa', mmap this trie file (0.7 MiB
             resident) instead of building from `words`.
     """
-    mode = mode or _kernel_mode
+    mode = mode or ("fast_marisa" if marisa_path is not None else _kernel_mode)
     if mode == "legacy":
         raise ValueError("legacy mode scans the raw set; no kernel handle form")
-    if mode == "fast_marisa" and marisa_path is not None:
+    if marisa_path is not None and mode != "fast_marisa":
+        raise ValueError("marisa_path implies mode='fast_marisa'")
+    if marisa_path is not None:
         import marisa_trie
         trie = marisa_trie.Trie()
         trie.mmap(marisa_path)
