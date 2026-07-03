@@ -1,0 +1,191 @@
+{
+  "protocol": "CANONICAL-B4 (2000 test.csv domains, 200 warmup, 1000 reps), model = RF-pruned (B4 fallback), FEATURE_KERNEL=fast",
+  "note": "data point only - B4 runtime adjudication (ONNX) not re-opened. tl2cgen was import-blocked on Windows (B3).",
+  "cgroup": {
+    "effective_cpus": 16.0,
+    "memory_limit_mib": null,
+    "host_visible_cpus": 16,
+    "cpu_model": "AMD Ryzen 7 7840HS w/ Radeon 780M Graphics",
+    "kernel": "Linux version 5.15.167.4-microsoft-standard-WSL2",
+    "machine": "x86_64",
+    "raw": {
+      "cgroup_v2_cpu.max": null,
+      "cgroup_v2_memory.max": null,
+      "cgroup_v2_memory.swap.max": null,
+      "cgroup_v1_cpu.cfs_quota_us": "-1",
+      "cgroup_v1_cpu.cfs_period_us": "100000",
+      "cgroup_v1_memory.limit_in_bytes": "9223372036854771712",
+      "cgroup_v1_memsw.limit_in_bytes": "9223372036854771712"
+    }
+  },
+  "compile_sec": 17.12,
+  "so_bytes": 2481816,
+  "parity_labels_equal_vs_sklearn": {
+    "sklearn_njobs1": true,
+    "treelite_gtil": true,
+    "tl2cgen_so": true,
+    "onnx_ort": true
+  },
+  "arms": {
+    "sklearn_njobs1": {
+      "config": {
+        "reps": 1000,
+        "warmup": 200,
+        "n_features": 5,
+        "domain_pool_size": 2000,
+        "serving_n_jobs": null
+      },
+      "total": {
+        "n": 1000,
+        "mean_us": 4172.137163,
+        "sd_us": 789.6662707433198,
+        "p50_us": 3949.6785,
+        "p95_us": 5502.086199999998,
+        "p99_us": 6937.186959999999,
+        "min_us": 3232.031,
+        "max_us": 11864.695
+      },
+      "feature": {
+        "n": 1000,
+        "mean_us": 79.861315,
+        "sd_us": 166.38428685275926,
+        "p50_us": 67.71600000000001,
+        "p95_us": 131.27329999999995,
+        "p99_us": 211.52183999999997,
+        "min_us": 24.428,
+        "max_us": 5173.181
+      },
+      "predict": {
+        "n": 1000,
+        "mean_us": 4092.275848,
+        "sd_us": 755.3863557633725,
+        "p50_us": 3874.83,
+        "p95_us": 5416.184449999999,
+        "p99_us": 6715.119979999999,
+        "min_us": 3193.413,
+        "max_us": 11809.868
+      }
+    },
+    "treelite_gtil": {
+      "config": {
+        "reps": 1000,
+        "warmup": 200,
+        "n_features": 5,
+        "domain_pool_size": 2000,
+        "serving_n_jobs": null
+      },
+      "total": {
+        "n": 1000,
+        "mean_us": 675.4920330000001,
+        "sd_us": 1748.0101669151143,
+        "p50_us": 544.1714999999999,
+        "p95_us": 1385.1898999999999,
+        "p99_us": 3608.6571299999987,
+        "min_us": 122.07,
+        "max_us": 48037.491
+      },
+      "feature": {
+        "n": 1000,
+        "mean_us": 62.047086,
+        "sd_us": 27.223966005887046,
+        "p50_us": 56.50749999999999,
+        "p95_us": 110.31954999999999,
+        "p99_us": 145.89364999999998,
+        "min_us": 22.748,
+        "max_us": 381.638
+      },
+      "predict": {
+        "n": 1000,
+        "mean_us": 613.444947,
+        "sd_us": 1743.458539879254,
+        "p50_us": 482.089,
+        "p95_us": 1277.9066999999995,
+        "p99_us": 3556.882889999999,
+        "min_us": 82.562,
+        "max_us": 47979.174
+      }
+    },
+    "tl2cgen_so": {
+      "config": {
+        "reps": 1000,
+        "warmup": 200,
+        "n_features": 5,
+        "domain_pool_size": 2000,
+        "serving_n_jobs": null
+      },
+      "total": {
+        "n": 1000,
+        "mean_us": 254.06251699999999,
+        "sd_us": 259.93953206777405,
+        "p50_us": 185.7265,
+        "p95_us": 599.6915499999998,
+        "p99_us": 1418.8063799999995,
+        "min_us": 76.491,
+        "max_us": 3883.789
+      },
+      "feature": {
+        "n": 1000,
+        "mean_us": 59.391802,
+        "sd_us": 50.862579877554346,
+        "p50_us": 50.579,
+        "p95_us": 117.60619999999999,
+        "p99_us": 187.88170999999997,
+        "min_us": 15.153,
+        "max_us": 1077.552
+      },
+      "predict": {
+        "n": 1000,
+        "mean_us": 194.670715,
+        "sd_us": 243.90025909469682,
+        "p50_us": 127.05250000000001,
+        "p95_us": 470.01434999999975,
+        "p99_us": 1207.752969999999,
+        "min_us": 43.88,
+        "max_us": 3767.974
+      }
+    },
+    "onnx_ort": {
+      "config": {
+        "reps": 1000,
+        "warmup": 200,
+        "n_features": 5,
+        "domain_pool_size": 2000,
+        "serving_n_jobs": null
+      },
+      "total": {
+        "n": 1000,
+        "mean_us": 45.11936,
+        "sd_us": 25.69473841346778,
+        "p50_us": 39.674,
+        "p95_us": 72.1899,
+        "p99_us": 122.77436999999986,
+        "min_us": 23.667,
+        "max_us": 463.484
+      },
+      "feature": {
+        "n": 1000,
+        "mean_us": 28.32029,
+        "sd_us": 14.254630202151864,
+        "p50_us": 25.618000000000002,
+        "p95_us": 47.71654999999999,
+        "p99_us": 67.30607999999998,
+        "min_us": 11.361,
+        "max_us": 282.307
+      },
+      "predict": {
+        "n": 1000,
+        "mean_us": 16.79907,
+        "sd_us": 16.94924624930323,
+        "p50_us": 13.509,
+        "p95_us": 30.76545,
+        "p99_us": 56.211819999999946,
+        "min_us": 11.526,
+        "max_us": 416.142
+      }
+    }
+  },
+  "versions": {
+    "treelite": "4.7.0",
+    "tl2cgen": "1.0.0"
+  }
+}
