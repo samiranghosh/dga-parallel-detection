@@ -23,7 +23,7 @@ Three decoupled research questions extend a static batch parallel pipeline:
 - RQ1 (Batch 2): `src/benchmark_adaptive.py` · `src/load_harness.py` + `src/load_profiles.py` (uniform/Poisson/ramp, ρ-sweep) · `tests/test_adaptive.py`
 - RQ2 groundwork (pre-existing): `src/compact_dict.py` (marisa-trie DAWG — already a hard runtime dep via `preprocess.py`) · `src/onnx_model.py` + `tests/test_onnx.py` (failing, known issue)
 - `tests/test_parallel.py` (gate) + `test_boundary.py` `test_features.py` `test_fault_handler.py` `test_compact_dict.py`
-- `results/metrics.json` — raw baseline · `results/rq1/FINDINGS.md` — RQ1 C3 report · `results/spike/` — Batch-3 probes · `results/rq2/` — Batch-4 gates/C4 (FINDINGS, INTERIM, gate JSONs, `models/manifest.json`) · `results/kernel/` — Batch-5 AC-kernel (FINDINGS + bench/A2/step5 JSONs) · `results/wsl2/` — E1 Linux-fork re-run · `scripts/{spike,rq2,kernel}/` — probe/gate/bench scripts · `P3_Experimental_Report.ipynb`
+- `results/metrics.json` — raw baseline · `results/rq1/FINDINGS.md` — RQ1 C3 report · `results/spike/` — Batch-3 probes · `results/rq2/` — Batch-4 gates/C4 (FINDINGS, INTERIM, gate JSONs, `models/manifest.json`) · `results/kernel/` — Batch-5 AC-kernel (FINDINGS + bench/A2/step5 JSONs) · `results/rq3/` — Batch-6 edge grid (FINDINGS, `x86/` cell JSONs, QEMU parity, `logs/`, ONNX models baked into the ARM image) · `results/wsl2/` — E1 Linux-fork re-run · `scripts/{spike,rq2,kernel,rq3}/` — probe/gate/bench scripts (+`scripts/rq3/ARM_RUNBOOK.md`) · `P3_Experimental_Report.ipynb`
 - Canonical single-request protocol: constants in `src/latency_harness.py` (2000-domain sample, 200 warm-up, 1000 reps, n_jobs=1) — **every latency claim cites it**
 
 ## Commands
@@ -68,9 +68,9 @@ bash reproduce.sh [--quick]                                  # full pipeline + r
 - Claim RQ1 as a **resource-efficiency + stability** contribution, never a streaming-throughput one.
 
 ## Known issues
-- `test_onnx` **FIXED** (B3 Step 2): root cause was an **onnxruntime ≥1.26.0 TreeEnsemble kernel regression** (binary-RF probas emitted as (−p₁,+p₁), corrupting in-graph labels). Shipped: zipmap=False + **ort pinned 1.25.1**. Never bump onnxruntime without re-running `test_onnx` + a real-model parity check (re-verify wheel+parity on aarch64 in Batch 6).
+- `test_onnx` **FIXED** (B3 Step 2): root cause was an **onnxruntime ≥1.26.0 TreeEnsemble kernel regression** (binary-RF probas emitted as (−p₁,+p₁), corrupting in-graph labels). Shipped: zipmap=False + **ort pinned 1.25.1**. Never bump onnxruntime without re-running `test_onnx` + a real-model parity check (aarch64 wheel + parity re-verified in B6 under QEMU: max|Δ|=0.0).
 - **RF-100·ONNX cold-start**: session init >1,800 s regardless of graph-opt level (kernel construction) — DQ'd for serving; small models init instantly.
-- **Windows spawn cost** (~0.3–0.5 s/worker + dict unpickle) inflates parallel startup in RQ1 numbers; re-check on Linux `fork` / ARM in Batch 6.
+- **Windows spawn cost** (~0.3–0.5 s/worker + dict unpickle) inflates parallel startup in RQ1 numbers; B6 measured Linux `fork` at **0.065 s/worker** — real-ARM re-check pending T1.
 - A1-adaptive equality + A5 end-to-end (kill/overload) tests were gaps in Batch 2 — closed in Batch-3 Step 0; keep them green.
 
 ## RQ2 result (Batch 4, MEASURED — `results/rq2/FINDINGS.md` + `INTERIM.md`)
@@ -85,7 +85,15 @@ bash reproduce.sh [--quick]                                  # full pipeline + r
 - The two O(m²) dictionary features run on a **C Aho-Corasick kernel** (`FEATURE_KERNEL=fast`, default; `legacy` selectable for A/B). **Provably identical output**: bit-identical on the 1,049-domain golden-v2 oracle *and* the full 999,927-domain corpus (max|Δ|=0.0) → B4 gate verdicts carry over untouched.
 - Canonical single-request (same-session before/after): DT-12·ONNX **71.5→45.8 µs p50**, DT-12·sklearn 136.6→74.2; feature p99 tails linearised (sklearn arm **371→91 µs**, ONNX arm 299→110). Batch `Pool.map` k=8: 78.9k (baseline reproduced) → **152.4k dom/s (1.93×)**.
 - Cost: **+34.5 MiB** automaton RSS — DT-12·ONNX end-to-end **118.9 MiB** (Profile-C headroom 2.05×). marisa-mmap fallback measured (0.7 MiB, 1.6× kernel latency) for tighter profiles.
-- **Spawn traps (measured):** workers read `FEATURE_KERNEL` from the **env** (`set_kernel_mode` is process-local); per-worker parallel automaton build beats shipping the 26.5 MiB blob through spawn initargs — single-copy attach lives on the shm path. Re-check both on Linux `fork`/ARM in Batch 6.
+- **Spawn traps (measured):** workers read `FEATURE_KERNEL` from the **env** (`set_kernel_mode` is process-local); per-worker parallel automaton build beats shipping the 26.5 MiB blob through spawn initargs — single-copy attach lives on the shm path. Re-checked on Linux `fork` in B6 (see RQ3 result); real ARM still pending (T1).
+
+## RQ3 edge result (Batch 6, MEASURED — `results/rq3/FINDINGS.md`; **x86-bounded until T1**)
+- **C5 (<1 ms median) MET under x86+cgroup with 20–40× margin:** all 12 grid cells ({DT-12·ONNX, RF-pruned·ONNX} × {fast, fast_marisa} × {A 2c/512M, B 1c/512M, C 1c/256M}) at **24.0–50.3 µs p50**, worst p99 anywhere 363 µs (canonical protocol, in-container). **Idle RSS fits Profile C before data in every cell** (68.3–159.4 MiB peak). Gates 52-green in-container. Features remain 65–75% of single-request cost under cgroups (B5 framing holds).
+- **Kernel locked (SamG):** `fast` for Profiles A/B (lowest p50, ≥3.5× RSS headroom at 512 MiB); **`fast_marisa` for Profile C + any batch work under RAM pressure** — the 1M-row batch harness OOMs at A/fast and C/*, marisa survives A at 73.3k dom/s (0.7 vs ~35 MiB/worker). Minimal pair: DT-12+fast_marisa = 68 MiB end-to-end, 33.6 µs p50 under C.
+- **T6 aarch64 parity PASS (QEMU, correctness ONLY):** features bit-identical (golden-v2, all 3 kernel modes), model labels `array_equal`, probas **max|Δ|=0.0** — ort 1.25.1 aarch64 wheel verified (`results/rq3/parity_qemu_arm64.json`). Caveat: the full pytest suite did **not** run under QEMU — the arm64 *full* image never built (WSL2 NAT link; FINDINGS §7 + `results/rq3/logs/`); parity ran in the self-contained serve image. **tl2cgen publishes no aarch64 wheel** → arm64 builds use `requirements-arm64.txt` (`--build-arg REQUIREMENTS=…`).
+- **T1 real ARM: NOT RUN — blocked on cloud account** (Oracle Ampere A1 / Graviton). Complete copy-paste procedure: `scripts/rq3/ARM_RUNBOOK.md`; identical digest-pinned images/driver/parity gate already exercised on x86. **Claim bounding (approved §9 text): every latency/RSS claim reads "x86 under cgroup" until T1 lands.**
+- **Linux-fork re-checks:** pool startup **0.065 s/worker** (5–8× cheaper than Windows spawn, k=8); `set_kernel_mode()` propagates under fork (env var stays the documented interface); attach ranking unchanged (blob-attach < build < save/load). tl2cgen compiled-`.so` (Windows-blocked since B3): parity-equal but **ONNX still wins ~9× at batch=1** (39.7 vs 186 µs) — B4 adjudication reinforced.
+- Container p50s are *faster* than Windows-host B5 numbers (24–36 vs 45.8 µs; Linux syscall/timer overhead) — never compare cross-OS absolutes. Bounded RQ1-under-cgroup datum reproduces the ≤2-core finding; under fork, static-2 beats sequential at high load (B2's ordering was partly a spawn-cost artifact).
 
 ## Rejected — do not relitigate
 - Shannon entropy as a novelty claim (foundational; off-the-shelf).
@@ -97,7 +105,7 @@ bash reproduce.sh [--quick]                                  # full pipeline + r
 
 ## Planning
 - Live plan: `docs/IMPLEMENTATION_PLAN.md` (gated batches; read on demand — **not** imported, plans change too often to live in memory) + the thread tracker (T1–T7).
-- Highest-value levers, **post-B5**: (1) **T1 real ARM validation** (Batch 6 — publishability; re-verify ort-1.25.1 aarch64 parity, `fork` spawn economics, DT-12 image sizing); (2) Batch-7 robustness/reproducibility (T3 dictionary-family blind spot feeds the viva narrative). DT-12 distill (B4) and AC/DAWG kernel (B5) are **done and measured**; 3-feature drop stays rejected (−2.3 pp).
+- Highest-value levers, **post-B6**: (1) **T1 real ARM run** — the only open B6 item, blocked on cloud account (Ampere A1/Graviton); everything is staged in `scripts/rq3/ARM_RUNBOOK.md`, run it the day access lands; (2) **Batch-7 robustness/reproducibility** (T3 dictionary-family blind spot feeds the viva narrative). B4 distill, B5 kernel, B6 edge grid are **done and measured**; 3-feature drop stays rejected (−2.3 pp).
 
 ## Statistical rigor
 - Accuracy: stratified CV + paired t-tests. Latency/throughput: mean ± SD with CIs over repetitions.

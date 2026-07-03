@@ -1,7 +1,7 @@
 # DGA Dissertation — Implementation Plan (Claude Code)
 
 Gated batches. Execute one, report, then the next is issued. Files in `src/` unless noted.
-**Status (03 Jul):** B1 ✅ · B2 ✅ · B3 ✅ (decisions resolved) · B4 ✅ (all 4 gates PASS → DT-12 PRIMARY locked, SamG; RF-pruned·ONNX fallback) · **B5 ✅ (`feature-kernel`: A2 bit-identical, 45.8 µs single-request, 1.93× batch)** · **B6 next (`rq3-edge`)** — partially pre-run (WSL2 E1) · B7 pending.
+**Status (03 Jul):** B1 ✅ · B2 ✅ · B3 ✅ (decisions resolved) · B4 ✅ (all 4 gates PASS → DT-12 PRIMARY locked, SamG; RF-pruned·ONNX fallback) · B5 ✅ (`feature-kernel`: A2 bit-identical, 45.8 µs single-request, 1.93× batch) · **B6 ✅ (`rq3-edge`: C5 MET x86-bounded, kernel locked, T6 PASS — except T1 real ARM, blocked on cloud account; `results/rq3/FINDINGS.md`)** · **B7 next**.
 Acceptance IDs (A1–A5 / B1–B5 / C1–C5 / D / E) reference the Testing Approach doc.
 **Revised after Batch-1 measurement:** single-request latency and RSS are **model-dominated, not feature-dominated** (predict = 99% of ~4.6 ms; features ~145 µs / <1%; model 473 of 657 MiB). Sequencing updated accordingly: **model compression is the shared lever for RQ2 memory *and* RQ3 latency**; AC/DAWG is demoted to a conditional batch-throughput lever. RQ1 stays front-loaded (independent, feeds Mid-Sem).
 
@@ -63,15 +63,15 @@ Files: `features.py` (`calc_meaningful_word_ratio`, `calc_lms_percentage`), `sha
 3. Batch-throughput before/after — the honest, provably-identical-output contribution.
 **Exit:** A2 passes · batch-throughput delta recorded.
 
-## Batch 6 — Phase 4: RQ3 edge validation  `[incl. real ARM — T1]`
-**Gate:** requires Batch 4 (peak RSS 657 MiB > 512 MB — container won't load uncompressed).
-1. Dockerfiles: **A 2c/512 MB · B 1c/512 MB · C 1c/256 MB**.
-2. Full suite under cgroups; percentile latency curves; **<1 ms median** — **C5**.
-3. Tightest profile: **idle RSS first**; ONNX-only / treelite image is the headline if sklearn won't fit — **C5**.
-4. ONNX-only container bit-identical on aarch64 (QEMU functional only) — **T6 / D**.
-5. **T1 real ARM**: cloud ARM VM (Ampere A1 / Graviton t4g) cgroup-constrained; run `benchmark.py`; **bound the claim** (x86+cgroup *and* ARM+cgroup). Re-confirm the model-dominated bottleneck holds on ARM — **D**.
-6. Re-measure RQ1 spawn costs under Linux `fork`; re-run tl2cgen compiled-`.so` bench (Windows-blocked). **Partially pre-run:** `results/wsl2/metrics.json` — E1 under WSL2: k=2 → 1.81×, IPC ~0.4% (vs 1.32% Windows). Full native-Linux/ARM still due.
-**Exit:** <1 ms met or honest fallback · ARM result with bounded claim.
+## Batch 6 — Phase 4: RQ3 edge validation  ✅ DONE except T1 — `results/rq3/FINDINGS.md`
+**Verdicts (03 Jul, SamG adjudicated):**
+1. Images ✅ — digest-pinned `python:3.11-slim-bookworm` (multi-arch); `dga-full:b6` 1.44 GB + `dga-serve-onnx:b6` 436 MB (self-contained for ARM); profiles applied at `docker run` (A 2c/512M · B 1c/512M · C 1c/256M, swap=mem).
+2. **C5 MET (x86+cgroup)** ✅ — all 12 grid cells 24.0–50.3 µs p50, worst p99 363 µs (20–40× inside 1 ms); gates 52-green in-container; features remain 65–75% of single-request cost.
+3. Idle-RSS-first ✅ — every cell fits Profile C **before data** (68.3–159.4 MiB peak). **Kernel locked (SamG): `fast` for A/B; `fast_marisa` for C + batch under RAM pressure** (batch harness OOMs at A/fast and C/*; marisa survives A at 73.3k dom/s).
+4. **T6 PASS** ✅ — aarch64 QEMU parity (correctness only): golden-v2 bit-identical ×3 kernel modes, labels array_equal, probas max|Δ|=0.0. Caveat: full pytest suite NOT run under QEMU — arm64 *full* image never built (WSL2 NAT; FINDINGS §7); parity ran in the self-contained serve image. tl2cgen has no aarch64 wheel → `requirements-arm64.txt`.
+5. **T1 real ARM — OPEN, blocked on cloud account** (Ampere A1 / Graviton). Complete procedure: `scripts/rq3/ARM_RUNBOOK.md`; identical driver/images/parity gate exercised on x86. Until it lands, every claim is bounded **"x86 under cgroup"** (approved FINDINGS §9 text). Run the day access lands.
+6. Fork re-checks ✅ — pool startup 0.065 s/worker (5–8× vs Windows spawn); `set_kernel_mode()` propagates under fork; attach ranking unchanged. tl2cgen compiled-`.so` datum: parity-equal, ONNX still ~9× faster at batch=1 (39.7 vs 186 µs). Bounded RQ1 datum under Profile A reproduces the ≤2-core finding.
+**Exit:** <1 ms ✅ (x86-bounded, no fallback story needed) · ARM = committed runbook + bounded claim; **T1 carried as the open follow-up**.
 
 ## Batch 7 — Phase 5: Robustness, generalization, reproducibility  `[feeds Final report]`
 1. **T3** compression vs dictionary / PCFG DGAs — per-type breakdown — **B5**.

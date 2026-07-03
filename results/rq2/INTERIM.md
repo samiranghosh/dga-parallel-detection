@@ -83,3 +83,25 @@ DT-12·ONNX end-to-end 84.4 → **118.9 MiB** (Profile-C headroom 2.9× →
 0.7 MiB / 1.6× kernel latency for tighter profiles). Gates green
 throughout (suite 54 passed); `FEATURE_KERNEL=legacy` retained for
 A/B + rollback.
+
+---
+
+## Batch-6 addendum (03 Jul — RQ3 edge validation; full report `results/rq3/FINDINGS.md`)
+**C5 MET on x86+cgroup, with 20–40× margin**: all 12 grid cells
+({DT-12·ONNX, RF-pruned·ONNX} × {fast, fast_marisa} × {A 2c/512M,
+B 1c/512M, C 1c/256M}) sit at **24.0–50.3 µs p50** (canonical protocol,
+run in-container); worst p99 anywhere is 363 µs. Idle RSS fits every
+profile **before data arrives** (68.3–159.4 MiB peak; DT-12·fast_marisa
+is 68 MiB under Profile C). Kernel choice locked (SamG): **fast for
+A/B; fast_marisa for C + batch under RAM pressure** — the 1M-row batch
+harness OOMs at A/fast and C/*, and marisa is the batch survivor
+(73.3k dom/s at A, 0.7 MiB/worker). **T6 aarch64 functional parity:
+PASS under QEMU (correctness only)** — golden-v2 bit-identical for all
+three kernel modes, DT-12/RF-pruned labels array_equal, probas
+max|Δ| = 0.0 (`results/rq3/parity_qemu_arm64.json`); the full pytest
+suite did not run under QEMU (arm64 full image never built — WSL2 NAT;
+FINDINGS §7). **T1 real ARM: NOT RUN — blocked on cloud account**;
+the complete procedure is committed (`scripts/rq3/ARM_RUNBOOK.md`).
+Claim bounding (approved): every latency/RSS claim is stated as
+**"x86 under cgroup"** until T1 lands; QEMU contributed correctness
+verification only.
