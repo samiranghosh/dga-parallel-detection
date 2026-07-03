@@ -15,7 +15,10 @@ WORKDIR /app
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1
 
-COPY requirements.txt .
+# aarch64 builds pass REQUIREMENTS=requirements-arm64.txt (tl2cgen has no
+# aarch64 wheel - see that file's header); the default keeps x86 canonical.
+ARG REQUIREMENTS=requirements.txt
+COPY ${REQUIREMENTS} requirements.txt
 # pip 24.0 (bundled) trips over inconsistent PEP-658 metadata hashes on some
 # older PyPI wheels ("THESE PACKAGES DO NOT MATCH THE HASHES ... unknown
 # package"); current pip verifies correctly. The retry loop + cache mount
