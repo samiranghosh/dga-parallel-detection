@@ -1,0 +1,8 @@
+ERROR: THESE PACKAGES DO NOT MATCH THE HASHES FROM THE REQUIREMENTS FILE. If you have updated the package versions, please update the hashes. Otherwise, examine the package contents carefully; someone may have tampered with them.
+    unknown package:
+        Expected sha256 cd8d0c3be0515c12fed0bdbae072551c8b54b7192c7b1fda0ba56059a0179698
+             Got        fe01b25ee6b9762ba00877483e4089b9f9ebb03524818197f6482107dd0e2508
+
+
+[notice] A new release of pip is available: 24.0 -> 26.1.2
+[notice] To update, run: pip install --upgrade pip

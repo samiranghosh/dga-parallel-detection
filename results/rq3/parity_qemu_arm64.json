@@ -1,0 +1,23 @@
+{
+  "arch_ref": "x86_64",
+  "arch_here": "aarch64",
+  "golden_v2_a2_pass_all_modes": true,
+  "feature_hash_equal": {
+    "legacy": true,
+    "fast": true,
+    "fast_marisa": true
+  },
+  "models": {
+    "dt12": {
+      "labels_array_equal": true,
+      "probas_allclose_rtol1e-3": true,
+      "probas_max_abs_delta": 0.0
+    },
+    "rf_pruned": {
+      "labels_array_equal": true,
+      "probas_allclose_rtol1e-3": true,
+      "probas_max_abs_delta": 0.0
+    }
+  },
+  "PASS": true
+}

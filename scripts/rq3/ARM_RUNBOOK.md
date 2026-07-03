@@ -31,11 +31,14 @@ claim).
 ```bash
 git clone <repo-url> dga && cd dga && git checkout rq3-edge
 docker build -f docker/Dockerfile.serve-onnx -t dga-serve-onnx:b6 .
-docker build -f docker/Dockerfile.full       -t dga-full:b6 .
+docker build --build-arg REQUIREMENTS=requirements-arm64.txt \
+             -f docker/Dockerfile.full -t dga-full:b6 .
 ```
-If the full build fails on a pinned wheel with no aarch64 build (watch
-`tl2cgen`), record the failing pin in the results — that is itself a T1
-finding — and retry with the pin commented out to keep the gates runnable.
+`requirements-arm64.txt` == requirements.txt minus `tl2cgen` — **verified
+B6 Step 5: tl2cgen 1.0.0 publishes no aarch64 wheel** ("from versions:
+none"). Nothing in the tests or runtime imports it; the compiled-.so bench
+is therefore an x86-only datum (results/rq3/x86/tl2cgen_bench.json) and
+`scripts/rq3/tl2cgen_bench.py` is expected to fail on ARM.
 
 ## 4. Cross-arch parity gate FIRST (T6 criteria on real silicon)
 ```bash

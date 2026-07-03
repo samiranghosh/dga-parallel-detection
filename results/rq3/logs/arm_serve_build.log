@@ -1,0 +1,234 @@
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile.serve-onnx
+#1 transferring dockerfile: 2.21kB done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/python@sha256:721dc13fd1be0a771e54b72097634291d628d0007dee9da777e2ce676a9c998f
+#2 DONE 1.7s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 548B done
+#3 DONE 0.0s
+
+#4 [stage-0  1/10] FROM docker.io/library/python@sha256:721dc13fd1be0a771e54b72097634291d628d0007dee9da777e2ce676a9c998f
+#4 resolve docker.io/library/python@sha256:721dc13fd1be0a771e54b72097634291d628d0007dee9da777e2ce676a9c998f 0.0s done
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 33.92MB 0.1s done
+#5 DONE 0.1s
+
+#6 [stage-0  2/10] WORKDIR /app
+#6 CACHED
+
+#7 [stage-0  3/10] COPY requirements-serve.txt .
+#7 CACHED
+
+#8 [stage-0  4/10] RUN --mount=type=cache,target=/root/.cache/pip     --mount=type=bind,source=wheels,target=/wheels     pip install --upgrade pip &&     ( for i in 1 2 3 4 5 6 7 8; do         pip install --retries 10 --resume-retries 5 --find-links /wheels           -r requirements-serve.txt           && exit 0;         echo "pip attempt $i failed; retrying"; sleep 5;       done; exit 1 )
+#8 13.27 Requirement already satisfied: pip in /usr/local/lib/python3.11/site-packages (24.0)
+#8 14.70 Collecting pip
+#8 14.71   Using cached pip-26.1.2-py3-none-any.whl.metadata (4.6 kB)
+#8 14.74 Using cached pip-26.1.2-py3-none-any.whl (1.8 MB)
+#8 15.31 Installing collected packages: pip
+#8 15.31   Attempting uninstall: pip
+#8 15.33     Found existing installation: pip 24.0
+#8 15.78     Uninstalling pip-24.0:
+#8 16.35       Successfully uninstalled pip-24.0
+#8 23.94 Successfully installed pip-26.1.2
+#8 23.94 WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv
+#8 33.54 Looking in links: /wheels
+#8 35.44 Collecting onnxruntime==1.25.1 (from -r requirements-serve.txt (line 7))
+#8 35.45   Using cached onnxruntime-1.25.1-cp311-cp311-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl.metadata (5.3 kB)
+#8 37.66 Collecting numpy==2.4.6 (from -r requirements-serve.txt (line 9))
+#8 37.67   Using cached numpy-2.4.6-cp311-cp311-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl.metadata (6.6 kB)
+#8 37.87 Collecting pyahocorasick==2.3.1 (from -r requirements-serve.txt (line 10))
+#8 37.89   Using cached pyahocorasick-2.3.1-cp311-cp311-manylinux2014_aarch64.manylinux_2_17_aarch64.whl.metadata (13 kB)
+#8 38.47 Collecting marisa-trie==1.4.1 (from -r requirements-serve.txt (line 11))
+#8 38.48   Using cached marisa_trie-1.4.1-cp311-cp311-manylinux_2_24_aarch64.manylinux_2_28_aarch64.whl.metadata (10 kB)
+#8 38.61 Collecting flatbuffers (from onnxruntime==1.25.1->-r requirements-serve.txt (line 7))
+#8 38.63   Using cached flatbuffers-25.12.19-py2.py3-none-any.whl.metadata (1.0 kB)
+#8 38.78 Collecting packaging (from onnxruntime==1.25.1->-r requirements-serve.txt (line 7))
+#8 38.79   Using cached packaging-26.2-py3-none-any.whl.metadata (3.5 kB)
+#8 40.44 Collecting protobuf (from onnxruntime==1.25.1->-r requirements-serve.txt (line 7))
+#8 40.45   Using cached protobuf-7.35.1-cp310-abi3-manylinux2014_aarch64.whl.metadata (595 bytes)
+#8 40.48 Using cached onnxruntime-1.25.1-cp311-cp311-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl (15.9 MB)
+#8 41.64 Downloading numpy-2.4.6-cp311-cp311-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl (16.0 MB)
+#8 46.08    ━━━━━━━╸                                 3.0/16.0 MB 760.8 kB/s eta 0:00:18
+#8 46.12 ERROR: Exception:
+#8 46.12 Traceback (most recent call last):
+#8 46.12   File "/usr/local/lib/python3.11/site-packages/pip/_vendor/urllib3/response.py", line 897, in _error_catcher
+#8 46.12     yield
+#8 46.12   File "/usr/local/lib/python3.11/site-packages/pip/_vendor/urllib3/response.py", line 1043, in _raw_read
+#8 46.12     raise IncompleteRead(self._fp_bytes_read, self.length_remaining)
+#8 46.12 pip._vendor.urllib3.exceptions.IncompleteRead: IncompleteRead(3013597 bytes read, 12953095 more expected)
+#8 46.12 
+#8 46.12 The above exception was the direct cause of the following exception:
+#8 46.12 
+#8 46.12 Traceback (most recent call last):
+#8 46.12   File "/usr/local/lib/python3.11/site-packages/pip/_internal/cli/base_command.py", line 109, in _run_wrapper
+#8 46.12     status = _inner_run()
+#8 46.12              ^^^^^^^^^^^^
+#8 46.12   File "/usr/local/lib/python3.11/site-packages/pip/_internal/cli/base_command.py", line 102, in _inner_run
+#8 46.12     return self.run(options, args)
+#8 46.12            ^^^^^^^^^^^^^^^^^^^^^^^
+#8 46.12   File "/usr/local/lib/python3.11/site-packages/pip/_internal/cli/req_command.py", line 101, in wrapper
+#8 46.12     return func(self, options, args)
+#8 46.12            ^^^^^^^^^^^^^^^^^^^^^^^^^
+#8 46.12   File "/usr/local/lib/python3.11/site-packages/pip/_internal/commands/install.py", line 506, in run
+#8 46.12     preparer.prepare_linked_requirements_more(
+#8 46.12   File "/usr/local/lib/python3.11/site-packages/pip/_internal/operations/prepare.py", line 569, in prepare_linked_requirements_more
+#8 46.12     self._complete_partial_requirements(
+#8 46.12   File "/usr/local/lib/python3.11/site-packages/pip/_internal/operations/prepare.py", line 478, in _complete_partial_requirements
+#8 46.12     for link, (filepath, _) in batch_download:
+#8 46.12   File "/usr/local/lib/python3.11/site-packages/pip/_internal/network/download.py", line 182, in batch
+#8 46.12     filepath, content_type = self(link, location)
+#8 46.12                              ^^^^^^^^^^^^^^^^^^^^
+#8 46.12   File "/usr/local/lib/python3.11/site-packages/pip/_internal/network/download.py", line 193, in __call__
+#8 46.12     self._process_response(download, resp)
+#8 46.12   File "/usr/local/lib/python3.11/site-packages/pip/_internal/network/download.py", line 210, in _process_response
+#8 46.12     for chunk in chunks:
+#8 46.12   File "/usr/local/lib/python3.11/site-packages/pip/_internal/cli/progress_bars.py", line 69, in _rich_download_progress_bar
+#8 46.12     for chunk in iterable:
+#8 46.12   File "/usr/local/lib/python3.11/site-packages/pip/_internal/network/utils.py", line 65, in response_chunks
+#8 46.12     for chunk in response.raw.stream(
+#8 46.12   File "/usr/local/lib/python3.11/site-packages/pip/_vendor/urllib3/response.py", line 1251, in stream
+#8 46.12     data = self.read(amt=amt, decode_content=decode_content)
+#8 46.12            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#8 46.12   File "/usr/local/lib/python3.11/site-packages/pip/_vendor/urllib3/response.py", line 1106, in read
+#8 46.12     data = self._raw_read(amt)
+#8 46.12            ^^^^^^^^^^^^^^^^^^^
+#8 46.12   File "/usr/local/lib/python3.11/site-packages/pip/_vendor/urllib3/response.py", line 1021, in _raw_read
+#8 46.12     with self._error_catcher():
+#8 46.12   File "/usr/local/lib/python3.11/contextlib.py", line 158, in __exit__
+#8 46.12     self.gen.throw(typ, value, traceback)
+#8 46.12   File "/usr/local/lib/python3.11/site-packages/pip/_vendor/urllib3/response.py", line 921, in _error_catcher
+#8 46.12     raise ProtocolError(arg, e) from e
+#8 46.12 pip._vendor.urllib3.exceptions.ProtocolError: ('Connection broken: IncompleteRead(3013597 bytes read, 12953095 more expected)', IncompleteRead(3013597 bytes read, 12953095 more expected))
+#8 46.41 pip attempt 1 failed; retrying
+#8 58.69 Looking in links: /wheels
+#8 60.57 Collecting onnxruntime==1.25.1 (from -r requirements-serve.txt (line 7))
+#8 60.59   Using cached onnxruntime-1.25.1-cp311-cp311-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl.metadata (5.3 kB)
+#8 64.56 Collecting numpy==2.4.6 (from -r requirements-serve.txt (line 9))
+#8 64.57   Using cached numpy-2.4.6-cp311-cp311-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl.metadata (6.6 kB)
+#8 64.78 Collecting pyahocorasick==2.3.1 (from -r requirements-serve.txt (line 10))
+#8 64.79   Using cached pyahocorasick-2.3.1-cp311-cp311-manylinux2014_aarch64.manylinux_2_17_aarch64.whl.metadata (13 kB)
+#8 65.36 Collecting marisa-trie==1.4.1 (from -r requirements-serve.txt (line 11))
+#8 65.37   Using cached marisa_trie-1.4.1-cp311-cp311-manylinux_2_24_aarch64.manylinux_2_28_aarch64.whl.metadata (10 kB)
+#8 65.50 Collecting flatbuffers (from onnxruntime==1.25.1->-r requirements-serve.txt (line 7))
+#8 65.51   Using cached flatbuffers-25.12.19-py2.py3-none-any.whl.metadata (1.0 kB)
+#8 65.66 Collecting packaging (from onnxruntime==1.25.1->-r requirements-serve.txt (line 7))
+#8 65.67   Using cached packaging-26.2-py3-none-any.whl.metadata (3.5 kB)
+#8 67.31 Collecting protobuf (from onnxruntime==1.25.1->-r requirements-serve.txt (line 7))
+#8 67.32   Using cached protobuf-7.35.1-cp310-abi3-manylinux2014_aarch64.whl.metadata (595 bytes)
+#8 67.35 Using cached onnxruntime-1.25.1-cp311-cp311-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl (15.9 MB)
+#8 68.53 Downloading numpy-2.4.6-cp311-cp311-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl (16.0 MB)
+#8 73.54    ━━━━━━━━                                 3.3/16.0 MB 720.8 kB/s eta 0:00:18
+#8 73.57 ERROR: Exception:
+#8 73.57 Traceback (most recent call last):
+#8 73.57   File "/usr/local/lib/python3.11/site-packages/pip/_vendor/urllib3/response.py", line 897, in _error_catcher
+#8 73.57     yield
+#8 73.57   File "/usr/local/lib/python3.11/site-packages/pip/_vendor/urllib3/response.py", line 1043, in _raw_read
+#8 73.57     raise IncompleteRead(self._fp_bytes_read, self.length_remaining)
+#8 73.57 pip._vendor.urllib3.exceptions.IncompleteRead: IncompleteRead(3269639 bytes read, 12697053 more expected)
+#8 73.57 
+#8 73.57 The above exception was the direct cause of the following exception:
+#8 73.57 
+#8 73.57 Traceback (most recent call last):
+#8 73.57   File "/usr/local/lib/python3.11/site-packages/pip/_internal/cli/base_command.py", line 109, in _run_wrapper
+#8 73.57     status = _inner_run()
+#8 73.57              ^^^^^^^^^^^^
+#8 73.57   File "/usr/local/lib/python3.11/site-packages/pip/_internal/cli/base_command.py", line 102, in _inner_run
+#8 73.57     return self.run(options, args)
+#8 73.57            ^^^^^^^^^^^^^^^^^^^^^^^
+#8 73.57   File "/usr/local/lib/python3.11/site-packages/pip/_internal/cli/req_command.py", line 101, in wrapper
+#8 73.57     return func(self, options, args)
+#8 73.57            ^^^^^^^^^^^^^^^^^^^^^^^^^
+#8 73.57   File "/usr/local/lib/python3.11/site-packages/pip/_internal/commands/install.py", line 506, in run
+#8 73.57     preparer.prepare_linked_requirements_more(
+#8 73.57   File "/usr/local/lib/python3.11/site-packages/pip/_internal/operations/prepare.py", line 569, in prepare_linked_requirements_more
+#8 73.57     self._complete_partial_requirements(
+#8 73.57   File "/usr/local/lib/python3.11/site-packages/pip/_internal/operations/prepare.py", line 478, in _complete_partial_requirements
+#8 73.57     for link, (filepath, _) in batch_download:
+#8 73.57   File "/usr/local/lib/python3.11/site-packages/pip/_internal/network/download.py", line 182, in batch
+#8 73.57     filepath, content_type = self(link, location)
+#8 73.57                              ^^^^^^^^^^^^^^^^^^^^
+#8 73.57   File "/usr/local/lib/python3.11/site-packages/pip/_internal/network/download.py", line 193, in __call__
+#8 73.57     self._process_response(download, resp)
+#8 73.57   File "/usr/local/lib/python3.11/site-packages/pip/_internal/network/download.py", line 210, in _process_response
+#8 73.57     for chunk in chunks:
+#8 73.57   File "/usr/local/lib/python3.11/site-packages/pip/_internal/cli/progress_bars.py", line 69, in _rich_download_progress_bar
+#8 73.57     for chunk in iterable:
+#8 73.57   File "/usr/local/lib/python3.11/site-packages/pip/_internal/network/utils.py", line 65, in response_chunks
+#8 73.57     for chunk in response.raw.stream(
+#8 73.57   File "/usr/local/lib/python3.11/site-packages/pip/_vendor/urllib3/response.py", line 1251, in stream
+#8 73.57     data = self.read(amt=amt, decode_content=decode_content)
+#8 73.57            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#8 73.57   File "/usr/local/lib/python3.11/site-packages/pip/_vendor/urllib3/response.py", line 1106, in read
+#8 73.57     data = self._raw_read(amt)
+#8 73.57            ^^^^^^^^^^^^^^^^^^^
+#8 73.57   File "/usr/local/lib/python3.11/site-packages/pip/_vendor/urllib3/response.py", line 1021, in _raw_read
+#8 73.57     with self._error_catcher():
+#8 73.57   File "/usr/local/lib/python3.11/contextlib.py", line 158, in __exit__
+#8 73.57     self.gen.throw(typ, value, traceback)
+#8 73.57   File "/usr/local/lib/python3.11/site-packages/pip/_vendor/urllib3/response.py", line 921, in _error_catcher
+#8 73.57     raise ProtocolError(arg, e) from e
+#8 73.57 pip._vendor.urllib3.exceptions.ProtocolError: ('Connection broken: IncompleteRead(3269639 bytes read, 12697053 more expected)', IncompleteRead(3269639 bytes read, 12697053 more expected))
+#8 73.87 pip attempt 2 failed; retrying
+#8 86.38 Looking in links: /wheels
+#8 88.40 Collecting onnxruntime==1.25.1 (from -r requirements-serve.txt (line 7))
+#8 88.42   Using cached onnxruntime-1.25.1-cp311-cp311-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl.metadata (5.3 kB)
+#8 90.56 Collecting numpy==2.4.6 (from -r requirements-serve.txt (line 9))
+#8 90.57   Using cached numpy-2.4.6-cp311-cp311-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl.metadata (6.6 kB)
+#8 90.77 Collecting pyahocorasick==2.3.1 (from -r requirements-serve.txt (line 10))
+#8 90.78   Using cached pyahocorasick-2.3.1-cp311-cp311-manylinux2014_aarch64.manylinux_2_17_aarch64.whl.metadata (13 kB)
+#8 91.34 Collecting marisa-trie==1.4.1 (from -r requirements-serve.txt (line 11))
+#8 91.35   Using cached marisa_trie-1.4.1-cp311-cp311-manylinux_2_24_aarch64.manylinux_2_28_aarch64.whl.metadata (10 kB)
+#8 91.45 Collecting flatbuffers (from onnxruntime==1.25.1->-r requirements-serve.txt (line 7))
+#8 91.47   Using cached flatbuffers-25.12.19-py2.py3-none-any.whl.metadata (1.0 kB)
+#8 91.61 Collecting packaging (from onnxruntime==1.25.1->-r requirements-serve.txt (line 7))
+#8 91.62   Using cached packaging-26.2-py3-none-any.whl.metadata (3.5 kB)
+#8 93.27 Collecting protobuf (from onnxruntime==1.25.1->-r requirements-serve.txt (line 7))
+#8 93.28   Using cached protobuf-7.35.1-cp310-abi3-manylinux2014_aarch64.whl.metadata (595 bytes)
+#8 93.31 Using cached onnxruntime-1.25.1-cp311-cp311-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl (15.9 MB)
+#8 94.44 Downloading numpy-2.4.6-cp311-cp311-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl (16.0 MB)
+#8 106.5    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 16.0/16.0 MB 1.7 MB/s  0:00:10
+#8 106.5 Downloading pyahocorasick-2.3.1-cp311-cp311-manylinux2014_aarch64.manylinux_2_17_aarch64.whl (113 kB)
+#8 106.6 Downloading marisa_trie-1.4.1-cp311-cp311-manylinux_2_24_aarch64.manylinux_2_28_aarch64.whl (1.5 MB)
+#8 106.7    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.5/1.5 MB 14.2 MB/s  0:00:00
+#8 106.7 Using cached flatbuffers-25.12.19-py2.py3-none-any.whl (26 kB)
+#8 106.8 Using cached packaging-26.2-py3-none-any.whl (100 kB)
+#8 106.8 Downloading protobuf-7.35.1-cp310-abi3-manylinux2014_aarch64.whl (328 kB)
+#8 107.7 Installing collected packages: flatbuffers, pyahocorasick, protobuf, packaging, numpy, marisa-trie, onnxruntime
+#8 131.8 
+#8 131.8 Successfully installed flatbuffers-25.12.19 marisa-trie-1.4.1 numpy-2.4.6 onnxruntime-1.25.1 packaging-26.2 protobuf-7.35.1 pyahocorasick-2.3.1
+#8 131.8 WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
+#8 DONE 132.2s
+
+#9 [stage-0  5/10] COPY src/ src/
+#9 DONE 0.1s
+
+#10 [stage-0  6/10] COPY scripts/rq3/ scripts/rq3/
+#10 DONE 0.0s
+
+#11 [stage-0  7/10] COPY tests/golden_features_v2.json tests/
+#11 DONE 0.0s
+
+#12 [stage-0  8/10] COPY results/rq3/models/ models/
+#12 DONE 0.0s
+
+#13 [stage-0  9/10] COPY results/rq3/parity_expected.json parity/
+#13 DONE 0.0s
+
+#14 [stage-0 10/10] COPY data/english_dictionary.txt data/english_dictionary.marisa      data/ngram_table.pkl data/test.csv data/train.csv data/
+#14 DONE 0.1s
+
+#15 exporting to image
+#15 exporting layers
+#15 exporting layers 4.1s done
+#15 exporting manifest sha256:6f027625131e5392d452fdc6428c352c8576a73153d382046cef779102ea7452 0.0s done
+#15 exporting config sha256:3adbc95a4699a60426546a598c0e1942e1f5c9be132455d39d1f859bb914c452 0.0s done
+#15 exporting attestation manifest sha256:63363e8ae9a4e3009fcf91f2597e41e902561380de60706647dc3b93beb12f3f 0.0s done
+#15 exporting manifest list sha256:63123cc35ff393037c9160c12599a3cdeaa835e91be114cdb6b9237c332c4709 0.0s done
+#15 naming to docker.io/library/dga-serve-onnx:b6-arm64 done
+#15 DONE 4.2s

@@ -1,0 +1,936 @@
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile.full
+#1 transferring dockerfile: 2.19kB done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/python@sha256:721dc13fd1be0a771e54b72097634291d628d0007dee9da777e2ce676a9c998f
+#2 DONE 1.8s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 548B done
+#3 DONE 0.0s
+
+#4 [internal] load build context
+#4 transferring context: 12.12kB done
+#4 DONE 0.0s
+
+#5 [stage-0 1/6] FROM docker.io/library/python@sha256:721dc13fd1be0a771e54b72097634291d628d0007dee9da777e2ce676a9c998f
+#5 resolve docker.io/library/python@sha256:721dc13fd1be0a771e54b72097634291d628d0007dee9da777e2ce676a9c998f 0.0s done
+#5 DONE 0.0s
+
+#6 [stage-0 2/6] WORKDIR /app
+#6 CACHED
+
+#7 [stage-0 3/6] COPY requirements-arm64.txt requirements.txt
+#7 DONE 0.0s
+
+#8 [stage-0 4/6] RUN --mount=type=cache,target=/root/.cache/pip     --mount=type=bind,source=wheels,target=/wheels     pip install --upgrade pip &&     ( for i in 1 2 3 4 5 6 7 8; do         pip install --retries 10 --resume-retries 5 --find-links /wheels           -r requirements.txt           && exit 0;         echo "pip attempt $i failed; retrying"; sleep 5;       done; exit 1 )
+#8 15.00 Requirement already satisfied: pip in /usr/local/lib/python3.11/site-packages (24.0)
+#8 16.54 Collecting pip
+#8 16.55   Using cached pip-26.1.2-py3-none-any.whl.metadata (4.6 kB)
+#8 16.60 Using cached pip-26.1.2-py3-none-any.whl (1.8 MB)
+#8 17.25 Installing collected packages: pip
+#8 17.25   Attempting uninstall: pip
+#8 17.27     Found existing installation: pip 24.0
+#8 17.73     Uninstalling pip-24.0:
+#8 18.26       Successfully uninstalled pip-24.0
+#8 27.59 Successfully installed pip-26.1.2
+#8 27.59 WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv
+#8 36.16 Looking in links: /wheels
+#8 39.95 Collecting numpy==2.4.6 (from -r requirements.txt (line 27))
+#8 39.96   Using cached numpy-2.4.6-cp311-cp311-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl.metadata (6.6 kB)
+#8 41.20 Collecting pandas==2.2.3 (from -r requirements.txt (line 28))
+#8 41.21   Using cached pandas-2.2.3-cp311-cp311-manylinux2014_aarch64.manylinux_2_17_aarch64.whl.metadata (89 kB)
+#8 43.01 Collecting scipy==1.17.1 (from -r requirements.txt (line 29))
+#8 43.03   Using cached scipy-1.17.1-cp311-cp311-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl.metadata (62 kB)
+#8 44.23 Collecting scikit-learn==1.8.0 (from -r requirements.txt (line 32))
+#8 44.25   Using cached scikit_learn-1.8.0-cp311-cp311-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl.metadata (11 kB)
+#8 44.49 Collecting joblib==1.5.3 (from -r requirements.txt (line 35))
+#8 44.50   Using cached joblib-1.5.3-py3-none-any.whl.metadata (5.5 kB)
+#8 44.62 Collecting nltk==3.8.1 (from -r requirements.txt (line 38))
+#8 44.63   Using cached nltk-3.8.1-py3-none-any.whl.metadata (2.8 kB)
+#8 44.85 Collecting pyahocorasick==2.3.1 (from -r requirements.txt (line 39))
+#8 44.86   Using cached pyahocorasick-2.3.1-cp311-cp311-manylinux2014_aarch64.manylinux_2_17_aarch64.whl.metadata (13 kB)
+#8 44.98 Collecting python-Levenshtein==0.27.3 (from -r requirements.txt (line 48))
+#8 44.99   Using cached python_levenshtein-0.27.3-py3-none-any.whl.metadata (3.9 kB)
+#8 45.57 Collecting marisa-trie==1.4.1 (from -r requirements.txt (line 53))
+#8 45.58   Using cached marisa_trie-1.4.1-cp311-cp311-manylinux_2_24_aarch64.manylinux_2_28_aarch64.whl.metadata (10 kB)
+#8 46.26 Collecting onnx==1.22.0 (from -r requirements.txt (line 56))
+#8 46.28   Using cached onnx-1.22.0-cp311-cp311-manylinux_2_26_aarch64.manylinux_2_28_aarch64.whl.metadata (8.5 kB)
+#8 46.93 Collecting onnxruntime==1.25.1 (from -r requirements.txt (line 57))
+#8 46.94   Using cached onnxruntime-1.25.1-cp311-cp311-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl.metadata (5.3 kB)
+#8 47.08 Collecting skl2onnx==1.20.0 (from -r requirements.txt (line 64))
+#8 47.09   Using cached skl2onnx-1.20.0-py3-none-any.whl.metadata (4.0 kB)
+#8 47.52 Collecting treelite==4.7.0 (from -r requirements.txt (line 66))
+#8 47.53   Using cached treelite-4.7.0-py3-none-manylinux2014_aarch64.whl.metadata (1.5 kB)
+#8 47.93 Collecting fastapi==0.135.1 (from -r requirements.txt (line 72))
+#8 47.96   Using cached fastapi-0.135.1-py3-none-any.whl.metadata (30 kB)
+#8 48.21 Collecting uvicorn==0.41.0 (from -r requirements.txt (line 73))
+#8 48.23   Using cached uvicorn-0.41.0-py3-none-any.whl.metadata (6.7 kB)
+#8 49.02 Collecting psutil==7.2.2 (from -r requirements.txt (line 76))
+#8 50.29   Downloading psutil-7.2.2-cp36-abi3-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl.metadata (22 kB)
+#8 52.35 Collecting matplotlib==3.10.8 (from -r requirements.txt (line 79))
+#8 52.38   Downloading matplotlib-3.10.8-cp311-cp311-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl.metadata (52 kB)
+#8 52.79 Collecting seaborn==0.13.2 (from -r requirements.txt (line 80))
+#8 52.81   Using cached seaborn-0.13.2-py3-none-any.whl.metadata (5.4 kB)
+#8 53.07 Collecting pytest==9.0.2 (from -r requirements.txt (line 83))
+#8 53.08   Using cached pytest-9.0.2-py3-none-any.whl.metadata (7.6 kB)
+#8 53.20 Collecting pytest-cov==5.0.0 (from -r requirements.txt (line 84))
+#8 53.21   Using cached pytest_cov-5.0.0-py3-none-any.whl.metadata (27 kB)
+#8 53.46 Collecting tqdm==4.67.3 (from -r requirements.txt (line 87))
+#8 53.47   Using cached tqdm-4.67.3-py3-none-any.whl.metadata (57 kB)
+#8 53.65 Collecting tldextract==5.1.2 (from -r requirements.txt (line 88))
+#8 53.67   Using cached tldextract-5.1.2-py3-none-any.whl.metadata (11 kB)
+#8 53.83 Collecting python-dateutil>=2.8.2 (from pandas==2.2.3->-r requirements.txt (line 28))
+#8 53.85   Using cached python_dateutil-2.9.0.post0-py2.py3-none-any.whl.metadata (8.4 kB)
+#8 54.25 Collecting pytz>=2020.1 (from pandas==2.2.3->-r requirements.txt (line 28))
+#8 54.28   Using cached pytz-2026.2-py2.py3-none-any.whl.metadata (22 kB)
+#8 54.43 Collecting tzdata>=2022.7 (from pandas==2.2.3->-r requirements.txt (line 28))
+#8 54.45   Using cached tzdata-2026.2-py2.py3-none-any.whl.metadata (1.4 kB)
+#8 54.57 Collecting threadpoolctl>=3.2.0 (from scikit-learn==1.8.0->-r requirements.txt (line 32))
+#8 54.59   Using cached threadpoolctl-3.6.0-py3-none-any.whl.metadata (13 kB)
+#8 54.83 Collecting click (from nltk==3.8.1->-r requirements.txt (line 38))
+#8 54.84   Using cached click-8.4.2-py3-none-any.whl.metadata (2.6 kB)
+#8 59.07 Collecting regex>=2021.8.3 (from nltk==3.8.1->-r requirements.txt (line 38))
+#8 59.10   Downloading regex-2026.6.28-cp311-cp311-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl.metadata (40 kB)
+#8 60.96 Collecting Levenshtein==0.27.3 (from python-Levenshtein==0.27.3->-r requirements.txt (line 48))
+#8 60.99   Downloading levenshtein-0.27.3-cp311-cp311-manylinux_2_24_aarch64.manylinux_2_28_aarch64.whl.metadata (3.7 kB)
+#8 62.91 Collecting protobuf>=4.25.1 (from onnx==1.22.0->-r requirements.txt (line 56))
+#8 62.93   Using cached protobuf-7.35.1-cp310-abi3-manylinux2014_aarch64.whl.metadata (595 bytes)
+#8 63.10 Collecting typing_extensions>=4.15.0 (from onnx==1.22.0->-r requirements.txt (line 56))
+#8 63.11   Using cached typing_extensions-4.16.0-py3-none-any.whl.metadata (3.3 kB)
+#8 63.38 Collecting ml_dtypes>=0.5.4 (from onnx==1.22.0->-r requirements.txt (line 56))
+#8 63.41   Downloading ml_dtypes-0.5.4-cp311-cp311-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl.metadata (8.9 kB)
+#8 63.58 Collecting flatbuffers (from onnxruntime==1.25.1->-r requirements.txt (line 57))
+#8 63.60   Using cached flatbuffers-25.12.19-py2.py3-none-any.whl.metadata (1.0 kB)
+#8 63.75 Collecting packaging (from onnxruntime==1.25.1->-r requirements.txt (line 57))
+#8 63.76   Using cached packaging-26.2-py3-none-any.whl.metadata (3.5 kB)
+#8 64.02 Collecting starlette>=0.46.0 (from fastapi==0.135.1->-r requirements.txt (line 72))
+#8 64.03   Using cached starlette-1.3.1-py3-none-any.whl.metadata (6.4 kB)
+#8 65.28 Collecting pydantic>=2.7.0 (from fastapi==0.135.1->-r requirements.txt (line 72))
+#8 65.31   Using cached pydantic-2.13.4-py3-none-any.whl.metadata (109 kB)
+#8 65.43 Collecting typing-inspection>=0.4.2 (from fastapi==0.135.1->-r requirements.txt (line 72))
+#8 65.45   Using cached typing_inspection-0.4.2-py3-none-any.whl.metadata (2.6 kB)
+#8 65.52 Collecting annotated-doc>=0.0.2 (from fastapi==0.135.1->-r requirements.txt (line 72))
+#8 65.53   Using cached annotated_doc-0.0.4-py3-none-any.whl.metadata (6.6 kB)
+#8 65.65 Collecting h11>=0.8 (from uvicorn==0.41.0->-r requirements.txt (line 73))
+#8 65.66   Using cached h11-0.16.0-py3-none-any.whl.metadata (8.3 kB)
+#8 66.38 Collecting contourpy>=1.0.1 (from matplotlib==3.10.8->-r requirements.txt (line 79))
+#8 66.41   Downloading contourpy-1.3.3-cp311-cp311-manylinux_2_26_aarch64.manylinux_2_28_aarch64.whl.metadata (5.5 kB)
+#8 66.52 Collecting cycler>=0.10 (from matplotlib==3.10.8->-r requirements.txt (line 79))
+#8 66.54   Using cached cycler-0.12.1-py3-none-any.whl.metadata (3.8 kB)
+#8 68.14 Collecting fonttools>=4.22.0 (from matplotlib==3.10.8->-r requirements.txt (line 79))
+#8 68.17   Downloading fonttools-4.63.0-cp311-cp311-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl.metadata (118 kB)
+#8 69.27 Collecting kiwisolver>=1.3.1 (from matplotlib==3.10.8->-r requirements.txt (line 79))
+#8 69.30   Downloading kiwisolver-1.5.0-cp311-cp311-manylinux_2_24_aarch64.manylinux_2_28_aarch64.whl.metadata (5.1 kB)
+#8 71.45 Collecting pillow>=8 (from matplotlib==3.10.8->-r requirements.txt (line 79))
+#8 71.49   Downloading pillow-12.3.0-cp311-cp311-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl.metadata (9.1 kB)
+#8 71.74 Collecting pyparsing>=3 (from matplotlib==3.10.8->-r requirements.txt (line 79))
+#8 71.75   Using cached pyparsing-3.3.2-py3-none-any.whl.metadata (5.8 kB)
+#8 71.88 Collecting iniconfig>=1.0.1 (from pytest==9.0.2->-r requirements.txt (line 83))
+#8 71.89   Using cached iniconfig-2.3.0-py3-none-any.whl.metadata (2.5 kB)
+#8 71.98 Collecting pluggy<2,>=1.5 (from pytest==9.0.2->-r requirements.txt (line 83))
+#8 71.99   Using cached pluggy-1.6.0-py3-none-any.whl.metadata (4.8 kB)
+#8 72.15 Collecting pygments>=2.7.2 (from pytest==9.0.2->-r requirements.txt (line 83))
+#8 72.16   Using cached pygments-2.20.0-py3-none-any.whl.metadata (2.5 kB)
+#8 76.82 Collecting coverage>=5.2.1 (from coverage[toml]>=5.2.1->pytest-cov==5.0.0->-r requirements.txt (line 84))
+#8 76.85   Downloading coverage-7.15.0-cp311-cp311-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl.metadata (8.6 kB)
+#8 77.02 Collecting idna (from tldextract==5.1.2->-r requirements.txt (line 88))
+#8 77.03   Using cached idna-3.18-py3-none-any.whl.metadata (6.1 kB)
+#8 77.27 Collecting requests>=2.1.0 (from tldextract==5.1.2->-r requirements.txt (line 88))
+#8 77.28   Using cached requests-2.34.2-py3-none-any.whl.metadata (4.8 kB)
+#8 77.37 Collecting requests-file>=1.4 (from tldextract==5.1.2->-r requirements.txt (line 88))
+#8 77.38   Using cached requests_file-3.0.1-py2.py3-none-any.whl.metadata (1.7 kB)
+#8 77.64 Collecting filelock>=3.0.8 (from tldextract==5.1.2->-r requirements.txt (line 88))
+#8 77.68   Downloading filelock-3.29.5-py3-none-any.whl.metadata (2.0 kB)
+#8 83.73 Collecting rapidfuzz<4.0.0,>=3.9.0 (from Levenshtein==0.27.3->python-Levenshtein==0.27.3->-r requirements.txt (line 48))
+#8 83.76   Downloading rapidfuzz-3.14.5-cp311-cp311-manylinux_2_26_aarch64.manylinux_2_28_aarch64.whl.metadata (12 kB)
+#8 84.04 Collecting annotated-types>=0.6.0 (from pydantic>=2.7.0->fastapi==0.135.1->-r requirements.txt (line 72))
+#8 84.05   Using cached annotated_types-0.7.0-py3-none-any.whl.metadata (15 kB)
+#8 92.02 Collecting pydantic-core==2.46.4 (from pydantic>=2.7.0->fastapi==0.135.1->-r requirements.txt (line 72))
+#8 92.05   Downloading pydantic_core-2.46.4-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl.metadata (6.6 kB)
+#8 92.24 Collecting six>=1.5 (from python-dateutil>=2.8.2->pandas==2.2.3->-r requirements.txt (line 28))
+#8 92.25   Using cached six-1.17.0-py2.py3-none-any.whl.metadata (1.7 kB)
+#8 93.33 Collecting charset_normalizer<4,>=2 (from requests>=2.1.0->tldextract==5.1.2->-r requirements.txt (line 88))
+#8 93.37   Downloading charset_normalizer-3.4.7-cp311-cp311-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl.metadata (40 kB)
+#8 93.70 Collecting urllib3<3,>=1.26 (from requests>=2.1.0->tldextract==5.1.2->-r requirements.txt (line 88))
+#8 93.71   Using cached urllib3-2.7.0-py3-none-any.whl.metadata (6.9 kB)
+#8 93.87 Collecting certifi>=2023.5.7 (from requests>=2.1.0->tldextract==5.1.2->-r requirements.txt (line 88))
+#8 93.88   Using cached certifi-2026.6.17-py3-none-any.whl.metadata (2.5 kB)
+#8 94.14 Collecting anyio<5,>=3.6.2 (from starlette>=0.46.0->fastapi==0.135.1->-r requirements.txt (line 72))
+#8 94.15   Using cached anyio-4.14.1-py3-none-any.whl.metadata (4.6 kB)
+#8 94.28 Using cached numpy-2.4.6-cp311-cp311-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl (16.0 MB)
+#8 94.34 Downloading pandas-2.2.3-cp311-cp311-manylinux2014_aarch64.manylinux_2_17_aarch64.whl (15.6 MB)
+#8 100.2    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 15.6/15.6 MB 2.9 MB/s  0:00:05
+#8 100.3 Downloading scipy-1.17.1-cp311-cp311-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl (33.1 MB)
+#8 112.5    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 33.1/33.1 MB 2.8 MB/s  0:00:12
+#8 112.5 Downloading scikit_learn-1.8.0-cp311-cp311-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl (8.8 MB)
+#8 117.6    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━         7.0/8.8 MB 1.4 MB/s eta 0:00:02
+#8 117.7 ERROR: Exception:
+#8 117.7 Traceback (most recent call last):
+#8 117.7   File "/usr/local/lib/python3.11/site-packages/pip/_vendor/urllib3/response.py", line 897, in _error_catcher
+#8 117.7     yield
+#8 117.7   File "/usr/local/lib/python3.11/site-packages/pip/_vendor/urllib3/response.py", line 1043, in _raw_read
+#8 117.7     raise IncompleteRead(self._fp_bytes_read, self.length_remaining)
+#8 117.7 pip._vendor.urllib3.exceptions.IncompleteRead: IncompleteRead(7044002 bytes read, 1755630 more expected)
+#8 117.7 
+#8 117.7 The above exception was the direct cause of the following exception:
+#8 117.7 
+#8 117.7 Traceback (most recent call last):
+#8 117.7   File "/usr/local/lib/python3.11/site-packages/pip/_internal/cli/base_command.py", line 109, in _run_wrapper
+#8 117.7     status = _inner_run()
+#8 117.7              ^^^^^^^^^^^^
+#8 117.7   File "/usr/local/lib/python3.11/site-packages/pip/_internal/cli/base_command.py", line 102, in _inner_run
+#8 117.7     return self.run(options, args)
+#8 117.7            ^^^^^^^^^^^^^^^^^^^^^^^
+#8 117.7   File "/usr/local/lib/python3.11/site-packages/pip/_internal/cli/req_command.py", line 101, in wrapper
+#8 117.7     return func(self, options, args)
+#8 117.7            ^^^^^^^^^^^^^^^^^^^^^^^^^
+#8 117.7   File "/usr/local/lib/python3.11/site-packages/pip/_internal/commands/install.py", line 506, in run
+#8 117.7     preparer.prepare_linked_requirements_more(
+#8 117.7   File "/usr/local/lib/python3.11/site-packages/pip/_internal/operations/prepare.py", line 569, in prepare_linked_requirements_more
+#8 117.7     self._complete_partial_requirements(
+#8 117.7   File "/usr/local/lib/python3.11/site-packages/pip/_internal/operations/prepare.py", line 478, in _complete_partial_requirements
+#8 117.7     for link, (filepath, _) in batch_download:
+#8 117.7   File "/usr/local/lib/python3.11/site-packages/pip/_internal/network/download.py", line 182, in batch
+#8 117.7     filepath, content_type = self(link, location)
+#8 117.7                              ^^^^^^^^^^^^^^^^^^^^
+#8 117.7   File "/usr/local/lib/python3.11/site-packages/pip/_internal/network/download.py", line 193, in __call__
+#8 117.7     self._process_response(download, resp)
+#8 117.7   File "/usr/local/lib/python3.11/site-packages/pip/_internal/network/download.py", line 210, in _process_response
+#8 117.7     for chunk in chunks:
+#8 117.7   File "/usr/local/lib/python3.11/site-packages/pip/_internal/cli/progress_bars.py", line 69, in _rich_download_progress_bar
+#8 117.7     for chunk in iterable:
+#8 117.7   File "/usr/local/lib/python3.11/site-packages/pip/_internal/network/utils.py", line 65, in response_chunks
+#8 117.7     for chunk in response.raw.stream(
+#8 117.7   File "/usr/local/lib/python3.11/site-packages/pip/_vendor/urllib3/response.py", line 1251, in stream
+#8 117.7     data = self.read(amt=amt, decode_content=decode_content)
+#8 117.7            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#8 117.7   File "/usr/local/lib/python3.11/site-packages/pip/_vendor/urllib3/response.py", line 1106, in read
+#8 117.7     data = self._raw_read(amt)
+#8 117.7            ^^^^^^^^^^^^^^^^^^^
+#8 117.7   File "/usr/local/lib/python3.11/site-packages/pip/_vendor/urllib3/response.py", line 1021, in _raw_read
+#8 117.7     with self._error_catcher():
+#8 117.7   File "/usr/local/lib/python3.11/contextlib.py", line 158, in __exit__
+#8 117.7     self.gen.throw(typ, value, traceback)
+#8 117.7   File "/usr/local/lib/python3.11/site-packages/pip/_vendor/urllib3/response.py", line 921, in _error_catcher
+#8 117.7     raise ProtocolError(arg, e) from e
+#8 117.7 pip._vendor.urllib3.exceptions.ProtocolError: ('Connection broken: IncompleteRead(7044002 bytes read, 1755630 more expected)', IncompleteRead(7044002 bytes read, 1755630 more expected))
+#8 120.2 pip attempt 1 failed; retrying
+#8 132.9 Looking in links: /wheels
+#8 136.4 Collecting numpy==2.4.6 (from -r requirements.txt (line 27))
+#8 136.4   Using cached numpy-2.4.6-cp311-cp311-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl.metadata (6.6 kB)
+#8 137.7 Collecting pandas==2.2.3 (from -r requirements.txt (line 28))
+#8 137.7   Using cached pandas-2.2.3-cp311-cp311-manylinux2014_aarch64.manylinux_2_17_aarch64.whl.metadata (89 kB)
+#8 139.3 Collecting scipy==1.17.1 (from -r requirements.txt (line 29))
+#8 139.3   Using cached scipy-1.17.1-cp311-cp311-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl.metadata (62 kB)
+#8 140.3 Collecting scikit-learn==1.8.0 (from -r requirements.txt (line 32))
+#8 140.3   Using cached scikit_learn-1.8.0-cp311-cp311-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl.metadata (11 kB)
+#8 140.5 Collecting joblib==1.5.3 (from -r requirements.txt (line 35))
+#8 140.5   Using cached joblib-1.5.3-py3-none-any.whl.metadata (5.5 kB)
+#8 140.6 Collecting nltk==3.8.1 (from -r requirements.txt (line 38))
+#8 140.6   Using cached nltk-3.8.1-py3-none-any.whl.metadata (2.8 kB)
+#8 141.1 Collecting pyahocorasick==2.3.1 (from -r requirements.txt (line 39))
+#8 141.1   Using cached pyahocorasick-2.3.1-cp311-cp311-manylinux2014_aarch64.manylinux_2_17_aarch64.whl.metadata (13 kB)
+#8 141.2 Collecting python-Levenshtein==0.27.3 (from -r requirements.txt (line 48))
+#8 141.2   Using cached python_levenshtein-0.27.3-py3-none-any.whl.metadata (3.9 kB)
+#8 141.7 Collecting marisa-trie==1.4.1 (from -r requirements.txt (line 53))
+#8 141.7   Using cached marisa_trie-1.4.1-cp311-cp311-manylinux_2_24_aarch64.manylinux_2_28_aarch64.whl.metadata (10 kB)
+#8 142.3 Collecting onnx==1.22.0 (from -r requirements.txt (line 56))
+#8 142.4   Using cached onnx-1.22.0-cp311-cp311-manylinux_2_26_aarch64.manylinux_2_28_aarch64.whl.metadata (8.5 kB)
+#8 142.9 Collecting onnxruntime==1.25.1 (from -r requirements.txt (line 57))
+#8 143.0   Using cached onnxruntime-1.25.1-cp311-cp311-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl.metadata (5.3 kB)
+#8 143.1 Collecting skl2onnx==1.20.0 (from -r requirements.txt (line 64))
+#8 143.1   Using cached skl2onnx-1.20.0-py3-none-any.whl.metadata (4.0 kB)
+#8 143.4 Collecting treelite==4.7.0 (from -r requirements.txt (line 66))
+#8 143.5   Using cached treelite-4.7.0-py3-none-manylinux2014_aarch64.whl.metadata (1.5 kB)
+#8 143.8 Collecting fastapi==0.135.1 (from -r requirements.txt (line 72))
+#8 143.8   Using cached fastapi-0.135.1-py3-none-any.whl.metadata (30 kB)
+#8 144.1 Collecting uvicorn==0.41.0 (from -r requirements.txt (line 73))
+#8 144.1   Using cached uvicorn-0.41.0-py3-none-any.whl.metadata (6.7 kB)
+#8 144.8 Collecting psutil==7.2.2 (from -r requirements.txt (line 76))
+#8 144.8   Using cached psutil-7.2.2-cp36-abi3-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl.metadata (22 kB)
+#8 146.4 Collecting matplotlib==3.10.8 (from -r requirements.txt (line 79))
+#8 146.4   Using cached matplotlib-3.10.8-cp311-cp311-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl.metadata (52 kB)
+#8 146.6 Collecting seaborn==0.13.2 (from -r requirements.txt (line 80))
+#8 146.6   Using cached seaborn-0.13.2-py3-none-any.whl.metadata (5.4 kB)
+#8 146.9 Collecting pytest==9.0.2 (from -r requirements.txt (line 83))
+#8 146.9   Using cached pytest-9.0.2-py3-none-any.whl.metadata (7.6 kB)
+#8 147.0 Collecting pytest-cov==5.0.0 (from -r requirements.txt (line 84))
+#8 147.0   Using cached pytest_cov-5.0.0-py3-none-any.whl.metadata (27 kB)
+#8 147.2 Collecting tqdm==4.67.3 (from -r requirements.txt (line 87))
+#8 147.2   Using cached tqdm-4.67.3-py3-none-any.whl.metadata (57 kB)
+#8 147.4 Collecting tldextract==5.1.2 (from -r requirements.txt (line 88))
+#8 147.4   Using cached tldextract-5.1.2-py3-none-any.whl.metadata (11 kB)
+#8 147.5 Collecting python-dateutil>=2.8.2 (from pandas==2.2.3->-r requirements.txt (line 28))
+#8 147.6   Using cached python_dateutil-2.9.0.post0-py2.py3-none-any.whl.metadata (8.4 kB)
+#8 147.9 Collecting pytz>=2020.1 (from pandas==2.2.3->-r requirements.txt (line 28))
+#8 147.9   Using cached pytz-2026.2-py2.py3-none-any.whl.metadata (22 kB)
+#8 148.0 Collecting tzdata>=2022.7 (from pandas==2.2.3->-r requirements.txt (line 28))
+#8 148.0   Using cached tzdata-2026.2-py2.py3-none-any.whl.metadata (1.4 kB)
+#8 148.2 Collecting threadpoolctl>=3.2.0 (from scikit-learn==1.8.0->-r requirements.txt (line 32))
+#8 148.2   Using cached threadpoolctl-3.6.0-py3-none-any.whl.metadata (13 kB)
+#8 148.3 Collecting click (from nltk==3.8.1->-r requirements.txt (line 38))
+#8 148.3   Using cached click-8.4.2-py3-none-any.whl.metadata (2.6 kB)
+#8 154.2 Collecting regex>=2021.8.3 (from nltk==3.8.1->-r requirements.txt (line 38))
+#8 154.2   Using cached regex-2026.6.28-cp311-cp311-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl.metadata (40 kB)
+#8 155.7 Collecting Levenshtein==0.27.3 (from python-Levenshtein==0.27.3->-r requirements.txt (line 48))
+#8 155.7   Using cached levenshtein-0.27.3-cp311-cp311-manylinux_2_24_aarch64.manylinux_2_28_aarch64.whl.metadata (3.7 kB)
+#8 157.2 Collecting protobuf>=4.25.1 (from onnx==1.22.0->-r requirements.txt (line 56))
+#8 157.2   Using cached protobuf-7.35.1-cp310-abi3-manylinux2014_aarch64.whl.metadata (595 bytes)
+#8 157.4 Collecting typing_extensions>=4.15.0 (from onnx==1.22.0->-r requirements.txt (line 56))
+#8 157.4   Using cached typing_extensions-4.16.0-py3-none-any.whl.metadata (3.3 kB)
+#8 157.6 Collecting ml_dtypes>=0.5.4 (from onnx==1.22.0->-r requirements.txt (line 56))
+#8 157.6   Using cached ml_dtypes-0.5.4-cp311-cp311-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl.metadata (8.9 kB)
+#8 157.7 Collecting flatbuffers (from onnxruntime==1.25.1->-r requirements.txt (line 57))
+#8 157.7   Using cached flatbuffers-25.12.19-py2.py3-none-any.whl.metadata (1.0 kB)
+#8 157.9 Collecting packaging (from onnxruntime==1.25.1->-r requirements.txt (line 57))
+#8 157.9   Using cached packaging-26.2-py3-none-any.whl.metadata (3.5 kB)
+#8 158.2 Collecting starlette>=0.46.0 (from fastapi==0.135.1->-r requirements.txt (line 72))
+#8 158.2   Using cached starlette-1.3.1-py3-none-any.whl.metadata (6.4 kB)
+#8 159.4 Collecting pydantic>=2.7.0 (from fastapi==0.135.1->-r requirements.txt (line 72))
+#8 159.4   Using cached pydantic-2.13.4-py3-none-any.whl.metadata (109 kB)
+#8 159.6 Collecting typing-inspection>=0.4.2 (from fastapi==0.135.1->-r requirements.txt (line 72))
+#8 159.6   Using cached typing_inspection-0.4.2-py3-none-any.whl.metadata (2.6 kB)
+#8 159.6 Collecting annotated-doc>=0.0.2 (from fastapi==0.135.1->-r requirements.txt (line 72))
+#8 159.6   Using cached annotated_doc-0.0.4-py3-none-any.whl.metadata (6.6 kB)
+#8 159.7 Collecting h11>=0.8 (from uvicorn==0.41.0->-r requirements.txt (line 73))
+#8 159.8   Using cached h11-0.16.0-py3-none-any.whl.metadata (8.3 kB)
+#8 160.4 Collecting contourpy>=1.0.1 (from matplotlib==3.10.8->-r requirements.txt (line 79))
+#8 160.4   Using cached contourpy-1.3.3-cp311-cp311-manylinux_2_26_aarch64.manylinux_2_28_aarch64.whl.metadata (5.5 kB)
+#8 160.6 Collecting cycler>=0.10 (from matplotlib==3.10.8->-r requirements.txt (line 79))
+#8 160.6   Using cached cycler-0.12.1-py3-none-any.whl.metadata (3.8 kB)
+#8 162.1 Collecting fonttools>=4.22.0 (from matplotlib==3.10.8->-r requirements.txt (line 79))
+#8 162.1   Using cached fonttools-4.63.0-cp311-cp311-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl.metadata (118 kB)
+#8 162.9 Collecting kiwisolver>=1.3.1 (from matplotlib==3.10.8->-r requirements.txt (line 79))
+#8 163.0   Using cached kiwisolver-1.5.0-cp311-cp311-manylinux_2_24_aarch64.manylinux_2_28_aarch64.whl.metadata (5.1 kB)
+#8 165.1 Collecting pillow>=8 (from matplotlib==3.10.8->-r requirements.txt (line 79))
+#8 165.1   Using cached pillow-12.3.0-cp311-cp311-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl.metadata (9.1 kB)
+#8 165.5 Collecting pyparsing>=3 (from matplotlib==3.10.8->-r requirements.txt (line 79))
+#8 165.6   Using cached pyparsing-3.3.2-py3-none-any.whl.metadata (5.8 kB)
+#8 165.7 Collecting iniconfig>=1.0.1 (from pytest==9.0.2->-r requirements.txt (line 83))
+#8 165.7   Using cached iniconfig-2.3.0-py3-none-any.whl.metadata (2.5 kB)
+#8 165.8 Collecting pluggy<2,>=1.5 (from pytest==9.0.2->-r requirements.txt (line 83))
+#8 165.8   Using cached pluggy-1.6.0-py3-none-any.whl.metadata (4.8 kB)
+#8 165.9 Collecting pygments>=2.7.2 (from pytest==9.0.2->-r requirements.txt (line 83))
+#8 166.0   Using cached pygments-2.20.0-py3-none-any.whl.metadata (2.5 kB)
+#8 170.4 Collecting coverage>=5.2.1 (from coverage[toml]>=5.2.1->pytest-cov==5.0.0->-r requirements.txt (line 84))
+#8 170.4   Using cached coverage-7.15.0-cp311-cp311-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl.metadata (8.6 kB)
+#8 170.5 Collecting idna (from tldextract==5.1.2->-r requirements.txt (line 88))
+#8 170.5   Using cached idna-3.18-py3-none-any.whl.metadata (6.1 kB)
+#8 170.8 Collecting requests>=2.1.0 (from tldextract==5.1.2->-r requirements.txt (line 88))
+#8 170.8   Using cached requests-2.34.2-py3-none-any.whl.metadata (4.8 kB)
+#8 170.9 Collecting requests-file>=1.4 (from tldextract==5.1.2->-r requirements.txt (line 88))
+#8 170.9   Using cached requests_file-3.0.1-py2.py3-none-any.whl.metadata (1.7 kB)
+#8 171.1 Collecting filelock>=3.0.8 (from tldextract==5.1.2->-r requirements.txt (line 88))
+#8 171.1   Using cached filelock-3.29.5-py3-none-any.whl.metadata (2.0 kB)
+#8 176.4 Collecting rapidfuzz<4.0.0,>=3.9.0 (from Levenshtein==0.27.3->python-Levenshtein==0.27.3->-r requirements.txt (line 48))
+#8 176.4   Using cached rapidfuzz-3.14.5-cp311-cp311-manylinux_2_26_aarch64.manylinux_2_28_aarch64.whl.metadata (12 kB)
+#8 176.7 Collecting annotated-types>=0.6.0 (from pydantic>=2.7.0->fastapi==0.135.1->-r requirements.txt (line 72))
+#8 176.7   Using cached annotated_types-0.7.0-py3-none-any.whl.metadata (15 kB)
+#8 185.1 Collecting pydantic-core==2.46.4 (from pydantic>=2.7.0->fastapi==0.135.1->-r requirements.txt (line 72))
+#8 185.1   Using cached pydantic_core-2.46.4-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl.metadata (6.6 kB)
+#8 185.3 Collecting six>=1.5 (from python-dateutil>=2.8.2->pandas==2.2.3->-r requirements.txt (line 28))
+#8 185.3   Using cached six-1.17.0-py2.py3-none-any.whl.metadata (1.7 kB)
+#8 188.4 Collecting charset_normalizer<4,>=2 (from requests>=2.1.0->tldextract==5.1.2->-r requirements.txt (line 88))
+#8 188.4   Using cached charset_normalizer-3.4.7-cp311-cp311-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl.metadata (40 kB)
+#8 188.7 Collecting urllib3<3,>=1.26 (from requests>=2.1.0->tldextract==5.1.2->-r requirements.txt (line 88))
+#8 188.7   Using cached urllib3-2.7.0-py3-none-any.whl.metadata (6.9 kB)
+#8 188.8 Collecting certifi>=2023.5.7 (from requests>=2.1.0->tldextract==5.1.2->-r requirements.txt (line 88))
+#8 188.8   Using cached certifi-2026.6.17-py3-none-any.whl.metadata (2.5 kB)
+#8 189.1 Collecting anyio<5,>=3.6.2 (from starlette>=0.46.0->fastapi==0.135.1->-r requirements.txt (line 72))
+#8 189.1   Using cached anyio-4.14.1-py3-none-any.whl.metadata (4.6 kB)
+#8 189.3 Using cached numpy-2.4.6-cp311-cp311-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl (16.0 MB)
+#8 189.3 Using cached pandas-2.2.3-cp311-cp311-manylinux2014_aarch64.manylinux_2_17_aarch64.whl (15.6 MB)
+#8 189.3 Using cached scipy-1.17.1-cp311-cp311-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl (33.1 MB)
+#8 190.7 Downloading scikit_learn-1.8.0-cp311-cp311-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl (8.8 MB)
+#8 195.5    ━━━━━━━━━━━━━━━━                         3.6/8.8 MB 831.4 kB/s eta 0:00:07
+#8 195.5 ERROR: Exception:
+#8 195.5 Traceback (most recent call last):
+#8 195.5   File "/usr/local/lib/python3.11/site-packages/pip/_vendor/urllib3/response.py", line 897, in _error_catcher
+#8 195.5     yield
+#8 195.5   File "/usr/local/lib/python3.11/site-packages/pip/_vendor/urllib3/response.py", line 1043, in _raw_read
+#8 195.5     raise IncompleteRead(self._fp_bytes_read, self.length_remaining)
+#8 195.5 pip._vendor.urllib3.exceptions.IncompleteRead: IncompleteRead(3555325 bytes read, 5244307 more expected)
+#8 195.5 
+#8 195.5 The above exception was the direct cause of the following exception:
+#8 195.5 
+#8 195.5 Traceback (most recent call last):
+#8 195.5   File "/usr/local/lib/python3.11/site-packages/pip/_internal/cli/base_command.py", line 109, in _run_wrapper
+#8 195.5     status = _inner_run()
+#8 195.5              ^^^^^^^^^^^^
+#8 195.5   File "/usr/local/lib/python3.11/site-packages/pip/_internal/cli/base_command.py", line 102, in _inner_run
+#8 195.5     return self.run(options, args)
+#8 195.5            ^^^^^^^^^^^^^^^^^^^^^^^
+#8 195.5   File "/usr/local/lib/python3.11/site-packages/pip/_internal/cli/req_command.py", line 101, in wrapper
+#8 195.5     return func(self, options, args)
+#8 195.5            ^^^^^^^^^^^^^^^^^^^^^^^^^
+#8 195.5   File "/usr/local/lib/python3.11/site-packages/pip/_internal/commands/install.py", line 506, in run
+#8 195.5     preparer.prepare_linked_requirements_more(
+#8 195.5   File "/usr/local/lib/python3.11/site-packages/pip/_internal/operations/prepare.py", line 569, in prepare_linked_requirements_more
+#8 195.5     self._complete_partial_requirements(
+#8 195.5   File "/usr/local/lib/python3.11/site-packages/pip/_internal/operations/prepare.py", line 478, in _complete_partial_requirements
+#8 195.5     for link, (filepath, _) in batch_download:
+#8 195.5   File "/usr/local/lib/python3.11/site-packages/pip/_internal/network/download.py", line 182, in batch
+#8 195.5     filepath, content_type = self(link, location)
+#8 195.5                              ^^^^^^^^^^^^^^^^^^^^
+#8 195.5   File "/usr/local/lib/python3.11/site-packages/pip/_internal/network/download.py", line 193, in __call__
+#8 195.5     self._process_response(download, resp)
+#8 195.5   File "/usr/local/lib/python3.11/site-packages/pip/_internal/network/download.py", line 210, in _process_response
+#8 195.5     for chunk in chunks:
+#8 195.5   File "/usr/local/lib/python3.11/site-packages/pip/_internal/cli/progress_bars.py", line 69, in _rich_download_progress_bar
+#8 195.5     for chunk in iterable:
+#8 195.5   File "/usr/local/lib/python3.11/site-packages/pip/_internal/network/utils.py", line 65, in response_chunks
+#8 195.5     for chunk in response.raw.stream(
+#8 195.5   File "/usr/local/lib/python3.11/site-packages/pip/_vendor/urllib3/response.py", line 1251, in stream
+#8 195.5     data = self.read(amt=amt, decode_content=decode_content)
+#8 195.5            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#8 195.5   File "/usr/local/lib/python3.11/site-packages/pip/_vendor/urllib3/response.py", line 1106, in read
+#8 195.5     data = self._raw_read(amt)
+#8 195.5            ^^^^^^^^^^^^^^^^^^^
+#8 195.5   File "/usr/local/lib/python3.11/site-packages/pip/_vendor/urllib3/response.py", line 1021, in _raw_read
+#8 195.5     with self._error_catcher():
+#8 195.5   File "/usr/local/lib/python3.11/contextlib.py", line 158, in __exit__
+#8 195.5     self.gen.throw(typ, value, traceback)
+#8 195.5   File "/usr/local/lib/python3.11/site-packages/pip/_vendor/urllib3/response.py", line 921, in _error_catcher
+#8 195.5     raise ProtocolError(arg, e) from e
+#8 195.5 pip._vendor.urllib3.exceptions.ProtocolError: ('Connection broken: IncompleteRead(3555325 bytes read, 5244307 more expected)', IncompleteRead(3555325 bytes read, 5244307 more expected))
+#8 196.3 pip attempt 2 failed; retrying
+#8 208.8 Looking in links: /wheels
+#8 212.0 Collecting numpy==2.4.6 (from -r requirements.txt (line 27))
+#8 212.0   Using cached numpy-2.4.6-cp311-cp311-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl.metadata (6.6 kB)
+#8 213.2 Collecting pandas==2.2.3 (from -r requirements.txt (line 28))
+#8 213.2   Using cached pandas-2.2.3-cp311-cp311-manylinux2014_aarch64.manylinux_2_17_aarch64.whl.metadata (89 kB)
+#8 215.0 Collecting scipy==1.17.1 (from -r requirements.txt (line 29))
+#8 215.1   Using cached scipy-1.17.1-cp311-cp311-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl.metadata (62 kB)
+#8 216.3 Collecting scikit-learn==1.8.0 (from -r requirements.txt (line 32))
+#8 216.3   Using cached scikit_learn-1.8.0-cp311-cp311-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl.metadata (11 kB)
+#8 216.5 Collecting joblib==1.5.3 (from -r requirements.txt (line 35))
+#8 216.5   Using cached joblib-1.5.3-py3-none-any.whl.metadata (5.5 kB)
+#8 216.6 Collecting nltk==3.8.1 (from -r requirements.txt (line 38))
+#8 216.6   Using cached nltk-3.8.1-py3-none-any.whl.metadata (2.8 kB)
+#8 216.9 Collecting pyahocorasick==2.3.1 (from -r requirements.txt (line 39))
+#8 216.9   Using cached pyahocorasick-2.3.1-cp311-cp311-manylinux2014_aarch64.manylinux_2_17_aarch64.whl.metadata (13 kB)
+#8 217.0 Collecting python-Levenshtein==0.27.3 (from -r requirements.txt (line 48))
+#8 217.0   Using cached python_levenshtein-0.27.3-py3-none-any.whl.metadata (3.9 kB)
+#8 217.6 Collecting marisa-trie==1.4.1 (from -r requirements.txt (line 53))
+#8 217.6   Using cached marisa_trie-1.4.1-cp311-cp311-manylinux_2_24_aarch64.manylinux_2_28_aarch64.whl.metadata (10 kB)
+#8 218.2 Collecting onnx==1.22.0 (from -r requirements.txt (line 56))
+#8 218.3   Using cached onnx-1.22.0-cp311-cp311-manylinux_2_26_aarch64.manylinux_2_28_aarch64.whl.metadata (8.5 kB)
+#8 218.9 Collecting onnxruntime==1.25.1 (from -r requirements.txt (line 57))
+#8 218.9   Using cached onnxruntime-1.25.1-cp311-cp311-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl.metadata (5.3 kB)
+#8 219.1 Collecting skl2onnx==1.20.0 (from -r requirements.txt (line 64))
+#8 219.1   Using cached skl2onnx-1.20.0-py3-none-any.whl.metadata (4.0 kB)
+#8 219.5 Collecting treelite==4.7.0 (from -r requirements.txt (line 66))
+#8 219.5   Using cached treelite-4.7.0-py3-none-manylinux2014_aarch64.whl.metadata (1.5 kB)
+#8 219.9 Collecting fastapi==0.135.1 (from -r requirements.txt (line 72))
+#8 219.9   Using cached fastapi-0.135.1-py3-none-any.whl.metadata (30 kB)
+#8 221.9 Collecting uvicorn==0.41.0 (from -r requirements.txt (line 73))
+#8 221.9   Using cached uvicorn-0.41.0-py3-none-any.whl.metadata (6.7 kB)
+#8 222.6 Collecting psutil==7.2.2 (from -r requirements.txt (line 76))
+#8 222.7   Using cached psutil-7.2.2-cp36-abi3-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl.metadata (22 kB)
+#8 224.3 Collecting matplotlib==3.10.8 (from -r requirements.txt (line 79))
+#8 224.3   Using cached matplotlib-3.10.8-cp311-cp311-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl.metadata (52 kB)
+#8 224.5 Collecting seaborn==0.13.2 (from -r requirements.txt (line 80))
+#8 224.5   Using cached seaborn-0.13.2-py3-none-any.whl.metadata (5.4 kB)
+#8 224.8 Collecting pytest==9.0.2 (from -r requirements.txt (line 83))
+#8 224.8   Using cached pytest-9.0.2-py3-none-any.whl.metadata (7.6 kB)
+#8 224.9 Collecting pytest-cov==5.0.0 (from -r requirements.txt (line 84))
+#8 224.9   Using cached pytest_cov-5.0.0-py3-none-any.whl.metadata (27 kB)
+#8 225.2 Collecting tqdm==4.67.3 (from -r requirements.txt (line 87))
+#8 225.2   Using cached tqdm-4.67.3-py3-none-any.whl.metadata (57 kB)
+#8 225.3 Collecting tldextract==5.1.2 (from -r requirements.txt (line 88))
+#8 225.3   Using cached tldextract-5.1.2-py3-none-any.whl.metadata (11 kB)
+#8 225.5 Collecting python-dateutil>=2.8.2 (from pandas==2.2.3->-r requirements.txt (line 28))
+#8 225.5   Using cached python_dateutil-2.9.0.post0-py2.py3-none-any.whl.metadata (8.4 kB)
+#8 225.9 Collecting pytz>=2020.1 (from pandas==2.2.3->-r requirements.txt (line 28))
+#8 225.9   Using cached pytz-2026.2-py2.py3-none-any.whl.metadata (22 kB)
+#8 226.0 Collecting tzdata>=2022.7 (from pandas==2.2.3->-r requirements.txt (line 28))
+#8 226.0   Using cached tzdata-2026.2-py2.py3-none-any.whl.metadata (1.4 kB)
+#8 226.1 Collecting threadpoolctl>=3.2.0 (from scikit-learn==1.8.0->-r requirements.txt (line 32))
+#8 226.1   Using cached threadpoolctl-3.6.0-py3-none-any.whl.metadata (13 kB)
+#8 226.3 Collecting click (from nltk==3.8.1->-r requirements.txt (line 38))
+#8 226.3   Using cached click-8.4.2-py3-none-any.whl.metadata (2.6 kB)
+#8 230.5 Collecting regex>=2021.8.3 (from nltk==3.8.1->-r requirements.txt (line 38))
+#8 230.6   Using cached regex-2026.6.28-cp311-cp311-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl.metadata (40 kB)
+#8 232.0 Collecting Levenshtein==0.27.3 (from python-Levenshtein==0.27.3->-r requirements.txt (line 48))
+#8 232.0   Using cached levenshtein-0.27.3-cp311-cp311-manylinux_2_24_aarch64.manylinux_2_28_aarch64.whl.metadata (3.7 kB)
+#8 233.5 Collecting protobuf>=4.25.1 (from onnx==1.22.0->-r requirements.txt (line 56))
+#8 233.5   Using cached protobuf-7.35.1-cp310-abi3-manylinux2014_aarch64.whl.metadata (595 bytes)
+#8 233.7 Collecting typing_extensions>=4.15.0 (from onnx==1.22.0->-r requirements.txt (line 56))
+#8 233.7   Using cached typing_extensions-4.16.0-py3-none-any.whl.metadata (3.3 kB)
+#8 233.9 Collecting ml_dtypes>=0.5.4 (from onnx==1.22.0->-r requirements.txt (line 56))
+#8 233.9   Using cached ml_dtypes-0.5.4-cp311-cp311-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl.metadata (8.9 kB)
+#8 234.0 Collecting flatbuffers (from onnxruntime==1.25.1->-r requirements.txt (line 57))
+#8 234.0   Using cached flatbuffers-25.12.19-py2.py3-none-any.whl.metadata (1.0 kB)
+#8 234.2 Collecting packaging (from onnxruntime==1.25.1->-r requirements.txt (line 57))
+#8 234.2   Using cached packaging-26.2-py3-none-any.whl.metadata (3.5 kB)
+#8 234.4 Collecting starlette>=0.46.0 (from fastapi==0.135.1->-r requirements.txt (line 72))
+#8 234.4   Using cached starlette-1.3.1-py3-none-any.whl.metadata (6.4 kB)
+#8 235.6 Collecting pydantic>=2.7.0 (from fastapi==0.135.1->-r requirements.txt (line 72))
+#8 235.6   Using cached pydantic-2.13.4-py3-none-any.whl.metadata (109 kB)
+#8 235.7 Collecting typing-inspection>=0.4.2 (from fastapi==0.135.1->-r requirements.txt (line 72))
+#8 235.7   Using cached typing_inspection-0.4.2-py3-none-any.whl.metadata (2.6 kB)
+#8 235.8 Collecting annotated-doc>=0.0.2 (from fastapi==0.135.1->-r requirements.txt (line 72))
+#8 235.8   Using cached annotated_doc-0.0.4-py3-none-any.whl.metadata (6.6 kB)
+#8 235.9 Collecting h11>=0.8 (from uvicorn==0.41.0->-r requirements.txt (line 73))
+#8 235.9   Using cached h11-0.16.0-py3-none-any.whl.metadata (8.3 kB)
+#8 236.5 Collecting contourpy>=1.0.1 (from matplotlib==3.10.8->-r requirements.txt (line 79))
+#8 236.6   Using cached contourpy-1.3.3-cp311-cp311-manylinux_2_26_aarch64.manylinux_2_28_aarch64.whl.metadata (5.5 kB)
+#8 236.6 Collecting cycler>=0.10 (from matplotlib==3.10.8->-r requirements.txt (line 79))
+#8 236.6   Using cached cycler-0.12.1-py3-none-any.whl.metadata (3.8 kB)
+#8 238.1 Collecting fonttools>=4.22.0 (from matplotlib==3.10.8->-r requirements.txt (line 79))
+#8 238.1   Using cached fonttools-4.63.0-cp311-cp311-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl.metadata (118 kB)
+#8 238.9 Collecting kiwisolver>=1.3.1 (from matplotlib==3.10.8->-r requirements.txt (line 79))
+#8 238.9   Using cached kiwisolver-1.5.0-cp311-cp311-manylinux_2_24_aarch64.manylinux_2_28_aarch64.whl.metadata (5.1 kB)
+#8 241.2 Collecting pillow>=8 (from matplotlib==3.10.8->-r requirements.txt (line 79))
+#8 241.2   Using cached pillow-12.3.0-cp311-cp311-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl.metadata (9.1 kB)
+#8 241.5 Collecting pyparsing>=3 (from matplotlib==3.10.8->-r requirements.txt (line 79))
+#8 241.5   Using cached pyparsing-3.3.2-py3-none-any.whl.metadata (5.8 kB)
+#8 241.6 Collecting iniconfig>=1.0.1 (from pytest==9.0.2->-r requirements.txt (line 83))
+#8 241.7   Using cached iniconfig-2.3.0-py3-none-any.whl.metadata (2.5 kB)
+#8 241.7 Collecting pluggy<2,>=1.5 (from pytest==9.0.2->-r requirements.txt (line 83))
+#8 241.8   Using cached pluggy-1.6.0-py3-none-any.whl.metadata (4.8 kB)
+#8 241.9 Collecting pygments>=2.7.2 (from pytest==9.0.2->-r requirements.txt (line 83))
+#8 241.9   Using cached pygments-2.20.0-py3-none-any.whl.metadata (2.5 kB)
+#8 246.2 Collecting coverage>=5.2.1 (from coverage[toml]>=5.2.1->pytest-cov==5.0.0->-r requirements.txt (line 84))
+#8 246.2   Using cached coverage-7.15.0-cp311-cp311-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl.metadata (8.6 kB)
+#8 246.3 Collecting idna (from tldextract==5.1.2->-r requirements.txt (line 88))
+#8 246.3   Using cached idna-3.18-py3-none-any.whl.metadata (6.1 kB)
+#8 246.6 Collecting requests>=2.1.0 (from tldextract==5.1.2->-r requirements.txt (line 88))
+#8 246.6   Using cached requests-2.34.2-py3-none-any.whl.metadata (4.8 kB)
+#8 246.7 Collecting requests-file>=1.4 (from tldextract==5.1.2->-r requirements.txt (line 88))
+#8 246.7   Using cached requests_file-3.0.1-py2.py3-none-any.whl.metadata (1.7 kB)
+#8 246.9 Collecting filelock>=3.0.8 (from tldextract==5.1.2->-r requirements.txt (line 88))
+#8 246.9   Using cached filelock-3.29.5-py3-none-any.whl.metadata (2.0 kB)
+#8 252.4 Collecting rapidfuzz<4.0.0,>=3.9.0 (from Levenshtein==0.27.3->python-Levenshtein==0.27.3->-r requirements.txt (line 48))
+#8 252.4   Using cached rapidfuzz-3.14.5-cp311-cp311-manylinux_2_26_aarch64.manylinux_2_28_aarch64.whl.metadata (12 kB)
+#8 252.7 Collecting annotated-types>=0.6.0 (from pydantic>=2.7.0->fastapi==0.135.1->-r requirements.txt (line 72))
+#8 252.7   Using cached annotated_types-0.7.0-py3-none-any.whl.metadata (15 kB)
+#8 261.9 Collecting pydantic-core==2.46.4 (from pydantic>=2.7.0->fastapi==0.135.1->-r requirements.txt (line 72))
+#8 262.0   Using cached pydantic_core-2.46.4-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl.metadata (6.6 kB)
+#8 262.1 Collecting six>=1.5 (from python-dateutil>=2.8.2->pandas==2.2.3->-r requirements.txt (line 28))
+#8 262.1   Using cached six-1.17.0-py2.py3-none-any.whl.metadata (1.7 kB)
+#8 263.1 Collecting charset_normalizer<4,>=2 (from requests>=2.1.0->tldextract==5.1.2->-r requirements.txt (line 88))
+#8 263.2   Using cached charset_normalizer-3.4.7-cp311-cp311-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl.metadata (40 kB)
+#8 263.4 Collecting urllib3<3,>=1.26 (from requests>=2.1.0->tldextract==5.1.2->-r requirements.txt (line 88))
+#8 263.4   Using cached urllib3-2.7.0-py3-none-any.whl.metadata (6.9 kB)
+#8 263.6 Collecting certifi>=2023.5.7 (from requests>=2.1.0->tldextract==5.1.2->-r requirements.txt (line 88))
+#8 263.6   Using cached certifi-2026.6.17-py3-none-any.whl.metadata (2.5 kB)
+#8 263.8 Collecting anyio<5,>=3.6.2 (from starlette>=0.46.0->fastapi==0.135.1->-r requirements.txt (line 72))
+#8 263.8   Using cached anyio-4.14.1-py3-none-any.whl.metadata (4.6 kB)
+#8 264.0 Using cached numpy-2.4.6-cp311-cp311-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl (16.0 MB)
+#8 264.0 Using cached pandas-2.2.3-cp311-cp311-manylinux2014_aarch64.manylinux_2_17_aarch64.whl (15.6 MB)
+#8 264.1 Using cached scipy-1.17.1-cp311-cp311-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl (33.1 MB)
+#8 265.3 Downloading scikit_learn-1.8.0-cp311-cp311-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl (8.8 MB)
+#8 269.9    ━━━━━━━━━━━━━╸                           3.0/8.8 MB 716.1 kB/s eta 0:00:09
+#8 270.0 ERROR: Exception:
+#8 270.0 Traceback (most recent call last):
+#8 270.0   File "/usr/local/lib/python3.11/site-packages/pip/_vendor/urllib3/response.py", line 897, in _error_catcher
+#8 270.0     yield
+#8 270.0   File "/usr/local/lib/python3.11/site-packages/pip/_vendor/urllib3/response.py", line 1043, in _raw_read
+#8 270.0     raise IncompleteRead(self._fp_bytes_read, self.length_remaining)
+#8 270.0 pip._vendor.urllib3.exceptions.IncompleteRead: IncompleteRead(2996299 bytes read, 5803333 more expected)
+#8 270.0 
+#8 270.0 The above exception was the direct cause of the following exception:
+#8 270.0 
+#8 270.0 Traceback (most recent call last):
+#8 270.0   File "/usr/local/lib/python3.11/site-packages/pip/_internal/cli/base_command.py", line 109, in _run_wrapper
+#8 270.0     status = _inner_run()
+#8 270.0              ^^^^^^^^^^^^
+#8 270.0   File "/usr/local/lib/python3.11/site-packages/pip/_internal/cli/base_command.py", line 102, in _inner_run
+#8 270.0     return self.run(options, args)
+#8 270.0            ^^^^^^^^^^^^^^^^^^^^^^^
+#8 270.0   File "/usr/local/lib/python3.11/site-packages/pip/_internal/cli/req_command.py", line 101, in wrapper
+#8 270.0     return func(self, options, args)
+#8 270.0            ^^^^^^^^^^^^^^^^^^^^^^^^^
+#8 270.0   File "/usr/local/lib/python3.11/site-packages/pip/_internal/commands/install.py", line 506, in run
+#8 270.0     preparer.prepare_linked_requirements_more(
+#8 270.0   File "/usr/local/lib/python3.11/site-packages/pip/_internal/operations/prepare.py", line 569, in prepare_linked_requirements_more
+#8 270.0     self._complete_partial_requirements(
+#8 270.0   File "/usr/local/lib/python3.11/site-packages/pip/_internal/operations/prepare.py", line 478, in _complete_partial_requirements
+#8 270.0     for link, (filepath, _) in batch_download:
+#8 270.0   File "/usr/local/lib/python3.11/site-packages/pip/_internal/network/download.py", line 182, in batch
+#8 270.0     filepath, content_type = self(link, location)
+#8 270.0                              ^^^^^^^^^^^^^^^^^^^^
+#8 270.0   File "/usr/local/lib/python3.11/site-packages/pip/_internal/network/download.py", line 193, in __call__
+#8 270.0     self._process_response(download, resp)
+#8 270.0   File "/usr/local/lib/python3.11/site-packages/pip/_internal/network/download.py", line 210, in _process_response
+#8 270.0     for chunk in chunks:
+#8 270.0   File "/usr/local/lib/python3.11/site-packages/pip/_internal/cli/progress_bars.py", line 69, in _rich_download_progress_bar
+#8 270.0     for chunk in iterable:
+#8 270.0   File "/usr/local/lib/python3.11/site-packages/pip/_internal/network/utils.py", line 65, in response_chunks
+#8 270.0     for chunk in response.raw.stream(
+#8 270.0   File "/usr/local/lib/python3.11/site-packages/pip/_vendor/urllib3/response.py", line 1251, in stream
+#8 270.0     data = self.read(amt=amt, decode_content=decode_content)
+#8 270.0            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#8 270.0   File "/usr/local/lib/python3.11/site-packages/pip/_vendor/urllib3/response.py", line 1106, in read
+#8 270.0     data = self._raw_read(amt)
+#8 270.0            ^^^^^^^^^^^^^^^^^^^
+#8 270.0   File "/usr/local/lib/python3.11/site-packages/pip/_vendor/urllib3/response.py", line 1021, in _raw_read
+#8 270.0     with self._error_catcher():
+#8 270.0   File "/usr/local/lib/python3.11/contextlib.py", line 158, in __exit__
+#8 270.0     self.gen.throw(typ, value, traceback)
+#8 270.0   File "/usr/local/lib/python3.11/site-packages/pip/_vendor/urllib3/response.py", line 921, in _error_catcher
+#8 270.0     raise ProtocolError(arg, e) from e
+#8 270.0 pip._vendor.urllib3.exceptions.ProtocolError: ('Connection broken: IncompleteRead(2996299 bytes read, 5803333 more expected)', IncompleteRead(2996299 bytes read, 5803333 more expected))
+#8 270.8 pip attempt 3 failed; retrying
+#8 283.3 Looking in links: /wheels
+#8 286.8 Collecting numpy==2.4.6 (from -r requirements.txt (line 27))
+#8 286.8   Using cached numpy-2.4.6-cp311-cp311-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl.metadata (6.6 kB)
+#8 288.0 Collecting pandas==2.2.3 (from -r requirements.txt (line 28))
+#8 288.0   Using cached pandas-2.2.3-cp311-cp311-manylinux2014_aarch64.manylinux_2_17_aarch64.whl.metadata (89 kB)
+#8 291.7 Collecting scipy==1.17.1 (from -r requirements.txt (line 29))
+#8 291.7   Using cached scipy-1.17.1-cp311-cp311-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl.metadata (62 kB)
+#8 292.8 Collecting scikit-learn==1.8.0 (from -r requirements.txt (line 32))
+#8 292.8   Using cached scikit_learn-1.8.0-cp311-cp311-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl.metadata (11 kB)
+#8 293.0 Collecting joblib==1.5.3 (from -r requirements.txt (line 35))
+#8 293.0   Using cached joblib-1.5.3-py3-none-any.whl.metadata (5.5 kB)
+#8 293.2 Collecting nltk==3.8.1 (from -r requirements.txt (line 38))
+#8 293.2   Using cached nltk-3.8.1-py3-none-any.whl.metadata (2.8 kB)
+#8 293.4 Collecting pyahocorasick==2.3.1 (from -r requirements.txt (line 39))
+#8 293.4   Using cached pyahocorasick-2.3.1-cp311-cp311-manylinux2014_aarch64.manylinux_2_17_aarch64.whl.metadata (13 kB)
+#8 293.5 Collecting python-Levenshtein==0.27.3 (from -r requirements.txt (line 48))
+#8 293.5   Using cached python_levenshtein-0.27.3-py3-none-any.whl.metadata (3.9 kB)
+#8 294.1 Collecting marisa-trie==1.4.1 (from -r requirements.txt (line 53))
+#8 294.1   Using cached marisa_trie-1.4.1-cp311-cp311-manylinux_2_24_aarch64.manylinux_2_28_aarch64.whl.metadata (10 kB)
+#8 294.7 Collecting onnx==1.22.0 (from -r requirements.txt (line 56))
+#8 294.7   Using cached onnx-1.22.0-cp311-cp311-manylinux_2_26_aarch64.manylinux_2_28_aarch64.whl.metadata (8.5 kB)
+#8 295.3 Collecting onnxruntime==1.25.1 (from -r requirements.txt (line 57))
+#8 295.3   Using cached onnxruntime-1.25.1-cp311-cp311-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl.metadata (5.3 kB)
+#8 295.5 Collecting skl2onnx==1.20.0 (from -r requirements.txt (line 64))
+#8 295.5   Using cached skl2onnx-1.20.0-py3-none-any.whl.metadata (4.0 kB)
+#8 295.9 Collecting treelite==4.7.0 (from -r requirements.txt (line 66))
+#8 295.9   Using cached treelite-4.7.0-py3-none-manylinux2014_aarch64.whl.metadata (1.5 kB)
+#8 296.2 Collecting fastapi==0.135.1 (from -r requirements.txt (line 72))
+#8 296.2   Using cached fastapi-0.135.1-py3-none-any.whl.metadata (30 kB)
+#8 296.5 Collecting uvicorn==0.41.0 (from -r requirements.txt (line 73))
+#8 296.5   Using cached uvicorn-0.41.0-py3-none-any.whl.metadata (6.7 kB)
+#8 297.2 Collecting psutil==7.2.2 (from -r requirements.txt (line 76))
+#8 297.2   Using cached psutil-7.2.2-cp36-abi3-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl.metadata (22 kB)
+#8 298.8 Collecting matplotlib==3.10.8 (from -r requirements.txt (line 79))
+#8 298.9   Using cached matplotlib-3.10.8-cp311-cp311-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl.metadata (52 kB)
+#8 299.1 Collecting seaborn==0.13.2 (from -r requirements.txt (line 80))
+#8 299.1   Using cached seaborn-0.13.2-py3-none-any.whl.metadata (5.4 kB)
+#8 299.4 Collecting pytest==9.0.2 (from -r requirements.txt (line 83))
+#8 299.4   Using cached pytest-9.0.2-py3-none-any.whl.metadata (7.6 kB)
+#8 299.5 Collecting pytest-cov==5.0.0 (from -r requirements.txt (line 84))
+#8 299.6   Using cached pytest_cov-5.0.0-py3-none-any.whl.metadata (27 kB)
+#8 299.8 Collecting tqdm==4.67.3 (from -r requirements.txt (line 87))
+#8 299.8   Using cached tqdm-4.67.3-py3-none-any.whl.metadata (57 kB)
+#8 300.0 Collecting tldextract==5.1.2 (from -r requirements.txt (line 88))
+#8 300.0   Using cached tldextract-5.1.2-py3-none-any.whl.metadata (11 kB)
+#8 300.1 Collecting python-dateutil>=2.8.2 (from pandas==2.2.3->-r requirements.txt (line 28))
+#8 300.1   Using cached python_dateutil-2.9.0.post0-py2.py3-none-any.whl.metadata (8.4 kB)
+#8 300.6 Collecting pytz>=2020.1 (from pandas==2.2.3->-r requirements.txt (line 28))
+#8 300.6   Using cached pytz-2026.2-py2.py3-none-any.whl.metadata (22 kB)
+#8 300.7 Collecting tzdata>=2022.7 (from pandas==2.2.3->-r requirements.txt (line 28))
+#8 300.7   Using cached tzdata-2026.2-py2.py3-none-any.whl.metadata (1.4 kB)
+#8 300.8 Collecting threadpoolctl>=3.2.0 (from scikit-learn==1.8.0->-r requirements.txt (line 32))
+#8 300.8   Using cached threadpoolctl-3.6.0-py3-none-any.whl.metadata (13 kB)
+#8 301.1 Collecting click (from nltk==3.8.1->-r requirements.txt (line 38))
+#8 301.1   Using cached click-8.4.2-py3-none-any.whl.metadata (2.6 kB)
+#8 305.3 Collecting regex>=2021.8.3 (from nltk==3.8.1->-r requirements.txt (line 38))
+#8 305.3   Using cached regex-2026.6.28-cp311-cp311-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl.metadata (40 kB)
+#8 306.8 Collecting Levenshtein==0.27.3 (from python-Levenshtein==0.27.3->-r requirements.txt (line 48))
+#8 306.8   Using cached levenshtein-0.27.3-cp311-cp311-manylinux_2_24_aarch64.manylinux_2_28_aarch64.whl.metadata (3.7 kB)
+#8 308.4 Collecting protobuf>=4.25.1 (from onnx==1.22.0->-r requirements.txt (line 56))
+#8 308.4   Using cached protobuf-7.35.1-cp310-abi3-manylinux2014_aarch64.whl.metadata (595 bytes)
+#8 308.6 Collecting typing_extensions>=4.15.0 (from onnx==1.22.0->-r requirements.txt (line 56))
+#8 308.6   Using cached typing_extensions-4.16.0-py3-none-any.whl.metadata (3.3 kB)
+#8 308.8 Collecting ml_dtypes>=0.5.4 (from onnx==1.22.0->-r requirements.txt (line 56))
+#8 308.8   Using cached ml_dtypes-0.5.4-cp311-cp311-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl.metadata (8.9 kB)
+#8 308.9 Collecting flatbuffers (from onnxruntime==1.25.1->-r requirements.txt (line 57))
+#8 308.9   Using cached flatbuffers-25.12.19-py2.py3-none-any.whl.metadata (1.0 kB)
+#8 309.1 Collecting packaging (from onnxruntime==1.25.1->-r requirements.txt (line 57))
+#8 309.1   Using cached packaging-26.2-py3-none-any.whl.metadata (3.5 kB)
+#8 309.3 Collecting starlette>=0.46.0 (from fastapi==0.135.1->-r requirements.txt (line 72))
+#8 309.3   Using cached starlette-1.3.1-py3-none-any.whl.metadata (6.4 kB)
+#8 310.6 Collecting pydantic>=2.7.0 (from fastapi==0.135.1->-r requirements.txt (line 72))
+#8 310.6   Using cached pydantic-2.13.4-py3-none-any.whl.metadata (109 kB)
+#8 310.7 Collecting typing-inspection>=0.4.2 (from fastapi==0.135.1->-r requirements.txt (line 72))
+#8 310.7   Using cached typing_inspection-0.4.2-py3-none-any.whl.metadata (2.6 kB)
+#8 310.8 Collecting annotated-doc>=0.0.2 (from fastapi==0.135.1->-r requirements.txt (line 72))
+#8 310.8   Using cached annotated_doc-0.0.4-py3-none-any.whl.metadata (6.6 kB)
+#8 310.9 Collecting h11>=0.8 (from uvicorn==0.41.0->-r requirements.txt (line 73))
+#8 310.9   Using cached h11-0.16.0-py3-none-any.whl.metadata (8.3 kB)
+#8 311.6 Collecting contourpy>=1.0.1 (from matplotlib==3.10.8->-r requirements.txt (line 79))
+#8 311.6   Using cached contourpy-1.3.3-cp311-cp311-manylinux_2_26_aarch64.manylinux_2_28_aarch64.whl.metadata (5.5 kB)
+#8 311.7 Collecting cycler>=0.10 (from matplotlib==3.10.8->-r requirements.txt (line 79))
+#8 311.7   Using cached cycler-0.12.1-py3-none-any.whl.metadata (3.8 kB)
+#8 313.2 Collecting fonttools>=4.22.0 (from matplotlib==3.10.8->-r requirements.txt (line 79))
+#8 313.2   Using cached fonttools-4.63.0-cp311-cp311-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl.metadata (118 kB)
+#8 314.0 Collecting kiwisolver>=1.3.1 (from matplotlib==3.10.8->-r requirements.txt (line 79))
+#8 314.0   Using cached kiwisolver-1.5.0-cp311-cp311-manylinux_2_24_aarch64.manylinux_2_28_aarch64.whl.metadata (5.1 kB)
+#8 316.2 Collecting pillow>=8 (from matplotlib==3.10.8->-r requirements.txt (line 79))
+#8 316.2   Using cached pillow-12.3.0-cp311-cp311-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl.metadata (9.1 kB)
+#8 316.4 Collecting pyparsing>=3 (from matplotlib==3.10.8->-r requirements.txt (line 79))
+#8 316.4   Using cached pyparsing-3.3.2-py3-none-any.whl.metadata (5.8 kB)
+#8 316.6 Collecting iniconfig>=1.0.1 (from pytest==9.0.2->-r requirements.txt (line 83))
+#8 316.6   Using cached iniconfig-2.3.0-py3-none-any.whl.metadata (2.5 kB)
+#8 316.7 Collecting pluggy<2,>=1.5 (from pytest==9.0.2->-r requirements.txt (line 83))
+#8 316.7   Using cached pluggy-1.6.0-py3-none-any.whl.metadata (4.8 kB)
+#8 316.9 Collecting pygments>=2.7.2 (from pytest==9.0.2->-r requirements.txt (line 83))
+#8 316.9   Using cached pygments-2.20.0-py3-none-any.whl.metadata (2.5 kB)
+#8 321.2 Collecting coverage>=5.2.1 (from coverage[toml]>=5.2.1->pytest-cov==5.0.0->-r requirements.txt (line 84))
+#8 321.3   Using cached coverage-7.15.0-cp311-cp311-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl.metadata (8.6 kB)
+#8 321.4 Collecting idna (from tldextract==5.1.2->-r requirements.txt (line 88))
+#8 321.4   Using cached idna-3.18-py3-none-any.whl.metadata (6.1 kB)
+#8 321.6 Collecting requests>=2.1.0 (from tldextract==5.1.2->-r requirements.txt (line 88))
+#8 321.6   Using cached requests-2.34.2-py3-none-any.whl.metadata (4.8 kB)
+#8 321.7 Collecting requests-file>=1.4 (from tldextract==5.1.2->-r requirements.txt (line 88))
+#8 321.7   Using cached requests_file-3.0.1-py2.py3-none-any.whl.metadata (1.7 kB)
+#8 321.9 Collecting filelock>=3.0.8 (from tldextract==5.1.2->-r requirements.txt (line 88))
+#8 321.9   Using cached filelock-3.29.5-py3-none-any.whl.metadata (2.0 kB)
+#8 329.5 Collecting rapidfuzz<4.0.0,>=3.9.0 (from Levenshtein==0.27.3->python-Levenshtein==0.27.3->-r requirements.txt (line 48))
+#8 329.5   Using cached rapidfuzz-3.14.5-cp311-cp311-manylinux_2_26_aarch64.manylinux_2_28_aarch64.whl.metadata (12 kB)
+#8 329.8 Collecting annotated-types>=0.6.0 (from pydantic>=2.7.0->fastapi==0.135.1->-r requirements.txt (line 72))
+#8 329.8   Using cached annotated_types-0.7.0-py3-none-any.whl.metadata (15 kB)
+#8 337.2 Collecting pydantic-core==2.46.4 (from pydantic>=2.7.0->fastapi==0.135.1->-r requirements.txt (line 72))
+#8 337.2   Using cached pydantic_core-2.46.4-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl.metadata (6.6 kB)
+#8 337.3 Collecting six>=1.5 (from python-dateutil>=2.8.2->pandas==2.2.3->-r requirements.txt (line 28))
+#8 337.3   Using cached six-1.17.0-py2.py3-none-any.whl.metadata (1.7 kB)
+#8 338.3 Collecting charset_normalizer<4,>=2 (from requests>=2.1.0->tldextract==5.1.2->-r requirements.txt (line 88))
+#8 338.4   Using cached charset_normalizer-3.4.7-cp311-cp311-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl.metadata (40 kB)
+#8 338.6 Collecting urllib3<3,>=1.26 (from requests>=2.1.0->tldextract==5.1.2->-r requirements.txt (line 88))
+#8 338.6   Using cached urllib3-2.7.0-py3-none-any.whl.metadata (6.9 kB)
+#8 338.7 Collecting certifi>=2023.5.7 (from requests>=2.1.0->tldextract==5.1.2->-r requirements.txt (line 88))
+#8 338.8   Using cached certifi-2026.6.17-py3-none-any.whl.metadata (2.5 kB)
+#8 339.0 Collecting anyio<5,>=3.6.2 (from starlette>=0.46.0->fastapi==0.135.1->-r requirements.txt (line 72))
+#8 339.0   Using cached anyio-4.14.1-py3-none-any.whl.metadata (4.6 kB)
+#8 339.1 Using cached numpy-2.4.6-cp311-cp311-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl (16.0 MB)
+#8 339.2 Using cached pandas-2.2.3-cp311-cp311-manylinux2014_aarch64.manylinux_2_17_aarch64.whl (15.6 MB)
+#8 339.2 Using cached scipy-1.17.1-cp311-cp311-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl (33.1 MB)
+#8 340.5 Downloading scikit_learn-1.8.0-cp311-cp311-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl (8.8 MB)
+#8 345.5    ━━━━━━━━━━━━━━━╸                         3.5/8.8 MB 772.8 kB/s eta 0:00:07
+#8 345.5 ERROR: Exception:
+#8 345.5 Traceback (most recent call last):
+#8 345.5   File "/usr/local/lib/python3.11/site-packages/pip/_vendor/urllib3/response.py", line 897, in _error_catcher
+#8 345.5     yield
+#8 345.5   File "/usr/local/lib/python3.11/site-packages/pip/_vendor/urllib3/response.py", line 1043, in _raw_read
+#8 345.5     raise IncompleteRead(self._fp_bytes_read, self.length_remaining)
+#8 345.5 pip._vendor.urllib3.exceptions.IncompleteRead: IncompleteRead(3455051 bytes read, 5344581 more expected)
+#8 345.5 
+#8 345.5 The above exception was the direct cause of the following exception:
+#8 345.5 
+#8 345.5 Traceback (most recent call last):
+#8 345.5   File "/usr/local/lib/python3.11/site-packages/pip/_internal/cli/base_command.py", line 109, in _run_wrapper
+#8 345.5     status = _inner_run()
+#8 345.5              ^^^^^^^^^^^^
+#8 345.5   File "/usr/local/lib/python3.11/site-packages/pip/_internal/cli/base_command.py", line 102, in _inner_run
+#8 345.5     return self.run(options, args)
+#8 345.5            ^^^^^^^^^^^^^^^^^^^^^^^
+#8 345.5   File "/usr/local/lib/python3.11/site-packages/pip/_internal/cli/req_command.py", line 101, in wrapper
+#8 345.5     return func(self, options, args)
+#8 345.5            ^^^^^^^^^^^^^^^^^^^^^^^^^
+#8 345.5   File "/usr/local/lib/python3.11/site-packages/pip/_internal/commands/install.py", line 506, in run
+#8 345.5     preparer.prepare_linked_requirements_more(
+#8 345.5   File "/usr/local/lib/python3.11/site-packages/pip/_internal/operations/prepare.py", line 569, in prepare_linked_requirements_more
+#8 345.5     self._complete_partial_requirements(
+#8 345.5   File "/usr/local/lib/python3.11/site-packages/pip/_internal/operations/prepare.py", line 478, in _complete_partial_requirements
+#8 345.5     for link, (filepath, _) in batch_download:
+#8 345.5   File "/usr/local/lib/python3.11/site-packages/pip/_internal/network/download.py", line 182, in batch
+#8 345.5     filepath, content_type = self(link, location)
+#8 345.5                              ^^^^^^^^^^^^^^^^^^^^
+#8 345.5   File "/usr/local/lib/python3.11/site-packages/pip/_internal/network/download.py", line 193, in __call__
+#8 345.5     self._process_response(download, resp)
+#8 345.5   File "/usr/local/lib/python3.11/site-packages/pip/_internal/network/download.py", line 210, in _process_response
+#8 345.5     for chunk in chunks:
+#8 345.5   File "/usr/local/lib/python3.11/site-packages/pip/_internal/cli/progress_bars.py", line 69, in _rich_download_progress_bar
+#8 345.5     for chunk in iterable:
+#8 345.5   File "/usr/local/lib/python3.11/site-packages/pip/_internal/network/utils.py", line 65, in response_chunks
+#8 345.5     for chunk in response.raw.stream(
+#8 345.5   File "/usr/local/lib/python3.11/site-packages/pip/_vendor/urllib3/response.py", line 1251, in stream
+#8 345.5     data = self.read(amt=amt, decode_content=decode_content)
+#8 345.5            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#8 345.5   File "/usr/local/lib/python3.11/site-packages/pip/_vendor/urllib3/response.py", line 1106, in read
+#8 345.5     data = self._raw_read(amt)
+#8 345.5            ^^^^^^^^^^^^^^^^^^^
+#8 345.5   File "/usr/local/lib/python3.11/site-packages/pip/_vendor/urllib3/response.py", line 1021, in _raw_read
+#8 345.5     with self._error_catcher():
+#8 345.5   File "/usr/local/lib/python3.11/contextlib.py", line 158, in __exit__
+#8 345.5     self.gen.throw(typ, value, traceback)
+#8 345.5   File "/usr/local/lib/python3.11/site-packages/pip/_vendor/urllib3/response.py", line 921, in _error_catcher
+#8 345.5     raise ProtocolError(arg, e) from e
+#8 345.5 pip._vendor.urllib3.exceptions.ProtocolError: ('Connection broken: IncompleteRead(3455051 bytes read, 5344581 more expected)', IncompleteRead(3455051 bytes read, 5344581 more expected))
+#8 346.3 pip attempt 4 failed; retrying
+#8 360.8 Looking in links: /wheels
+#8 364.4 Collecting numpy==2.4.6 (from -r requirements.txt (line 27))
+#8 364.4   Using cached numpy-2.4.6-cp311-cp311-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl.metadata (6.6 kB)
+#8 365.6 Collecting pandas==2.2.3 (from -r requirements.txt (line 28))
+#8 365.6   Using cached pandas-2.2.3-cp311-cp311-manylinux2014_aarch64.manylinux_2_17_aarch64.whl.metadata (89 kB)
+#8 367.4 Collecting scipy==1.17.1 (from -r requirements.txt (line 29))
+#8 367.4   Using cached scipy-1.17.1-cp311-cp311-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl.metadata (62 kB)
+#8 368.4 Collecting scikit-learn==1.8.0 (from -r requirements.txt (line 32))
+#8 368.5   Using cached scikit_learn-1.8.0-cp311-cp311-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl.metadata (11 kB)
+#8 368.7 Collecting joblib==1.5.3 (from -r requirements.txt (line 35))
+#8 368.7   Using cached joblib-1.5.3-py3-none-any.whl.metadata (5.5 kB)
+#8 368.8 Collecting nltk==3.8.1 (from -r requirements.txt (line 38))
+#8 368.8   Using cached nltk-3.8.1-py3-none-any.whl.metadata (2.8 kB)
+#8 369.0 Collecting pyahocorasick==2.3.1 (from -r requirements.txt (line 39))
+#8 369.0   Using cached pyahocorasick-2.3.1-cp311-cp311-manylinux2014_aarch64.manylinux_2_17_aarch64.whl.metadata (13 kB)
+#8 369.1 Collecting python-Levenshtein==0.27.3 (from -r requirements.txt (line 48))
+#8 369.1   Using cached python_levenshtein-0.27.3-py3-none-any.whl.metadata (3.9 kB)
+#8 369.7 Collecting marisa-trie==1.4.1 (from -r requirements.txt (line 53))
+#8 369.7   Using cached marisa_trie-1.4.1-cp311-cp311-manylinux_2_24_aarch64.manylinux_2_28_aarch64.whl.metadata (10 kB)
+#8 370.3 Collecting onnx==1.22.0 (from -r requirements.txt (line 56))
+#8 370.3   Using cached onnx-1.22.0-cp311-cp311-manylinux_2_26_aarch64.manylinux_2_28_aarch64.whl.metadata (8.5 kB)
+#8 371.0 Collecting onnxruntime==1.25.1 (from -r requirements.txt (line 57))
+#8 371.0   Using cached onnxruntime-1.25.1-cp311-cp311-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl.metadata (5.3 kB)
+#8 371.1 Collecting skl2onnx==1.20.0 (from -r requirements.txt (line 64))
+#8 371.2   Using cached skl2onnx-1.20.0-py3-none-any.whl.metadata (4.0 kB)
+#8 371.6 Collecting treelite==4.7.0 (from -r requirements.txt (line 66))
+#8 371.6   Using cached treelite-4.7.0-py3-none-manylinux2014_aarch64.whl.metadata (1.5 kB)
+#8 372.0 Collecting fastapi==0.135.1 (from -r requirements.txt (line 72))
+#8 372.0   Using cached fastapi-0.135.1-py3-none-any.whl.metadata (30 kB)
+#8 372.2 Collecting uvicorn==0.41.0 (from -r requirements.txt (line 73))
+#8 372.2   Using cached uvicorn-0.41.0-py3-none-any.whl.metadata (6.7 kB)
+#8 372.9 Collecting psutil==7.2.2 (from -r requirements.txt (line 76))
+#8 373.0   Using cached psutil-7.2.2-cp36-abi3-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl.metadata (22 kB)
+#8 374.7 Collecting matplotlib==3.10.8 (from -r requirements.txt (line 79))
+#8 374.7   Using cached matplotlib-3.10.8-cp311-cp311-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl.metadata (52 kB)
+#8 375.0 Collecting seaborn==0.13.2 (from -r requirements.txt (line 80))
+#8 375.0   Using cached seaborn-0.13.2-py3-none-any.whl.metadata (5.4 kB)
+#8 375.3 Collecting pytest==9.0.2 (from -r requirements.txt (line 83))
+#8 375.3   Using cached pytest-9.0.2-py3-none-any.whl.metadata (7.6 kB)
+#8 375.4 Collecting pytest-cov==5.0.0 (from -r requirements.txt (line 84))
+#8 375.4   Using cached pytest_cov-5.0.0-py3-none-any.whl.metadata (27 kB)
+#8 375.7 Collecting tqdm==4.67.3 (from -r requirements.txt (line 87))
+#8 375.7   Using cached tqdm-4.67.3-py3-none-any.whl.metadata (57 kB)
+#8 375.9 Collecting tldextract==5.1.2 (from -r requirements.txt (line 88))
+#8 375.9   Using cached tldextract-5.1.2-py3-none-any.whl.metadata (11 kB)
+#8 376.0 Collecting python-dateutil>=2.8.2 (from pandas==2.2.3->-r requirements.txt (line 28))
+#8 376.0   Using cached python_dateutil-2.9.0.post0-py2.py3-none-any.whl.metadata (8.4 kB)
+#8 376.3 Collecting pytz>=2020.1 (from pandas==2.2.3->-r requirements.txt (line 28))
+#8 376.3   Using cached pytz-2026.2-py2.py3-none-any.whl.metadata (22 kB)
+#8 376.5 Collecting tzdata>=2022.7 (from pandas==2.2.3->-r requirements.txt (line 28))
+#8 376.5   Using cached tzdata-2026.2-py2.py3-none-any.whl.metadata (1.4 kB)
+#8 376.6 Collecting threadpoolctl>=3.2.0 (from scikit-learn==1.8.0->-r requirements.txt (line 32))
+#8 376.6   Using cached threadpoolctl-3.6.0-py3-none-any.whl.metadata (13 kB)
+#8 376.8 Collecting click (from nltk==3.8.1->-r requirements.txt (line 38))
+#8 376.8   Using cached click-8.4.2-py3-none-any.whl.metadata (2.6 kB)
+#8 380.9 Collecting regex>=2021.8.3 (from nltk==3.8.1->-r requirements.txt (line 38))
+#8 380.9   Using cached regex-2026.6.28-cp311-cp311-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl.metadata (40 kB)
+#8 382.4 Collecting Levenshtein==0.27.3 (from python-Levenshtein==0.27.3->-r requirements.txt (line 48))
+#8 382.5   Using cached levenshtein-0.27.3-cp311-cp311-manylinux_2_24_aarch64.manylinux_2_28_aarch64.whl.metadata (3.7 kB)
+#8 384.1 Collecting protobuf>=4.25.1 (from onnx==1.22.0->-r requirements.txt (line 56))
+#8 384.1   Using cached protobuf-7.35.1-cp310-abi3-manylinux2014_aarch64.whl.metadata (595 bytes)
+#8 384.2 Collecting typing_extensions>=4.15.0 (from onnx==1.22.0->-r requirements.txt (line 56))
+#8 384.3   Using cached typing_extensions-4.16.0-py3-none-any.whl.metadata (3.3 kB)
+#8 384.5 Collecting ml_dtypes>=0.5.4 (from onnx==1.22.0->-r requirements.txt (line 56))
+#8 384.5   Using cached ml_dtypes-0.5.4-cp311-cp311-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl.metadata (8.9 kB)
+#8 384.6 Collecting flatbuffers (from onnxruntime==1.25.1->-r requirements.txt (line 57))
+#8 384.6   Using cached flatbuffers-25.12.19-py2.py3-none-any.whl.metadata (1.0 kB)
+#8 384.8 Collecting packaging (from onnxruntime==1.25.1->-r requirements.txt (line 57))
+#8 384.8   Using cached packaging-26.2-py3-none-any.whl.metadata (3.5 kB)
+#8 385.0 Collecting starlette>=0.46.0 (from fastapi==0.135.1->-r requirements.txt (line 72))
+#8 385.0   Using cached starlette-1.3.1-py3-none-any.whl.metadata (6.4 kB)
+#8 386.2 Collecting pydantic>=2.7.0 (from fastapi==0.135.1->-r requirements.txt (line 72))
+#8 386.2   Using cached pydantic-2.13.4-py3-none-any.whl.metadata (109 kB)
+#8 386.4 Collecting typing-inspection>=0.4.2 (from fastapi==0.135.1->-r requirements.txt (line 72))
+#8 386.4   Using cached typing_inspection-0.4.2-py3-none-any.whl.metadata (2.6 kB)
+#8 386.5 Collecting annotated-doc>=0.0.2 (from fastapi==0.135.1->-r requirements.txt (line 72))
+#8 386.5   Using cached annotated_doc-0.0.4-py3-none-any.whl.metadata (6.6 kB)
+#8 386.6 Collecting h11>=0.8 (from uvicorn==0.41.0->-r requirements.txt (line 73))
+#8 386.6   Using cached h11-0.16.0-py3-none-any.whl.metadata (8.3 kB)
+#8 387.2 Collecting contourpy>=1.0.1 (from matplotlib==3.10.8->-r requirements.txt (line 79))
+#8 387.2   Using cached contourpy-1.3.3-cp311-cp311-manylinux_2_26_aarch64.manylinux_2_28_aarch64.whl.metadata (5.5 kB)
+#8 387.3 Collecting cycler>=0.10 (from matplotlib==3.10.8->-r requirements.txt (line 79))
+#8 387.4   Using cached cycler-0.12.1-py3-none-any.whl.metadata (3.8 kB)
+#8 388.9 Collecting fonttools>=4.22.0 (from matplotlib==3.10.8->-r requirements.txt (line 79))
+#8 388.9   Using cached fonttools-4.63.0-cp311-cp311-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl.metadata (118 kB)
+#8 389.7 Collecting kiwisolver>=1.3.1 (from matplotlib==3.10.8->-r requirements.txt (line 79))
+#8 389.7   Using cached kiwisolver-1.5.0-cp311-cp311-manylinux_2_24_aarch64.manylinux_2_28_aarch64.whl.metadata (5.1 kB)
+#8 393.8 Collecting pillow>=8 (from matplotlib==3.10.8->-r requirements.txt (line 79))
+#8 393.8   Using cached pillow-12.3.0-cp311-cp311-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl.metadata (9.1 kB)
+#8 394.1 Collecting pyparsing>=3 (from matplotlib==3.10.8->-r requirements.txt (line 79))
+#8 394.1   Using cached pyparsing-3.3.2-py3-none-any.whl.metadata (5.8 kB)
+#8 394.2 Collecting iniconfig>=1.0.1 (from pytest==9.0.2->-r requirements.txt (line 83))
+#8 394.2   Using cached iniconfig-2.3.0-py3-none-any.whl.metadata (2.5 kB)
+#8 394.3 Collecting pluggy<2,>=1.5 (from pytest==9.0.2->-r requirements.txt (line 83))
+#8 394.3   Using cached pluggy-1.6.0-py3-none-any.whl.metadata (4.8 kB)
+#8 394.5 Collecting pygments>=2.7.2 (from pytest==9.0.2->-r requirements.txt (line 83))
+#8 394.5   Using cached pygments-2.20.0-py3-none-any.whl.metadata (2.5 kB)
+#8 398.7 Collecting coverage>=5.2.1 (from coverage[toml]>=5.2.1->pytest-cov==5.0.0->-r requirements.txt (line 84))
+#8 398.7   Using cached coverage-7.15.0-cp311-cp311-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl.metadata (8.6 kB)
+#8 398.9 Collecting idna (from tldextract==5.1.2->-r requirements.txt (line 88))
+#8 398.9   Using cached idna-3.18-py3-none-any.whl.metadata (6.1 kB)
+#8 399.1 Collecting requests>=2.1.0 (from tldextract==5.1.2->-r requirements.txt (line 88))
+#8 399.1   Using cached requests-2.34.2-py3-none-any.whl.metadata (4.8 kB)
+#8 399.2 Collecting requests-file>=1.4 (from tldextract==5.1.2->-r requirements.txt (line 88))
+#8 399.2   Using cached requests_file-3.0.1-py2.py3-none-any.whl.metadata (1.7 kB)
+#8 399.4 Collecting filelock>=3.0.8 (from tldextract==5.1.2->-r requirements.txt (line 88))
+#8 399.4   Using cached filelock-3.29.5-py3-none-any.whl.metadata (2.0 kB)
+#8 404.8 Collecting rapidfuzz<4.0.0,>=3.9.0 (from Levenshtein==0.27.3->python-Levenshtein==0.27.3->-r requirements.txt (line 48))
+#8 404.8   Using cached rapidfuzz-3.14.5-cp311-cp311-manylinux_2_26_aarch64.manylinux_2_28_aarch64.whl.metadata (12 kB)
+#8 405.0 Collecting annotated-types>=0.6.0 (from pydantic>=2.7.0->fastapi==0.135.1->-r requirements.txt (line 72))
+#8 405.0   Using cached annotated_types-0.7.0-py3-none-any.whl.metadata (15 kB)
+#8 412.7 Collecting pydantic-core==2.46.4 (from pydantic>=2.7.0->fastapi==0.135.1->-r requirements.txt (line 72))
+#8 412.8   Using cached pydantic_core-2.46.4-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl.metadata (6.6 kB)
+#8 412.9 Collecting six>=1.5 (from python-dateutil>=2.8.2->pandas==2.2.3->-r requirements.txt (line 28))
+#8 412.9   Using cached six-1.17.0-py2.py3-none-any.whl.metadata (1.7 kB)
+#8 414.0 Collecting charset_normalizer<4,>=2 (from requests>=2.1.0->tldextract==5.1.2->-r requirements.txt (line 88))
+#8 414.0   Using cached charset_normalizer-3.4.7-cp311-cp311-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl.metadata (40 kB)
+#8 414.3 Collecting urllib3<3,>=1.26 (from requests>=2.1.0->tldextract==5.1.2->-r requirements.txt (line 88))
+#8 414.3   Using cached urllib3-2.7.0-py3-none-any.whl.metadata (6.9 kB)
+#8 414.4 Collecting certifi>=2023.5.7 (from requests>=2.1.0->tldextract==5.1.2->-r requirements.txt (line 88))
+#8 414.5   Using cached certifi-2026.6.17-py3-none-any.whl.metadata (2.5 kB)
+#8 414.7 Collecting anyio<5,>=3.6.2 (from starlette>=0.46.0->fastapi==0.135.1->-r requirements.txt (line 72))
+#8 414.7   Using cached anyio-4.14.1-py3-none-any.whl.metadata (4.6 kB)
+#8 414.9 Using cached numpy-2.4.6-cp311-cp311-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl (16.0 MB)
+#8 414.9 Using cached pandas-2.2.3-cp311-cp311-manylinux2014_aarch64.manylinux_2_17_aarch64.whl (15.6 MB)
+#8 414.9 Using cached scipy-1.17.1-cp311-cp311-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl (33.1 MB)
+#8 416.2 Downloading scikit_learn-1.8.0-cp311-cp311-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl (8.8 MB)
+#8 421.1    ━━━━━━━━━━━━━━                           3.2/8.8 MB 736.1 kB/s eta 0:00:08
+#8 421.1 ERROR: Exception:
+#8 421.1 Traceback (most recent call last):
+#8 421.1   File "/usr/local/lib/python3.11/site-packages/pip/_vendor/urllib3/response.py", line 897, in _error_catcher
+#8 421.1     yield
+#8 421.1   File "/usr/local/lib/python3.11/site-packages/pip/_vendor/urllib3/response.py", line 1043, in _raw_read
+#8 421.1     raise IncompleteRead(self._fp_bytes_read, self.length_remaining)
+#8 421.1 pip._vendor.urllib3.exceptions.IncompleteRead: IncompleteRead(3176523 bytes read, 5623109 more expected)
+#8 421.1 
+#8 421.1 The above exception was the direct cause of the following exception:
+#8 421.1 
+#8 421.1 Traceback (most recent call last):
+#8 421.1   File "/usr/local/lib/python3.11/site-packages/pip/_internal/cli/base_command.py", line 109, in _run_wrapper
+#8 421.1     status = _inner_run()
+#8 421.1              ^^^^^^^^^^^^
+#8 421.1   File "/usr/local/lib/python3.11/site-packages/pip/_internal/cli/base_command.py", line 102, in _inner_run
+#8 421.1     return self.run(options, args)
+#8 421.1            ^^^^^^^^^^^^^^^^^^^^^^^
+#8 421.1   File "/usr/local/lib/python3.11/site-packages/pip/_internal/cli/req_command.py", line 101, in wrapper
+#8 421.1     return func(self, options, args)
+#8 421.1            ^^^^^^^^^^^^^^^^^^^^^^^^^
+#8 421.1   File "/usr/local/lib/python3.11/site-packages/pip/_internal/commands/install.py", line 506, in run
+#8 421.1     preparer.prepare_linked_requirements_more(
+#8 421.1   File "/usr/local/lib/python3.11/site-packages/pip/_internal/operations/prepare.py", line 569, in prepare_linked_requirements_more
+#8 421.1     self._complete_partial_requirements(
+#8 421.1   File "/usr/local/lib/python3.11/site-packages/pip/_internal/operations/prepare.py", line 478, in _complete_partial_requirements
+#8 421.1     for link, (filepath, _) in batch_download:
+#8 421.1   File "/usr/local/lib/python3.11/site-packages/pip/_internal/network/download.py", line 182, in batch
+#8 421.1     filepath, content_type = self(link, location)
+#8 421.1                              ^^^^^^^^^^^^^^^^^^^^
+#8 421.1   File "/usr/local/lib/python3.11/site-packages/pip/_internal/network/download.py", line 193, in __call__
+#8 421.1     self._process_response(download, resp)
+#8 421.1   File "/usr/local/lib/python3.11/site-packages/pip/_internal/network/download.py", line 210, in _process_response
+#8 421.1     for chunk in chunks:
+#8 421.1   File "/usr/local/lib/python3.11/site-packages/pip/_internal/cli/progress_bars.py", line 69, in _rich_download_progress_bar
+#8 421.1     for chunk in iterable:
+#8 421.1   File "/usr/local/lib/python3.11/site-packages/pip/_internal/network/utils.py", line 65, in response_chunks
+#8 421.1     for chunk in response.raw.stream(
+#8 421.1   File "/usr/local/lib/python3.11/site-packages/pip/_vendor/urllib3/response.py", line 1251, in stream
+#8 421.1     data = self.read(amt=amt, decode_content=decode_content)
+#8 421.1            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#8 421.1   File "/usr/local/lib/python3.11/site-packages/pip/_vendor/urllib3/response.py", line 1106, in read
+#8 421.1     data = self._raw_read(amt)
+#8 421.1            ^^^^^^^^^^^^^^^^^^^
+#8 421.1   File "/usr/local/lib/python3.11/site-packages/pip/_vendor/urllib3/response.py", line 1021, in _raw_read
+#8 421.1     with self._error_catcher():
+#8 421.1   File "/usr/local/lib/python3.11/contextlib.py", line 158, in __exit__
+#8 421.1     self.gen.throw(typ, value, traceback)
+#8 421.1   File "/usr/local/lib/python3.11/site-packages/pip/_vendor/urllib3/response.py", line 921, in _error_catcher
+#8 421.1     raise ProtocolError(arg, e) from e
+#8 421.1 pip._vendor.urllib3.exceptions.ProtocolError: ('Connection broken: IncompleteRead(3176523 bytes read, 5623109 more expected)', IncompleteRead(3176523 bytes read, 5623109 more expected))
+#8 422.0 pip attempt 5 failed; retrying

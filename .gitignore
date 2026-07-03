@@ -53,6 +53,8 @@ desktop.ini
 
 # --- Logs ---
 *.log
+# B6 carve-out: ARM/QEMU build + parity logs are dissertation evidence
+!results/rq3/logs/*.log
 venv_wsl2/
 Python-3.11.9.tgz
 Python-3.11.9/
