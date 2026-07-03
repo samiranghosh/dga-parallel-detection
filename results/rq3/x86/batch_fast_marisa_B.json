@@ -1,0 +1,42 @@
+{
+  "part": "batch",
+  "model": "dt12.onnx",
+  "feature_kernel": "fast_marisa",
+  "cgroup": {
+    "effective_cpus": 1.0,
+    "memory_limit_mib": 512.0,
+    "host_visible_cpus": 16,
+    "cpu_model": "AMD Ryzen 7 7840HS w/ Radeon 780M Graphics",
+    "kernel": "Linux version 5.15.167.4-microsoft-standard-WSL2",
+    "machine": "x86_64",
+    "raw": {
+      "cgroup_v2_cpu.max": null,
+      "cgroup_v2_memory.max": null,
+      "cgroup_v2_memory.swap.max": null,
+      "cgroup_v1_cpu.cfs_quota_us": "100000",
+      "cgroup_v1_cpu.cfs_period_us": "100000",
+      "cgroup_v1_memory.limit_in_bytes": "536870912",
+      "cgroup_v1_memsw.limit_in_bytes": "536870912"
+    }
+  },
+  "wall_sec_total": 78.9,
+  "result": {
+    "protocol": "Pool.map k=1 (effective cgroup cores), full train+test corpus (999927 domains), skip_levenshtein=True, 3 reps, wall incl. pool startup",
+    "k": 1,
+    "wall_sec": [
+      25.97,
+      26.04,
+      25.67
+    ],
+    "domains_per_sec": [
+      38498,
+      38401,
+      38958
+    ],
+    "mean_domains_per_sec": 38619,
+    "rss_after_mib": {
+      "VmHWM": 247.8,
+      "VmRSS": 161.1
+    }
+  }
+}

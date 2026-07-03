@@ -1,0 +1,47 @@
+{
+  "part": "idle",
+  "model": "rf_pruned.onnx",
+  "feature_kernel": "fast_marisa",
+  "cgroup": {
+    "effective_cpus": 2.0,
+    "memory_limit_mib": 512.0,
+    "host_visible_cpus": 16,
+    "cpu_model": "AMD Ryzen 7 7840HS w/ Radeon 780M Graphics",
+    "kernel": "Linux version 5.15.167.4-microsoft-standard-WSL2",
+    "machine": "x86_64",
+    "raw": {
+      "cgroup_v2_cpu.max": null,
+      "cgroup_v2_memory.max": null,
+      "cgroup_v2_memory.swap.max": null,
+      "cgroup_v1_cpu.cfs_quota_us": "200000",
+      "cgroup_v1_cpu.cfs_period_us": "100000",
+      "cgroup_v1_memory.limit_in_bytes": "536870912",
+      "cgroup_v1_memsw.limit_in_bytes": "536870912"
+    }
+  },
+  "wall_sec_total": 0.4,
+  "result": {
+    "stages_rss_mib": {
+      "interpreter": {
+        "VmHWM": 30.7,
+        "VmRSS": 30.7
+      },
+      "model_onnx_session": {
+        "VmHWM": 94.0,
+        "VmRSS": 94.0
+      },
+      "serving_resources_kernel_only": {
+        "VmHWM": 103.0,
+        "VmRSS": 103.0
+      },
+      "first_inference": {
+        "VmHWM": 103.9,
+        "VmRSS": 103.9
+      }
+    },
+    "idle_rss_mib": 103.9,
+    "peak_rss_mib": 103.9,
+    "resource_load_sec": 0.008,
+    "dict_form": "DictKernel"
+  }
+}

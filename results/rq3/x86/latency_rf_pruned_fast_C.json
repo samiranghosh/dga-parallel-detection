@@ -1,0 +1,67 @@
+{
+  "part": "latency",
+  "model": "rf_pruned.onnx",
+  "feature_kernel": "fast",
+  "cgroup": {
+    "effective_cpus": 1.0,
+    "memory_limit_mib": 256.0,
+    "host_visible_cpus": 16,
+    "cpu_model": "AMD Ryzen 7 7840HS w/ Radeon 780M Graphics",
+    "kernel": "Linux version 5.15.167.4-microsoft-standard-WSL2",
+    "machine": "x86_64",
+    "raw": {
+      "cgroup_v2_cpu.max": null,
+      "cgroup_v2_memory.max": null,
+      "cgroup_v2_memory.swap.max": null,
+      "cgroup_v1_cpu.cfs_quota_us": "100000",
+      "cgroup_v1_cpu.cfs_period_us": "100000",
+      "cgroup_v1_memory.limit_in_bytes": "268435456",
+      "cgroup_v1_memsw.limit_in_bytes": "268435456"
+    }
+  },
+  "wall_sec_total": 2.4,
+  "result": {
+    "config": {
+      "reps": 1000,
+      "warmup": 200,
+      "n_features": 5,
+      "domain_pool_size": 2000,
+      "serving_n_jobs": 1,
+      "protocol": "CANONICAL-B4"
+    },
+    "total": {
+      "n": 1000,
+      "mean_us": 801.2944060000001,
+      "sd_us": 11168.525884184925,
+      "p50_us": 42.897999999999996,
+      "p95_us": 82.57625,
+      "p99_us": 196.22540999999987,
+      "min_us": 24.48,
+      "max_us": 190628.747
+    },
+    "feature": {
+      "n": 1000,
+      "mean_us": 589.9582769999998,
+      "sd_us": 9410.39225196699,
+      "p50_us": 25.6815,
+      "p95_us": 49.853449999999995,
+      "p99_us": 99.40185999999994,
+      "min_us": 10.021,
+      "max_us": 190439.556
+    },
+    "predict": {
+      "n": 1000,
+      "mean_us": 211.33612900000008,
+      "sd_us": 6015.848282906892,
+      "p50_us": 15.975999999999999,
+      "p95_us": 38.61385,
+      "p99_us": 74.66702999999981,
+      "min_us": 11.261,
+      "max_us": 190256.752
+    },
+    "rss_after_mib": {
+      "VmHWM": 139.7,
+      "VmRSS": 139.7
+    }
+  }
+}

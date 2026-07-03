@@ -1,0 +1,192 @@
+{
+  "protocol": "uniform load, rho in (0.5, 0.9), reps=2, subset=30000, max_workers=2 (Profile A: 2 cores), rq1-adaptive tree as-is (legacy kernel)",
+  "cgroup": {
+    "effective_cpus": 2.0,
+    "memory_limit_mib": 512.0,
+    "host_visible_cpus": 16,
+    "cpu_model": "AMD Ryzen 7 7840HS w/ Radeon 780M Graphics",
+    "kernel": "Linux version 5.15.167.4-microsoft-standard-WSL2",
+    "machine": "x86_64",
+    "raw": {
+      "cgroup_v2_cpu.max": null,
+      "cgroup_v2_memory.max": null,
+      "cgroup_v2_memory.swap.max": null,
+      "cgroup_v1_cpu.cfs_quota_us": "200000",
+      "cgroup_v1_cpu.cfs_period_us": "100000",
+      "cgroup_v1_memory.limit_in_bytes": "536870912",
+      "cgroup_v1_memsw.limit_in_bytes": "536870912"
+    }
+  },
+  "mu_domains_per_sec_k2": 24108.973398513408,
+  "runs": {
+    "adaptive_rho0.5": [
+      {
+        "throughput_domains_per_sec": 11991.972765270288,
+        "mean_latency_ms": 12.28586514790853,
+        "p50_latency_ms": 8.557319641113281,
+        "p95_latency_ms": 33.29991102218628,
+        "p99_latency_ms": 41.72977924346924,
+        "mean_active_workers": 1.0,
+        "workers_spawned": 1,
+        "workers_retired": 0,
+        "workers_replaced": 0,
+        "total_monitor_cpu_ms": 0.6742760006090975,
+        "mean_cpu_percent": 12.258333333333333
+      },
+      {
+        "throughput_domains_per_sec": 11987.336756777304,
+        "mean_latency_ms": 11.495710213979086,
+        "p50_latency_ms": 8.55100154876709,
+        "p95_latency_ms": 25.22754669189453,
+        "p99_latency_ms": 50.11254549026489,
+        "mean_active_workers": 1.0,
+        "workers_spawned": 1,
+        "workers_retired": 0,
+        "workers_replaced": 0,
+        "total_monitor_cpu_ms": 1.0300629992343602,
+        "mean_cpu_percent": 11.958333333333334
+      }
+    ],
+    "static_rho0.5": [
+      {
+        "throughput_domains_per_sec": 11996.347013853527,
+        "mean_latency_ms": 9.669135411580404,
+        "p50_latency_ms": 8.544325828552246,
+        "p95_latency_ms": 16.80908203125,
+        "p99_latency_ms": 33.71201276779168,
+        "mean_active_workers": 2.0,
+        "workers_spawned": 2,
+        "workers_retired": 0,
+        "workers_replaced": 0,
+        "total_monitor_cpu_ms": 0.639304000287666,
+        "mean_cpu_percent": 6.25
+      },
+      {
+        "throughput_domains_per_sec": 11997.570911117144,
+        "mean_latency_ms": 9.928487141927082,
+        "p50_latency_ms": 8.568048477172852,
+        "p95_latency_ms": 16.949915885925293,
+        "p99_latency_ms": 33.46210956573486,
+        "mean_active_workers": 2.0,
+        "workers_spawned": 2,
+        "workers_retired": 0,
+        "workers_replaced": 0,
+        "total_monitor_cpu_ms": 0.8754169994062977,
+        "mean_cpu_percent": 5.658333333333332
+      }
+    ],
+    "sequential_rho0.5": [
+      {
+        "throughput_domains_per_sec": 12024.957575962608,
+        "mean_latency_ms": 6.562071641286214,
+        "p50_latency_ms": 6.4002275466918945,
+        "p95_latency_ms": 8.73342752456665,
+        "p99_latency_ms": 9.850838184356688,
+        "mean_active_workers": 1.0,
+        "workers_spawned": 1,
+        "workers_retired": 0,
+        "workers_replaced": 0,
+        "total_monitor_cpu_ms": 0.0,
+        "mean_cpu_percent": 5.3500000000000005
+      },
+      {
+        "throughput_domains_per_sec": 12023.436261534644,
+        "mean_latency_ms": 6.385786533355713,
+        "p50_latency_ms": 6.118297576904297,
+        "p95_latency_ms": 8.43867063522339,
+        "p99_latency_ms": 12.124865055084227,
+        "mean_active_workers": 1.0,
+        "workers_spawned": 1,
+        "workers_retired": 0,
+        "workers_replaced": 0,
+        "total_monitor_cpu_ms": 0.0,
+        "mean_cpu_percent": 4.716666666666667
+      }
+    ],
+    "adaptive_rho0.9": [
+      {
+        "throughput_domains_per_sec": 19536.6779900386,
+        "mean_latency_ms": 127.76201645533244,
+        "p50_latency_ms": 124.92167949676514,
+        "p95_latency_ms": 235.5418920516968,
+        "p99_latency_ms": 266.22454881668085,
+        "mean_active_workers": 1.6503067484662577,
+        "workers_spawned": 2,
+        "workers_retired": 1,
+        "workers_replaced": 0,
+        "total_monitor_cpu_ms": 2.993103998960578,
+        "mean_cpu_percent": 8.285714285714286
+      },
+      {
+        "throughput_domains_per_sec": 19650.526459135584,
+        "mean_latency_ms": 136.17337147394818,
+        "p50_latency_ms": 127.85768508911133,
+        "p95_latency_ms": 304.2829632759094,
+        "p99_latency_ms": 318.212308883667,
+        "mean_active_workers": 1.6523076923076923,
+        "workers_spawned": 2,
+        "workers_retired": 1,
+        "workers_replaced": 0,
+        "total_monitor_cpu_ms": 2.2713140006089816,
+        "mean_cpu_percent": 8.457142857142857
+      }
+    ],
+    "static_rho0.9": [
+      {
+        "throughput_domains_per_sec": 21524.91479697277,
+        "mean_latency_ms": 11.501620610555014,
+        "p50_latency_ms": 9.455442428588867,
+        "p95_latency_ms": 27.871787548065186,
+        "p99_latency_ms": 41.76272392272949,
+        "mean_active_workers": 2.0,
+        "workers_spawned": 2,
+        "workers_retired": 0,
+        "workers_replaced": 0,
+        "total_monitor_cpu_ms": 0.36690900014946237,
+        "mean_cpu_percent": 9.433333333333334
+      },
+      {
+        "throughput_domains_per_sec": 21508.879932158437,
+        "mean_latency_ms": 10.87050755818685,
+        "p50_latency_ms": 9.451985359191895,
+        "p95_latency_ms": 18.755626678466797,
+        "p99_latency_ms": 37.06120729446411,
+        "mean_active_workers": 2.0,
+        "workers_spawned": 2,
+        "workers_retired": 0,
+        "workers_replaced": 0,
+        "total_monitor_cpu_ms": 1.0983549991578911,
+        "mean_cpu_percent": 10.116666666666667
+      }
+    ],
+    "sequential_rho0.9": [
+      {
+        "throughput_domains_per_sec": 16639.866107848193,
+        "mean_latency_ms": 5.988423029581706,
+        "p50_latency_ms": 5.710721015930176,
+        "p95_latency_ms": 8.013558387756348,
+        "p99_latency_ms": 11.16010904312133,
+        "mean_active_workers": 1.0,
+        "workers_spawned": 1,
+        "workers_retired": 0,
+        "workers_replaced": 0,
+        "total_monitor_cpu_ms": 0.0,
+        "mean_cpu_percent": 6.275
+      },
+      {
+        "throughput_domains_per_sec": 16903.746174699685,
+        "mean_latency_ms": 5.894332726796468,
+        "p50_latency_ms": 5.629897117614746,
+        "p95_latency_ms": 7.74068832397461,
+        "p99_latency_ms": 10.435738563537589,
+        "mean_active_workers": 1.0,
+        "workers_spawned": 1,
+        "workers_retired": 0,
+        "workers_replaced": 0,
+        "total_monitor_cpu_ms": 0.0,
+        "mean_cpu_percent": 6.25
+      }
+    ]
+  },
+  "wall_sec_total": 26.3
+}

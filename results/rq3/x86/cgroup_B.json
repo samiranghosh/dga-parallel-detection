@@ -1,0 +1,17 @@
+{
+  "effective_cpus": 1.0,
+  "memory_limit_mib": 512.0,
+  "host_visible_cpus": 16,
+  "cpu_model": "AMD Ryzen 7 7840HS w/ Radeon 780M Graphics",
+  "kernel": "Linux version 5.15.167.4-microsoft-standard-WSL2",
+  "machine": "x86_64",
+  "raw": {
+    "cgroup_v2_cpu.max": null,
+    "cgroup_v2_memory.max": null,
+    "cgroup_v2_memory.swap.max": null,
+    "cgroup_v1_cpu.cfs_quota_us": "100000",
+    "cgroup_v1_cpu.cfs_period_us": "100000",
+    "cgroup_v1_memory.limit_in_bytes": "536870912",
+    "cgroup_v1_memsw.limit_in_bytes": "536870912"
+  }
+}
