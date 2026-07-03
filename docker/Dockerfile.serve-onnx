@@ -23,10 +23,14 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     FEATURE_KERNEL=fast
 
 COPY requirements-serve.txt .
+# wheels/ may hold pre-fetched platform wheels (pip download --platform ...)
+# for links too flaky to survive in-build downloads; empty otherwise.
 RUN --mount=type=cache,target=/root/.cache/pip \
+    --mount=type=bind,source=wheels,target=/wheels \
     pip install --upgrade pip && \
     ( for i in 1 2 3 4 5 6 7 8; do \
-        pip install --retries 10 --resume-retries 5 -r requirements-serve.txt \
+        pip install --retries 10 --resume-retries 5 --find-links /wheels \
+          -r requirements-serve.txt \
           && exit 0; \
         echo "pip attempt $i failed; retrying"; sleep 5; \
       done; exit 1 )

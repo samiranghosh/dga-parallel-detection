@@ -58,3 +58,6 @@ Python-3.11.9.tgz
 Python-3.11.9/
 data/DGA-Detection-Training-Dataset/
 data/DGA_domains_dataset/
+# pre-fetched platform wheels for docker builds; not committed
+wheels/*
+!wheels/.keep
